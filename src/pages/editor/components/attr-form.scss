@@ -1,0 +1,174 @@
+@mixin flex-column-row-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex-row-column-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.attr-list {
+    color: #262626;
+    position: relative;
+
+    .nav {
+        font-size: 24px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+
+        .actived {
+            color: red;
+        }
+    }
+
+    .attr-title {
+        height: 70px;
+        width: 100%;
+        font-size: 32px;
+        padding: 0 20px;
+        position: absolute;
+        left: 0;
+        top: 50px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        .save {
+            width: 100px;
+            height: 40px;
+            border-radius: 4px;
+            border: 0;
+            background: lightskyblue;
+            color: #fff;
+            font-size: 24px;
+        }
+    }
+
+    .blank {
+        width: 100%;
+        height: 100px;
+    }
+
+    .attr-card {
+        padding: 20px;
+        border-top: 1px solid #d8d8d8;
+
+        &:first-child {
+            margin-top: 50px;
+        }
+
+        .card-title {
+            font-size: 28px;
+        }
+
+        .card-content {
+            padding: 10px 0;
+
+            .row {
+                height: 30px;
+
+                span {
+                    display: inline-block;
+                    width: 80px;
+                }
+            }
+        }
+    }
+
+    // 盒子模型
+    .box-model {
+        width: 420px;
+        height: 220px;
+        border: 1px dashed #262626;
+        @include flex-row-column-center;
+        margin: 0 auto;
+        position: relative;
+
+        input {
+            border: 0;
+            text-align: center;
+            outline: none;
+        }
+
+        .tag {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+        }
+
+        .margin-inner {
+            @include flex-column-row-center;
+            &input {
+                width: 60px;
+            }
+        }
+
+        .border {
+            width: 300px;
+            height: 160px;
+            border: 1px dashed #262626;
+            position: relative;
+            @include flex-row-column-center;
+
+            .box-input {
+                width: 39px;
+            }
+
+            .border-inner {
+                @include flex-column-row-center;
+                .box-input {
+                    width: 60px;
+                }
+            }
+        }
+
+        .padding {
+            width: 220px;
+            height: 100px;
+            border: 1px dashed #262626;
+            position: relative;
+            @include flex-row-column-center;
+            .padding-input {
+                width: 49px;
+                height: 28px;
+            }
+
+            .padding-inner {
+                @include flex-column-row-center;
+                .padding-input {
+                    width: 60px;
+                    height: 28px;
+                }
+            }
+        }
+
+        .entity {
+            width: 120px;
+            height: 40px;
+            border: 1px dashed #262626;
+            @include flex-row-column-center;
+
+            .entity-input {
+                width: 50px;
+                height: 30px;
+            }
+        }
+
+        .box-input {
+            width: 59px;
+            height: 29px;
+            text-align: center;
+        }
+    }
+
+    // 定位
+
+}

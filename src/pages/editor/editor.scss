@@ -1,0 +1,68 @@
+.editor {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    // 拖拽影子元素
+    .shadow-ele {
+        position: fixed;
+        width: 375px;
+        height: 50px;
+        background: #ea413c;
+        display: none;
+
+        &.show {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #262626;
+            background: #fff;
+            border: 1px solid deepskyblue;
+        }
+    }
+
+    .ele-list {
+        width: 500px;
+        height: 100%;
+        border-right: 1px solid #d8d8d8;
+        overflow-y: scroll;
+
+        .ele-item {
+            height: 50px;
+            border-bottom: 1px solid #d8d8d8;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .attr-box {
+        width: 500px;
+        height: 100%;
+        border-left: 1px solid #d8d8d8;
+        overflow-y: scroll;
+    }
+
+    .table {
+        height: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .context {
+        width: 375px;
+        height: 667px;
+        border: 2px solid #d9d9d9;
+        border-radius: 4px;
+        position: relative;
+    }
+}
