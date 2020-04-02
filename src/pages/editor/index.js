@@ -9,10 +9,11 @@ class Editor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 0, // 元素索引
+            index: 5, // 元素索引
             isDown: false,
             dragName: '',
             activeKey: '',
+            isEdit: false,
             // 移动中位置
             movingX: 0,
             movingY: 0,
@@ -64,9 +65,9 @@ class Editor extends Component {
                                     id: 'F',
                                     text: '555',
                                 },
-                            }
+                            },
                         },
-                    }
+                    },
                 },
             },
         };
@@ -136,7 +137,7 @@ class Editor extends Component {
     setSucc(ele) {
         console.error('set success!!!');
         let { index, elements } = this.state;
-        index ++;
+        index++;
         const key = this.uniqueKey(index);
         const eleObj = {
             element: ele,
@@ -144,7 +145,7 @@ class Editor extends Component {
             className: key,
             id: key,
             text: '',
-            onClick: this.setEleAttr.bind(this, key),
+            onClick: this.onElementSelect.bind(this, key),
         };
         this.setState({
             index,
@@ -170,45 +171,36 @@ class Editor extends Component {
 
     // 选中元素
     onElementSelect(key) {
+        const { activeKey } = this.state;
         this.setState({
             activeKey: key,
+            isEdit: key == activeKey, // 双击编辑
         });
     }
     // 取消选中元素
     clearActiveKey() {
-        this.setState({ activeKey: false });
+        this.setState({ activeKey: false, isEdit: false });
     }
 
     renderElements(elements) {
         const { activeKey } = this.state;
         const list = Object.values(elements);
         return list.map((item, idx) => {
-            if (item.children) {
-                return (
-                    <Element
-                        key={`item-${idx}`}
-                        item={item}
-                        active={activeKey == item.key}
-                        onElementSelect={this.onElementSelect.bind(this)}
-                    >
-                        {this.renderElements(item.children)}
-                    </Element>
-                )
-            } else {
-                return (
-                    <Element
-                        key={`item-${idx}`}
-                        item={item}
-                        active={activeKey == item.key}
-                        onElementSelect={this.onElementSelect.bind(this)}
-                    />
-                )
-            }
-        })
+            return (
+                <Element
+                    key={`item-${idx}`}
+                    item={item}
+                    active={activeKey == item.key}
+                    onElementSelect={this.onElementSelect.bind(this)}
+                >
+                    {item.children && this.renderElements(item.children)}
+                </Element>
+            );
+        });
     }
 
     render() {
-        const { isDown, dragName, activeKey, elements, movingX, movingY } = this.state;
+        const { isDown, dragName, activeKey, isEdit, elements, movingX, movingY } = this.state;
         const list = Object.values(elements);
         activeKey && console.error(elements[activeKey]);
 
@@ -239,6 +231,7 @@ class Editor extends Component {
                 <div className='attr-box'>
                     <ArrtForm
                         activeKey={activeKey}
+                        isEdit={isEdit}
                         elements={elements}
                         onAttrChange={this.onAttrChange.bind(this)}
                         onSelectEle={this.onElementSelect.bind(this)}

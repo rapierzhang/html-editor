@@ -48,14 +48,15 @@ class ArrtForm extends Component {
         this.props.onSelectEle(key);
     }
 
-    renderTree(elements, floor = 0) {
+    // 渲染树结构
+    renderTree(elements, activeKey, floor = 0) {
         const arr = Object.values(elements);
         return arr.map((ele, idx) => {
             const key = `${idx}-${parseInt(Math.random() * 1e5)}`;
             const row = (
                 <div
                     key={key}
-                    className='tree-item'
+                    className={classNames('tree-item', { active: ele.key === activeKey })}
                     style={{ paddingLeft: `${floor * 10}px` }}
                     onClick={this.selectEle.bind(this, ele.key)}
                 >
@@ -63,7 +64,7 @@ class ArrtForm extends Component {
                 </div>
             );
             if (ele.children) {
-                return [row, this.renderTree(ele.children, floor + 1)];
+                return [row, this.renderTree(ele.children, activeKey, floor + 1)];
             } else {
                 return row;
             }
@@ -71,13 +72,13 @@ class ArrtForm extends Component {
     }
 
     render() {
-        const { activeKey, elements } = this.props;
+        const { activeKey, isEdit, elements } = this.props;
         const { navIndex } = this.state;
         const thisEle = elements[activeKey];
 
         return (
             <div>
-                {activeKey ? (
+                {isEdit ? (
                     <div className='attr-list'>
                         <div className='nav'>
                             <span
@@ -240,7 +241,7 @@ class ArrtForm extends Component {
                         )}
                     </div>
                 ) : (
-                    <div className='tree'>{this.renderTree(elements)}</div>
+                    <div className='tree'>{this.renderTree(elements, activeKey)}</div>
                 )}
             </div>
         );

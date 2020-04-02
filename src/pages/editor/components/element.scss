@@ -2,9 +2,9 @@
     width: 100%;
     min-height: 50px;
     background: lightpink;
+
+    &.active {
+        outline: #ea413c solid 1px;
+    }
 }
 
-.active {
-    //border: 1px solid red;
-    outline: #ea413c solid 1px;
-}

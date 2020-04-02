@@ -15,6 +15,10 @@ const utils = {
         }
         return target;
     },
+    deepReplace: (obj, obj1, obj2) => {
+        const k1 = Object.keys(obj1)[0];
+        const k2 = Object.keys(obj2)[0];
+    },
 };
 
 export default utils;

@@ -9,6 +9,7 @@
     // 拖拽影子元素
     .shadow-ele {
         position: fixed;
+        z-index: 9999;
         width: 375px;
         height: 50px;
         background: #ea413c;
