@@ -24,13 +24,35 @@ class Editor extends Component {
             ctxRight: 0,
 
             elements: {
-                /*A: {
+                A: {
                     element: 'div',
                     key: 'A',
                     className: 'A',
                     id: 'A',
-                    text: '2222',
-                },*/
+                    text: '1111',
+                },
+                B: {
+                    element: 'div',
+                    key: 'B',
+                    className: 'B',
+                    id: 'B',
+                    children: {
+                        C: {
+                            element: 'div',
+                            key: 'C',
+                            className: 'C',
+                            id: 'C',
+                            text: '3333',
+                        },
+                        D: {
+                            element: 'div',
+                            key: 'D',
+                            className: 'D',
+                            id: 'D',
+                            text: '444',
+                        },
+                    }
+                },
             },
         };
     }
@@ -60,17 +82,23 @@ class Editor extends Component {
     }
 
     // 开始拖拽
-    msDown(ele) {
+    msDown(ele, evt) {
         this.ctxPosition();
-        this.setState({ isDown: true, dragName: ele });
+        this.setState({
+            isDown: true,
+            dragName: ele,
+            movingX: evt.clientX,
+            movingY: evt.clientY,
+        });
 
         // 拖拽中
         window.onmousemove = e => {
             if (!this.state.isDown) return;
             //获取x和y
-            const movingX = e.clientX;
-            const movingY = e.clientY;
-            this.setState({ movingX, movingY });
+            this.setState({
+                movingX: e.clientX,
+                movingY: e.clientY,
+            });
         };
         // 拖拽结束
         window.onmouseup = e => {
@@ -89,9 +117,11 @@ class Editor extends Component {
         };
     }
 
+    // 设置元素成功
     setSucc(ele) {
         console.error('set success!!!');
-        const { index, elements } = this.state;
+        let { index, elements } = this.state;
+        index ++;
         const key = this.uniqueKey(index);
         const eleObj = {
             element: ele,
@@ -102,6 +132,7 @@ class Editor extends Component {
             onClick: this.setEleAttr.bind(this, key),
         };
         this.setState({
+            index,
             elements: {
                 ...elements,
                 [key]: eleObj,
@@ -109,6 +140,7 @@ class Editor extends Component {
         });
     }
 
+    // 设置元素失败
     setFail() {
         console.error('fail');
     }
@@ -137,6 +169,39 @@ class Editor extends Component {
         });
     }
 
+    clearActiveKey() {
+        this.setState({ activeKey: false });
+    }
+
+    renderElements(elements) {
+        const { activeKey } = this.state;
+        const list = Object.values(elements);
+        return list.map((item, idx) => {
+            if (item.children) {
+                console.error(item)
+                return (
+                    <Element
+                        key={`item-${idx}`}
+                        item={item}
+                        active={activeKey == item.key}
+                        setEleAttr={this.setEleAttr.bind(this)}
+                    >
+                        {this.renderElements(item.children)}
+                    </Element>
+                )
+            } else {
+                return (
+                    <Element
+                        key={`item-${idx}`}
+                        item={item}
+                        active={activeKey == item.key}
+                        setEleAttr={this.setEleAttr.bind(this)}
+                    />
+                )
+            }
+        })
+    }
+
     render() {
         const { isDown, dragName, activeKey, elements, movingX, movingY } = this.state;
         const list = Object.values(elements);
@@ -162,14 +227,7 @@ class Editor extends Component {
                 {/*------ 画布 ------*/}
                 <div className='table'>
                     <div className='context' ref='ctx'>
-                        {list.map((item, idx) => (
-                            <Element
-                                key={`item-${idx}`}
-                                item={item}
-                                active={activeKey == item.key}
-                                setEleAttr={this.setEleAttr.bind(this)}
-                            />
-                        ))}
+                        {this.renderElements(elements)}
                     </div>
                 </div>
                 {/*------ 属性 ------*/}
@@ -179,6 +237,7 @@ class Editor extends Component {
                         elements={elements}
                         onAttrChange={this.onAttrChange.bind(this)}
                         onStyleChange={this.onStyleChange.bind(this)}
+                        clearActiveKey={this.clearActiveKey.bind(this)}
                     />
                 </div>
             </div>

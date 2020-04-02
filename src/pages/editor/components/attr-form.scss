@@ -41,6 +41,7 @@
         justify-content: space-between;
         align-items: center;
 
+        // ^^^^^^
         .save {
             width: 100px;
             height: 40px;
@@ -49,6 +50,18 @@
             background: lightskyblue;
             color: #fff;
             font-size: 24px;
+        }
+
+        .close {
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            outline: none;
         }
     }
 

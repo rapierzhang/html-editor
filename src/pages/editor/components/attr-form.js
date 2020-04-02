@@ -21,8 +21,8 @@ class ArrtForm extends Component {
         const val = e.target.value;
         const obj = {
             ...thisEle,
-            [attr]: val
-        }
+            [attr]: val,
+        };
         this.props.onAttrChange(obj);
     }
 
@@ -37,6 +37,27 @@ class ArrtForm extends Component {
             style: { ...thisStyle, [attr]: val },
         };
         this.props.onStyleChange(obj);
+    }
+
+    close() {
+        this.props.clearActiveKey();
+    }
+
+    renderTree(elements, floor = 0) {
+        const arr = Object.values(elements);
+        return arr.map((ele, idx) => {
+            const key = `${idx}-${parseInt(Math.random() * 1e5)}`;
+            const row = (
+                <div key={key} style={{ paddingLeft: `${floor * 10}px` }}>
+                    |- {ele.element}
+                </div>
+            );
+            if (ele.children) {
+                return [row, this.renderTree(ele.children, floor + 1)];
+            } else {
+                return row;
+            }
+        });
     }
 
     render() {
@@ -63,29 +84,34 @@ class ArrtForm extends Component {
                             </span>
                         </div>
                         <div className='blank' />
-                        {navIndex == 0 && <div className='attr-box'>
-                            <div className='attr-title'>
-                                <span>属性</span>
-                                <button className='save'>保存</button>
-                            </div>
-                            <div className='attr-card'>
-                                <div className='card-title'>定位</div>
-                                <div className='card-content'>
-                                    <div className='row'>
-                                        <span>文字 </span>
-                                        <input type='text' onBlur={this.onAttrChange.bind(this, 'text')} />
+                        {navIndex == 0 && (
+                            <div className='attr-box'>
+                                <div className='attr-title'>
+                                    <span>属性</span>
+                                    <button className='close' onClick={this.close.bind(this)}>
+                                        X
+                                    </button>
+                                </div>
+                                <div className='attr-card'>
+                                    <div className='card-title'>定位</div>
+                                    <div className='card-content'>
+                                        <div className='row'>
+                                            <span>文字 </span>
+                                            <input type='text' onBlur={this.onAttrChange.bind(this, 'text')} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>}
+                        )}
                         {navIndex == 1 && (
                             <div className='style-box'>
                                 <div className='attr-title'>
                                     <span>样式</span>
-                                    <button className='save'>保存</button>
+                                    <button className='close' onClick={this.close.bind(this)}>
+                                        close
+                                    </button>
                                 </div>
                                 {/*------ 定位 ------*/}
-
 
                                 {/*------ 背景 ------*/}
                                 <div className='attr-card'>
@@ -205,7 +231,7 @@ class ArrtForm extends Component {
                         )}
                     </div>
                 ) : (
-                    <div>tree</div>
+                    <div>{this.renderTree(elements)}</div>
                 )}
             </div>
         );

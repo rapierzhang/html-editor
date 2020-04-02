@@ -24,6 +24,7 @@ class Element extends Component {
                         style={item.style}
                         onClick={this.setEleAttr.bind(this, item.id)}
                     >
+                        {this.props.children}
                         {item.text}
                     </div>
                 );
