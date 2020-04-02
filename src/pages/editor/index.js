@@ -49,7 +49,22 @@ class Editor extends Component {
                             key: 'D',
                             className: 'D',
                             id: 'D',
-                            text: '444',
+                            children: {
+                                E: {
+                                    element: 'div',
+                                    key: 'E',
+                                    className: 'E',
+                                    id: 'E',
+                                    text: '444',
+                                },
+                                F: {
+                                    element: 'div',
+                                    key: 'F',
+                                    className: 'F',
+                                    id: 'F',
+                                    text: '555',
+                                },
+                            }
                         },
                     }
                 },
@@ -145,15 +160,7 @@ class Editor extends Component {
         console.error('fail');
     }
 
-    // 设置元素属性
-    setEleAttr(key) {
-        const { elements } = this.state;
-        this.setState({
-            elements: { ...elements },
-            activeKey: key,
-        });
-    }
-
+    // 更改属性
     onAttrChange(newEle) {
         const { activeKey, elements } = this.state;
         this.setState({
@@ -161,14 +168,13 @@ class Editor extends Component {
         });
     }
 
-    // 更改元素样式
-    onStyleChange(newEle) {
-        const { activeKey, elements } = this.state;
+    // 选中元素
+    onElementSelect(key) {
         this.setState({
-            elements: { ...elements, ...{ [activeKey]: newEle } },
+            activeKey: key,
         });
     }
-
+    // 取消选中元素
     clearActiveKey() {
         this.setState({ activeKey: false });
     }
@@ -178,13 +184,12 @@ class Editor extends Component {
         const list = Object.values(elements);
         return list.map((item, idx) => {
             if (item.children) {
-                console.error(item)
                 return (
                     <Element
                         key={`item-${idx}`}
                         item={item}
                         active={activeKey == item.key}
-                        setEleAttr={this.setEleAttr.bind(this)}
+                        onElementSelect={this.onElementSelect.bind(this)}
                     >
                         {this.renderElements(item.children)}
                     </Element>
@@ -195,7 +200,7 @@ class Editor extends Component {
                         key={`item-${idx}`}
                         item={item}
                         active={activeKey == item.key}
-                        setEleAttr={this.setEleAttr.bind(this)}
+                        onElementSelect={this.onElementSelect.bind(this)}
                     />
                 )
             }
@@ -236,7 +241,7 @@ class Editor extends Component {
                         activeKey={activeKey}
                         elements={elements}
                         onAttrChange={this.onAttrChange.bind(this)}
-                        onStyleChange={this.onStyleChange.bind(this)}
+                        onSelectEle={this.onElementSelect.bind(this)}
                         clearActiveKey={this.clearActiveKey.bind(this)}
                     />
                 </div>

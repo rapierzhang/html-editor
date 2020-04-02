@@ -7,8 +7,9 @@ class Element extends Component {
         super(...arguments)
     }
 
-    setEleAttr(id) {
-        this.props.setEleAttr(id)
+    selectEle(key, e) {
+        e.stopPropagation()
+        this.props.onElementSelect(key)
     }
 
 
@@ -22,7 +23,7 @@ class Element extends Component {
                         id={item.id}
                         className={classNames('ele-div', item.className, { active })}
                         style={item.style}
-                        onClick={this.setEleAttr.bind(this, item.id)}
+                        onClick={this.selectEle.bind(this, item.key)}
                     >
                         {this.props.children}
                         {item.text}

@@ -36,11 +36,16 @@ class ArrtForm extends Component {
             ...thisEle,
             style: { ...thisStyle, [attr]: val },
         };
-        this.props.onStyleChange(obj);
+        this.props.onAttrChange(obj);
     }
 
+    // 关闭
     close() {
         this.props.clearActiveKey();
+    }
+
+    selectEle(key) {
+        this.props.onSelectEle(key);
     }
 
     renderTree(elements, floor = 0) {
@@ -48,7 +53,12 @@ class ArrtForm extends Component {
         return arr.map((ele, idx) => {
             const key = `${idx}-${parseInt(Math.random() * 1e5)}`;
             const row = (
-                <div key={key} style={{ paddingLeft: `${floor * 10}px` }}>
+                <div
+                    key={key}
+                    className='tree-item'
+                    style={{ paddingLeft: `${floor * 10}px` }}
+                    onClick={this.selectEle.bind(this, ele.key)}
+                >
                     |- {ele.element}
                 </div>
             );
@@ -111,7 +121,6 @@ class ArrtForm extends Component {
                                         close
                                     </button>
                                 </div>
-                                {/*------ 定位 ------*/}
 
                                 {/*------ 背景 ------*/}
                                 <div className='attr-card'>
@@ -231,7 +240,7 @@ class ArrtForm extends Component {
                         )}
                     </div>
                 ) : (
-                    <div>{this.renderTree(elements)}</div>
+                    <div className='tree'>{this.renderTree(elements)}</div>
                 )}
             </div>
         );

@@ -12,6 +12,12 @@
     align-items: center;
 }
 
+.tree {
+    .tree-item {
+        cursor: pointer;
+    }
+}
+
 .attr-list {
     color: #262626;
     position: relative;
@@ -182,6 +188,6 @@
         }
     }
 
-    // 定位
+
 
 }
