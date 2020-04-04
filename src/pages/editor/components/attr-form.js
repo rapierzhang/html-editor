@@ -15,42 +15,45 @@ class ArrtForm extends Component {
         this.setState({ navIndex });
     }
 
-    removeEle() {
-        const { activeKey } = this.props
+    // 选择元素
+    selectEle(key) {
+        this.props.onSelectEle(key);
     }
 
     // 属性更改
     onAttrChange(attr, e) {
         const { activeKey, elements } = this.props;
-        const thisEle = utils.deepSearch(elements, activeKey);
         const val = e.target.value;
-        const obj = {
-            ...thisEle,
+        const thisNode = utils.deepSearch(elements, activeKey);
+        const newNode = {
+            ...thisNode,
             [attr]: val,
         };
-        this.props.onAttrChange(obj);
+        this.props.onAttrChange(newNode);
     }
 
     // 样式更改
     onStyleChange(attr, e) {
         const { activeKey, elements } = this.props;
-        const thisEle = elements[activeKey];
-        const thisStyle = thisEle.style;
+        const thisNode = elements[activeKey];
+        const thisStyle = thisNode.style;
         const val = e.target.value;
-        const obj = {
-            ...thisEle,
+        const newNode = {
+            ...thisNode,
             style: { ...thisStyle, [attr]: val },
         };
-        this.props.onAttrChange(obj);
+        this.props.onAttrChange(newNode);
+    }
+
+    // 删除元素
+    removeEle() {
+        const { activeKey } = this.props;
+        this.props.onElementRemove(activeKey);
     }
 
     // 关闭
     close() {
         this.props.clearActiveKey();
-    }
-
-    selectEle(key) {
-        this.props.onSelectEle(key);
     }
 
     // 渲染树结构

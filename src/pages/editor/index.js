@@ -162,15 +162,6 @@ class Editor extends Component {
         console.error('fail');
     }
 
-    // 更改属性
-    onAttrChange(newEle) {
-        const { activeKey, elements } = this.state;
-        const newElements = utils.deepUpdate(elements, {[activeKey]: newEle});
-        this.setState({
-            elements: newElements ,
-        });
-    }
-
     // 选中元素
     onElementSelect(key) {
         const { activeKey } = this.state;
@@ -179,9 +170,24 @@ class Editor extends Component {
             isEdit: key == activeKey, // 双击编辑
         });
     }
+
     // 取消选中元素
     clearActiveKey() {
         this.setState({ activeKey: false, isEdit: false });
+    }
+
+    // 更改属性
+    onAttrChange(newNode) {
+        const { activeKey, elements } = this.state;
+        const newElements = utils.deepUpdate(elements, {[activeKey]: newNode});
+        this.setState({ elements: newElements });
+    }
+
+    // 删除元素
+    onElementRemove(key) {
+        const { elements } = this.state;
+        const newElements = utils.deepRemove(elements, key);
+        this.setState({ elements: newElements });
     }
 
     renderElements(elements) {
@@ -235,8 +241,9 @@ class Editor extends Component {
                         activeKey={activeKey}
                         isEdit={isEdit}
                         elements={elements}
-                        onAttrChange={this.onAttrChange.bind(this)}
                         onSelectEle={this.onElementSelect.bind(this)}
+                        onAttrChange={this.onAttrChange.bind(this)}
+                        onElementRemove={this.onElementRemove.bind(this)}
                         clearActiveKey={this.clearActiveKey.bind(this)}
                     />
                 </div>

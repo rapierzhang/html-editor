@@ -61,7 +61,7 @@ const utils = {
         } else {
             for (let key in obj) {
                 if (obj[key].children) {
-                    const children = this.deepRemove(obj[key].children, k);
+                    const children = utils.deepRemove(obj[key].children, k);
                     const childrenLen = Object.keys(children).length;
                     const child = childrenLen > 0 ? { children } : {};
                     const objCopy = { ...obj[key] };
