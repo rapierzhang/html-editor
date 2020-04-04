@@ -1,4 +1,15 @@
 const utils = {
+    deepSearch: (obj, key) => {
+        if (obj.hasOwnProperty(key)) {
+            return obj[key];
+        } else {
+            for (let item in obj) {
+                if (!!obj[item].children) {
+                    return utils.deepSearch(obj[item].children, key)
+                }
+            }
+        }
+    },
     deepUpdate: (obj1, obj2) => {
         const k = Object.keys(obj2)[0];
         let target = {};
@@ -7,7 +18,7 @@ const utils = {
         } else {
             for (let key in obj1) {
                 if (obj1[key].children) {
-                    target[key] = this.deepUpdate(obj1[key].children, obj2);
+                    target[key] = {...obj1[key], children: utils.deepUpdate(obj1[key].children, obj2)};
                 } else {
                     target[key] = obj1[key];
                 }
@@ -40,8 +51,7 @@ const utils = {
             }
         }
         return target;
-    }
-    ,
+    },
     deepRemove: (obj, k) => {
         let target = {};
         if (!!obj[k]) {

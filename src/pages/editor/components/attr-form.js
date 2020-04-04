@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import './attr-form.scss';
+import utils from '../../../common/utils';
 
 class ArrtForm extends Component {
     constructor() {
@@ -21,7 +22,7 @@ class ArrtForm extends Component {
     // 属性更改
     onAttrChange(attr, e) {
         const { activeKey, elements } = this.props;
-        const thisEle = elements[activeKey];
+        const thisEle = utils.deepSearch(elements, activeKey);
         const val = e.target.value;
         const obj = {
             ...thisEle,

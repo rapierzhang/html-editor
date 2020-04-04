@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
+import utils from '../../common/utils';
 import './editor.scss';
 
 const eleList = ['div', 'span'];
@@ -164,8 +165,9 @@ class Editor extends Component {
     // 更改属性
     onAttrChange(newEle) {
         const { activeKey, elements } = this.state;
+        const newElements = utils.deepUpdate(elements, {[activeKey]: newEle});
         this.setState({
-            elements: { ...elements, ...{ [activeKey]: newEle } },
+            elements: newElements ,
         });
     }
 
@@ -202,7 +204,7 @@ class Editor extends Component {
     render() {
         const { isDown, dragName, activeKey, isEdit, elements, movingX, movingY } = this.state;
         const list = Object.values(elements);
-        activeKey && console.error(111, elements, activeKey);
+        // activeKey && console.error(111, elements, activeKey);
 
         return (
             <div className='editor'>
