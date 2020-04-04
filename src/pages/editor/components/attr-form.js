@@ -14,6 +14,10 @@ class ArrtForm extends Component {
         this.setState({ navIndex });
     }
 
+    removeEle() {
+        const { activeKey } = this.props
+    }
+
     // 属性更改
     onAttrChange(attr, e) {
         const { activeKey, elements } = this.props;
@@ -106,6 +110,9 @@ class ArrtForm extends Component {
                                 <div className='attr-card'>
                                     <div className='card-title'>定位</div>
                                     <div className='card-content'>
+                                        <div className="row">
+                                            <button className='del-ele' onClick={this.removeEle.bind(this)}>删除节点</button>
+                                        </div>
                                         <div className='row'>
                                             <span>文字 </span>
                                             <input type='text' onBlur={this.onAttrChange.bind(this, 'text')} />

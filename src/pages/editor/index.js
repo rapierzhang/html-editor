@@ -202,7 +202,7 @@ class Editor extends Component {
     render() {
         const { isDown, dragName, activeKey, isEdit, elements, movingX, movingY } = this.state;
         const list = Object.values(elements);
-        activeKey && console.error(elements[activeKey]);
+        activeKey && console.error(111, elements, activeKey);
 
         return (
             <div className='editor'>
@@ -228,7 +228,7 @@ class Editor extends Component {
                     </div>
                 </div>
                 {/*------ 属性 ------*/}
-                <div className='attr-box'>
+                <div className='attr-bar'>
                     <ArrtForm
                         activeKey={activeKey}
                         isEdit={isEdit}

@@ -96,12 +96,19 @@
             padding: 10px 0;
 
             .row {
-                height: 30px;
+                min-height: 30px;
+                overflow: hidden;
+                margin-bottom: 20px;
 
                 span {
                     display: inline-block;
                     width: 80px;
                 }
+            }
+
+            .del-ele {
+                width: 100px;
+                height: 30px;
             }
         }
     }
