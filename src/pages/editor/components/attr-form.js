@@ -24,11 +24,6 @@ class ArrtForm extends Component {
         this.setState({ navIndex });
     }
 
-    // 选择节点
-    selectEle(key) {
-        this.props.onSelectEle(key);
-    }
-
     // 属性更改
     onAttrChange(attr, e) {
         const { activeKey, elements } = this.props;
@@ -75,7 +70,7 @@ class ArrtForm extends Component {
                     key={key}
                     className={classNames('tree-item', { active: ele.key === activeKey })}
                     style={{ paddingLeft: `${floor * 10}px` }}
-                    onClick={this.selectEle.bind(this, ele.key)}
+                    // onClick={this.selectEle.bind(this, ele.key)}
                     onMouseDown={this.onDragTree.bind(this, ele)}
                 >
                     |- {ele.element}
@@ -100,15 +95,16 @@ class ArrtForm extends Component {
         });
     }
 
+    // 选择节点
+    selectEle(key) {
+        this.props.onSelectEle(key);
+    }
+
     // 拖拽树的节点
     onDragTree(ele, evt) {
-        console.error(ele.text)
+        const firstTime = new Date().getTime();
         this.treePosition();
-        this.setState({
-            isDown: true,
-            movingX: evt.clientX,
-            movingY: evt.clientY,
-        });
+        this.setState({ isDown: true });
 
         // 拖拽中
         window.onmousemove = e => {
@@ -121,30 +117,38 @@ class ArrtForm extends Component {
         };
         // 拖拽结束
         window.onmouseup = e => {
-            const { elements } = this.props;
-            const { isDown, treeTop, treeBottom, treeLeft, treeRight } = this.state;
-            if (!isDown) return;
-
-            const endX = e.clientX;
-            const endY = e.clientY;
-            if (endX > treeLeft && endX < treeRight && endY > treeTop && endY < treeBottom) {
-                const newElements = utils.deepRemove(elements, ele.key);
-                // 深度优先遍历子节点
-                const treeArr = utils.objDepthFirstTraversal(elements);
-                // 重置虚拟元素
-                this.setState({ isDown: false, movingX: 0, movingY: 0 });
-                // 判断加载哪个元素的前后
-                const index = Math.floor(endY / 30); // 第几个元素
-                const dot = ((endY / 30).toFixed(1) - index).toFixed(1);
-                let newTree;
-                const isBefore = treeArr.length - 1 > index ? true : dot < 0.5; //前后
-                const hoverKey = treeArr[Math.min(index, treeArr.length - 1)]; // 最后悬停时的元素key
-                if (hoverKey == ele.key) return; // 没变return
-                newTree = utils.deepInsertSameFloor(newElements, hoverKey, isBefore, { [ele.key]: ele });
-                this.props.updateTree(newTree);
-                console.error('在里面');
+            const lastTime = new Date().getTime();
+            // 解决onMousedown和onClick冲突
+            if ((lastTime - firstTime) < 300) {
+                this.selectEle(ele.key);
+                this.setState({ isDown: false });
             } else {
-                console.error('在外面');
+                const { elements } = this.props;
+                const { isDown, treeTop, treeBottom, treeLeft, treeRight } = this.state;
+                if (!isDown) return;
+
+                const endX = e.clientX;
+                const endY = e.clientY;
+                if (endX > treeLeft && endX < treeRight && endY > treeTop && endY < treeBottom) {
+                    const newElements = utils.deepRemove(elements, ele.key);
+                    // 深度优先遍历子节点
+                    const treeArr = utils.objDepthFirstTraversal(elements);
+                    // 重置虚拟元素
+                    this.setState({ isDown: false, movingX: 0, movingY: 0 });
+                    // 判断加载哪个元素的前后
+                    const index = Math.floor(endY / 30); // 第几个元素
+                    const dot = ((endY / 30).toFixed(1) - index).toFixed(1);
+                    let newTree;
+                    const isBefore = treeArr.length - 1 > index ? true : dot < 0.5; //前后
+                    const hoverKey = treeArr[Math.min(index, treeArr.length - 1)]; // 最后悬停时的元素key
+                    if (hoverKey == ele.key) return; // 没变return
+                    newTree = utils.deepInsertSameFloor(newElements, hoverKey, isBefore, { [ele.key]: ele });
+                    this.props.updateTree(newTree);
+                    console.error('在里面');
+                } else {
+                    console.error('在外面');
+                    return;
+                }
             }
         };
     }
