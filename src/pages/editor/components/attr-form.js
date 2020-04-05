@@ -11,11 +11,12 @@ class ArrtForm extends Component {
         };
     }
 
+    // 切换导航
     switchNav(navIndex) {
         this.setState({ navIndex });
     }
 
-    // 选择元素
+    // 选择节点
     selectEle(key) {
         this.props.onSelectEle(key);
     }
@@ -45,7 +46,7 @@ class ArrtForm extends Component {
         this.props.onAttrChange(newNode);
     }
 
-    // 删除元素
+    // 删除节点
     removeEle() {
         const { activeKey } = this.props;
         this.props.onElementRemove(activeKey);

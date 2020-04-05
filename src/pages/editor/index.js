@@ -70,6 +70,13 @@ class Editor extends Component {
                         },
                     },
                 },
+                Z: {
+                    element: 'div',
+                    key: 'Z',
+                    className: 'Z',
+                    id: 'Z',
+                    text: 'zzz'
+                }
             },
         };
     }
