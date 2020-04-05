@@ -29,41 +29,29 @@ class Editor extends Component {
                 A: {
                     element: 'div',
                     key: 'A',
-                    className: 'A',
-                    id: 'A',
                     text: '1111',
                 },
                 B: {
                     element: 'div',
                     key: 'B',
-                    className: 'B',
-                    id: 'B',
                     children: {
                         C: {
                             element: 'div',
                             key: 'C',
-                            className: 'C',
-                            id: 'C',
                             text: '3333',
                         },
                         D: {
                             element: 'div',
                             key: 'D',
-                            className: 'D',
-                            id: 'D',
                             children: {
                                 E: {
                                     element: 'div',
                                     key: 'E',
-                                    className: 'E',
-                                    id: 'E',
                                     text: '444',
                                 },
                                 F: {
                                     element: 'div',
                                     key: 'F',
-                                    className: 'F',
-                                    id: 'F',
                                     text: '555',
                                 },
                             },
@@ -73,8 +61,6 @@ class Editor extends Component {
                 Z: {
                     element: 'div',
                     key: 'Z',
-                    className: 'Z',
-                    id: 'Z',
                     text: 'zzz'
                 }
             },

@@ -20,8 +20,8 @@ class Element extends Component {
             case 'div':
                 return (
                     <div
-                        id={item.id}
-                        className={classNames('ele-div', item.className, { active })}
+                        id={item.key}
+                        className={classNames('ele-div', item.key, { active })}
                         style={item.style}
                         onClick={this.selectNode.bind(this, item.key)}
                     >

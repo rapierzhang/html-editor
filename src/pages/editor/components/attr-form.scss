@@ -42,6 +42,10 @@
         justify-content: space-around;
         align-items: center;
 
+        .nav-item {
+            cursor: pointer;
+        }
+
         .actived {
             color: red;
         }
