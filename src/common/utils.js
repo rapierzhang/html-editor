@@ -77,6 +77,7 @@ const utils = {
                 }
             }
         }
+        return target
     },
     deepRemove: (obj, k) => {
         let target = {};
@@ -100,6 +101,21 @@ const utils = {
         }
         return target;
     },
+    objDepthFirstTraversal: (initObj) => {
+        let list = [];
+        const render = (obj) => {
+            Object.values(obj).map((item, idx) => {
+                if (item.children) {
+                    list.push(item.key)
+                    render(item.children)
+                } else {
+                    list.push(item.key)
+                }
+            })
+        }
+        render(initObj)
+        return list
+    }
 };
 
 export default utils;

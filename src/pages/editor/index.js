@@ -197,6 +197,7 @@ class Editor extends Component {
         this.setState({ elements: newElements });
     }
 
+    // 渲染画布中元素
     renderElements(elements) {
         const { activeKey } = this.state;
         const list = Object.values(elements);
@@ -212,6 +213,11 @@ class Editor extends Component {
                 </Element>
             );
         });
+    }
+
+    // 更新节点
+    updateTree(elements) {
+        this.setState({ elements })
     }
 
     render() {
@@ -252,6 +258,7 @@ class Editor extends Component {
                         onAttrChange={this.onAttrChange.bind(this)}
                         onElementRemove={this.onElementRemove.bind(this)}
                         clearActiveKey={this.clearActiveKey.bind(this)}
+                        updateTree={this.updateTree.bind(this)}
                     />
                 </div>
             </div>
