@@ -96,8 +96,8 @@ class ArrtForm extends Component {
     }
 
     // 选择节点
-    selectEle(key) {
-        this.props.onSelectEle(key);
+    selectNode(key) {
+        this.props.onSelectNode(key);
     }
 
     // 拖拽树的节点
@@ -120,7 +120,7 @@ class ArrtForm extends Component {
             const lastTime = new Date().getTime();
             // 解决onMousedown和onClick冲突
             if ((lastTime - firstTime) < 300) {
-                this.selectEle(ele.key);
+                this.selectNode(ele.key);
                 this.setState({ isDown: false });
             } else {
                 const { elements } = this.props;

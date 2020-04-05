@@ -7,9 +7,9 @@ class Element extends Component {
         super(...arguments)
     }
 
-    selectEle(key, e) {
+    selectNode(key, e) {
         e.stopPropagation()
-        this.props.onElementSelect(key)
+        this.props.onNodeSelect(key)
     }
 
 
@@ -23,7 +23,7 @@ class Element extends Component {
                         id={item.id}
                         className={classNames('ele-div', item.className, { active })}
                         style={item.style}
-                        onClick={this.selectEle.bind(this, item.key)}
+                        onClick={this.selectNode.bind(this, item.key)}
                     >
                         {this.props.children}
                         {item.text}

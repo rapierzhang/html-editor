@@ -153,7 +153,7 @@ class Editor extends Component {
             className: key,
             id: key,
             text: '',
-            onClick: this.onElementSelect.bind(this, key),
+            onClick: this.onNodeSelect.bind(this, key),
         };
         this.setState({
             index,
@@ -170,7 +170,7 @@ class Editor extends Component {
     }
 
     // 选中元素
-    onElementSelect(key) {
+    onNodeSelect(key) {
         const { activeKey } = this.state;
         this.setState({
             activeKey: key,
@@ -207,7 +207,7 @@ class Editor extends Component {
                     key={`item-${idx}`}
                     item={item}
                     active={activeKey == item.key}
-                    onElementSelect={this.onElementSelect.bind(this)}
+                    onNodeSelect={this.onNodeSelect.bind(this)}
                 >
                     {item.children && this.renderElements(item.children)}
                 </Element>
@@ -254,7 +254,7 @@ class Editor extends Component {
                         activeKey={activeKey}
                         isEdit={isEdit}
                         elements={elements}
-                        onSelectEle={this.onElementSelect.bind(this)}
+                        onSelectNode={this.onNodeSelect.bind(this)}
                         onAttrChange={this.onAttrChange.bind(this)}
                         onElementRemove={this.onElementRemove.bind(this)}
                         clearActiveKey={this.clearActiveKey.bind(this)}
