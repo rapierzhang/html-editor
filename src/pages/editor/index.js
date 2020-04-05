@@ -243,7 +243,7 @@ class Editor extends Component {
                     </div>
                 </div>
                 {/*------ 属性 ------*/}
-                <div className='attr-bar'>
+                <div className='side-bar'>
                     <ArrtForm
                         activeKey={activeKey}
                         isEdit={isEdit}

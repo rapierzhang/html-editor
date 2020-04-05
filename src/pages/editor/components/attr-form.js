@@ -8,6 +8,14 @@ class ArrtForm extends Component {
         super(...arguments);
         this.state = {
             navIndex: 0,
+            isDown: false,
+            movingX: 0,
+            movingY: 0,
+
+            treeTop: 0,
+            treeBottom: 0,
+            treeLeft: 0,
+            treeRight: 0,
         };
     }
 
@@ -68,6 +76,7 @@ class ArrtForm extends Component {
                     className={classNames('tree-item', { active: ele.key === activeKey })}
                     style={{ paddingLeft: `${floor * 10}px` }}
                     onClick={this.selectEle.bind(this, ele.key)}
+                    onMouseDown={this.onDragTree.bind(this, ele.key)}
                 >
                     |- {ele.element}
                 </div>
@@ -80,15 +89,72 @@ class ArrtForm extends Component {
         });
     }
 
+    treePosition() {
+        const tree = this.refs.tree;
+        const { offsetTop, offsetHeight, offsetLeft, offsetWidth } = tree;
+        this.setState({
+            treeTop: offsetTop,
+            treeBottom: offsetTop + offsetHeight,
+            treeLeft: offsetLeft,
+            treeRight: offsetLeft + offsetWidth,
+        });
+    }
+
+    // 拖拽树的节点
+    onDragTree(key, evt) {
+        this.treePosition();
+        this.setState({
+            isDown: true,
+            movingX: evt.clientX,
+            movingY: evt.clientY,
+        });
+
+        // 拖拽中
+        window.onmousemove = e => {
+            if (!this.state.isDown) return;
+            //获取x和y
+            this.setState({
+                movingX: e.clientX,
+                movingY: e.clientY,
+            });
+        };
+        // 拖拽结束
+        window.onmouseup = e => {
+            const { isDown, treeTop, treeBottom, treeLeft, treeRight, elements } = this.state;
+            if (!isDown) return;
+            this.setState({ isDown: false, movingX: 0, movingY: 0 });
+            const endX = e.clientX;
+            const endY = e.clientY;
+            if (endX > treeLeft && endX < treeRight && endY > treeTop && endY < treeBottom) {
+                const index = Math.floor(endY / 30);
+                const dot = ((endY / 30).toFixed(1) - index).toFixed(1)
+                if (dot < 0.5) {
+                    console.error(`在${index}上面`)
+                } else {
+                    console.error(`在${index}下面`)
+                }
+                console.error('在里面')
+            } else {
+                console.error('在外面')
+            }
+        };
+    }
+
     render() {
         const { activeKey, isEdit, elements } = this.props;
-        const { navIndex } = this.state;
+        const { navIndex, isDown, movingX, movingY } = this.state;
         const thisEle = elements[activeKey];
 
         return (
-            <div>
+            <div className='attribute'>
+                {isDown && (
+                    <div className='attr-phantom' style={{ left: movingX, top: movingY }}>
+                        000
+                    </div>
+                )}
                 {isEdit ? (
                     <div className='attr-list'>
+                        {/*------ nav ------*/}
                         <div className='nav'>
                             <span
                                 className={classNames('nav-item', { actived: navIndex == 0 })}
@@ -104,7 +170,8 @@ class ArrtForm extends Component {
                             </span>
                         </div>
                         <div className='blank' />
-                        {navIndex == 0 && (
+                        {/*------ 属性 ------*/}
+                        {navIndex === 0 && (
                             <div className='attr-box'>
                                 <div className='attr-title'>
                                     <span>属性</span>
@@ -115,8 +182,10 @@ class ArrtForm extends Component {
                                 <div className='attr-card'>
                                     <div className='card-title'>定位</div>
                                     <div className='card-content'>
-                                        <div className="row">
-                                            <button className='del-ele' onClick={this.removeEle.bind(this)}>删除节点</button>
+                                        <div className='row'>
+                                            <button className='del-ele' onClick={this.removeEle.bind(this)}>
+                                                删除节点
+                                            </button>
                                         </div>
                                         <div className='row'>
                                             <span>文字 </span>
@@ -126,7 +195,8 @@ class ArrtForm extends Component {
                                 </div>
                             </div>
                         )}
-                        {navIndex == 1 && (
+                        {/*------ 样式 ------*/}
+                        {navIndex === 1 && (
                             <div className='style-box'>
                                 <div className='attr-title'>
                                     <span>样式</span>
@@ -253,7 +323,9 @@ class ArrtForm extends Component {
                         )}
                     </div>
                 ) : (
-                    <div className='tree'>{this.renderTree(elements, activeKey)}</div>
+                    <div className='tree' ref='tree'>
+                        {this.renderTree(elements, activeKey)}
+                    </div>
                 )}
             </div>
         );
