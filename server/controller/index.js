@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const utils = require('../utils/index');
 
 exports.save = async (ctx, next) => {};
 
@@ -11,41 +12,39 @@ exports.build = async (ctx, next) => {
             A: {
                 element: 'div',
                 key: 'A',
-                className: 'A',
-                id: 'A',
                 text: '1111',
+                css: {
+                    backgroundColor: '#f5f5f5',
+                    fontSize: '28px',
+                    color: 'red',
+                },
             },
             B: {
                 element: 'div',
                 key: 'B',
-                className: 'B',
-                id: 'B',
                 children: {
                     C: {
                         element: 'div',
                         key: 'C',
-                        className: 'C',
-                        id: 'C',
                         text: '3333',
+                        css: {
+                            backgroundColor: '#f5f5f5',
+                            fontSize: '28px',
+                            color: 'red',
+                        },
                     },
                     D: {
                         element: 'div',
                         key: 'D',
-                        className: 'D',
-                        id: 'D',
                         children: {
                             E: {
                                 element: 'div',
                                 key: 'E',
-                                className: 'E',
-                                id: 'E',
                                 text: '444',
                             },
                             F: {
                                 element: 'div',
                                 key: 'F',
-                                className: 'F',
-                                id: 'F',
                                 text: '555',
                             },
                         },
@@ -61,7 +60,8 @@ exports.build = async (ctx, next) => {
     // 创建新目录
     if (!dirExists) fs.mkdirSync(dirPath);
 
-    writeHtml(dirPath, data,  next)
+    writeHtml(dirPath, data, next);
+    writeCss(dirPath, data, next);
 
     ctx.body = {
         title: 'koa2 json',
@@ -82,11 +82,32 @@ const writeHtml = (dirPath, data, next) => {
     </body>
 </html>`;
     fs.writeFileSync(`${dirPath}/index.html`, htmlData);
-}
+};
 
 const writeCss = (dirPath, data, next) => {
-    const cssDirPath = `${dirPath}/css`
+    const cssDirPath = `${dirPath}/css`;
     const cssDirExists = fs.existsSync(cssDirPath);
     if (!cssDirExists) fs.mkdirSync(cssDirPath);
-    const css = '';
-}
+    let cssContext = '';
+    const cssArr = utils.objToArr(data.data);
+    // console.log('arr: ', cssArr);
+    cssArr.forEach(item => {
+        let cssContent = '';
+        if (item.css) {
+            const { css } = item;
+            const cssLen = Object.keys(css).length;
+            let cssRowIdx = 0;
+            for (let key in css) {
+                cssContent += `${utils.toLine(key)}: ${css[key]}; `;
+                cssRowIdx++;
+                if (cssRowIdx < cssLen) {
+                    cssContent += ``;
+                }
+            }
+            const cssItem = `.${item.key} { ${cssContent} }
+`;
+            cssContext += cssItem;
+        }
+    });
+    console.log(cssContext);
+};
