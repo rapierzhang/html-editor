@@ -18,6 +18,18 @@ exports.build = async (ctx, next) => {
                     fontSize: '28px',
                     color: 'red',
                 },
+                bindJs: [
+                    {
+                        type: 'click',
+                        func: `alert(111)`,
+                    },
+                    {
+                        type: 'mouseover',
+                        func: `alert(333)`,
+                    },
+                ],
+                defaultJs: '',
+                extraJs: '',
             },
             B: {
                 element: 'div',
@@ -61,11 +73,24 @@ exports.build = async (ctx, next) => {
                     color: 'red',
                 },
             },
+            H: {
+                element: 'image',
+                key: 'H',
+                src: '//www.baidu.com/img/bd_logo1.png',
+                css: {
+                    backgroundColor: '#f5f5f5',
+                    fontSize: '28px',
+                    color: 'red',
+                },
+                defaultJs: `
+setTimeout(() => {
+    alert(222);
+}, 1000)`,
+            },
         },
     };
     const { index, htmlTree } = data;
     const dirPath = `${path.resolve('./')}/views/${index}`;
-    console.log(`dirPath: `, dirPath);
     // 判断目录存在
     const dirExists = fs.existsSync(dirPath);
     // 创建新目录
@@ -73,10 +98,47 @@ exports.build = async (ctx, next) => {
 
     writeHtml(dirPath, htmlTree, next);
     writeCss(dirPath, htmlTree, next);
+    writeJs(dirPath, htmlTree, next);
 
-    ctx.body = {
-        title: 'koa2 json',
-    };
+    ctx.body = utils.res(200, 'ok', {
+        result: true,
+    });
+};
+
+// 写入js
+const writeJs = (dirPath, data, next) => {
+    const jsDirPath = `${dirPath}/js`;
+    const jsDirExists = fs.existsSync(jsDirPath);
+    if (!jsDirExists) fs.mkdirSync(jsDirPath);
+    let jsContext = '';
+    const jsArr = utils.objToArr(data);
+    jsArr.forEach(item => {
+        const { key, bindJs, defaultJs, extraJs } = item;
+        // 绑定事件
+        if (bindJs) {
+            jsContext += `const ele${utils.delLine(key)} = $('#${key}');`;
+            bindJs.map(row => {
+                jsContext += `
+ele${utils.delLine(key)}.on('${row.type}', () => {
+    ${row.func}
+});`;
+            });
+        }
+        // 默认组件js
+        if (defaultJs) {
+            jsContext += defaultJs;
+        }
+        // 扩展js
+        if (extraJs) {
+            jsContext += defaultJs;
+        }
+        // 空行
+        if (bindJs || defaultJs || extraJs) {
+            jsContext += `
+`;
+        }
+    });
+    fs.writeFileSync(`${jsDirPath}/index.js`, jsContext);
 };
 
 // 写入HTML
@@ -99,19 +161,20 @@ const renderHtml = (data, floor = 0) => {
             ${renderTab(floor)}`;
         }
         if (labelType === 1) {
-            html += `<${element} id='${key}' class='${key}' ${renderAttribute(item)} />`;
+            html += `<${element} id='${key}' class='${key}' ${renderAttribute(item)}/>`;
         } else if (labelType === 2) {
-            html += `<${element} id='${key}' class='${key}' ${renderAttribute(item)} >
+            html += `<${element} id='${key}' class='${key}' ${renderAttribute(item)}>
                 ${renderTab(floor)}${children ? renderHtml(children, floor + 1) : text}
             ${renderTab(floor)}</${element}>`;
         } else {
             console.log('------ 无此标签 ------');
         }
-        idx ++
+        idx++;
     }
     return html;
 };
 
+// 渲染缩进
 const renderTab = num => {
     let str = '';
     for (let i = num; i > 0; i--) {
@@ -120,10 +183,11 @@ const renderTab = num => {
     return str;
 };
 
+// 渲染属性
 const renderAttribute = data => {
     let str = '';
     for (let k in data) {
-        if (['key', 'element', 'children', 'css', 'style', 'text'].indexOf(k) > -1) {
+        if (['key', 'element', 'children', 'css', 'style', 'text', 'bindJs', 'defaultJs', 'extraJs'].indexOf(k) > -1) {
             continue;
         } else {
             str += `${k}='${data[k]}'`;
@@ -176,6 +240,7 @@ const defaultHtml = (text = '') => `<!DOCTYPE html>
         <div>
             ${text}
         </div>
+        <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
         <script src="./js/index.js"></script>
     </body>
 </html>`;

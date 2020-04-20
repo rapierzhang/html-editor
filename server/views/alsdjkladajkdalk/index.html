@@ -7,24 +7,29 @@
     </head>
     <body>
         <div>
-            <div id='A' class='A'  >
+            <div id='A' class='A' bindJs='[object Object],[object Object]'defaultJs=''extraJs=''>
                 1111
             </div>
-            <div id='B' class='B'  >
-                <div id='C' class='C'  >
+            <div id='B' class='B' >
+                <div id='C' class='C' >
                     3333
                 </div>
-                <div id='D' class='D'  >
-                    <div id='E' class='E'  >
+                <div id='D' class='D' >
+                    <div id='E' class='E' >
                         444
                     </div>
-                    <div id='F' class='F'  >
+                    <div id='F' class='F' >
                         555
                     </div>
                 </div>
             </div>
-            <image id='G' class='G' src='//www.baidu.com/img/bd_logo1.png' />
+            <image id='G' class='G' src='//www.baidu.com/img/bd_logo1.png'/>
+            <image id='H' class='H' src='//www.baidu.com/img/bd_logo1.png'defaultJs='
+setTimeout(() => {
+    alert(222);
+}, 1000)'/>
         </div>
+        <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
         <script src="./js/index.js"></script>
     </body>
 </html>
