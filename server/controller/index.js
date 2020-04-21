@@ -17,6 +17,7 @@ exports.build = async (ctx, next) => {
                     backgroundColor: '#f5f5f5',
                     fontSize: '28px',
                     color: 'red',
+                    width: '375px',
                 },
                 bindJs: [
                     {
@@ -231,7 +232,7 @@ const writeCss = (dirPath, htmlTree, next) => {
 
 const pxToRem = text => {
     if (text.search(/[0-9]px/) > -1) {
-        return parseInt(text) / 40 + 'rem';
+        return (parseInt(text) * 2 / 45).toFixed(6) + 'rem';
     } else {
         return text;
     }
@@ -301,7 +302,7 @@ body {
     background: #f5f5f5;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 640px) {
     .container {
         width: 375px;
         margin: 0 auto;
