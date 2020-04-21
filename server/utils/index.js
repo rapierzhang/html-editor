@@ -13,6 +13,7 @@ const utils = {
         }
         return arr;
     },
+    // 删除-
     delLine: name => name.replace(/-/g, ''),
     // 驼峰转-
     toLine: name => name.replace(/([A-Z])/g, '-$1').toLowerCase(),
@@ -30,6 +31,40 @@ const utils = {
         msg,
         data
     }),
+    // 时间格式化
+    dateFormat: (ms, fmt) => {
+        /**
+         * 时间格式化，将13位时间戳格式化为时间字符串
+         * @param {number/string} [ms] 需要转换的毫秒值
+         * @param {string} [fmt] 输出格式，不传默认为 {yyyy-MM-dd hh:mm:ss}
+         * @return {string} 返回转换后的时间字符串
+         */
+        const date = new Date(parseInt(ms));
+        fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
+        const o = {
+            'M+': date.getMonth() + 1, //月份
+            'd+': date.getDate(), //日
+            'h+': date.getHours(), //小时
+            'm+': date.getMinutes(), //分
+            's+': date.getSeconds(), //秒
+            'q+': Math.floor((date.getMonth() + 3) / 3), //季度
+            S: date.getMilliseconds(), //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+        // eslint-disable-next-line
+        for (let k in o)
+            if (new RegExp('(' + k + ')').test(fmt))
+                fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
+        return fmt;
+    },
+    // uuid
+    uuid: () => {
+        return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, c =>  {
+            let r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 };
 
 module.exports = utils;

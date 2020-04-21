@@ -1,13 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 const utils = require('../utils/index');
+const db = require('../module/database');
+const PageModule = require('../module/page');
+const ListModule = require('../module/list');
 
-exports.save = async (ctx, next) => {};
+exports.pageGet = async (ctx, next) => {
+    const { id } = ctx.query;
+    const result = await PageModule.findOne({ id });
+    if (result) {
+        ctx.body = utils.res(200, 'ok', result);
+    } else {
+        ctx.body = utils.res(500, 'no data', {});
+    }
+};
 
-exports.build = async (ctx, next) => {
-    const data = {
+exports.pageSave = async (ctx, next) => {
+    /*const data = {
+        id: 'aaabbbccc',
         title: '测试',
-        index: 'alsdjkladajkdalk',
+        desc: '测试desc',
+        preview: '',
         htmlTree: {
             A: {
                 element: 'div',
@@ -32,72 +45,87 @@ exports.build = async (ctx, next) => {
                 defaultJs: '',
                 extraJs: '',
             },
-            B: {
-                element: 'div',
-                key: 'B',
-                children: {
-                    C: {
-                        element: 'div',
-                        key: 'C',
-                        text: '3333',
-                        css: {
-                            backgroundColor: '#f5f5f5',
-                            fontSize: '28px',
-                            color: 'red',
-                        },
-                    },
-                    D: {
-                        element: 'div',
-                        key: 'D',
-                        children: {
-                            E: {
-                                element: 'div',
-                                key: 'E',
-                                text: '444',
-                            },
-                            F: {
-                                element: 'div',
-                                key: 'F',
-                                text: '555',
-                            },
-                        },
-                    },
-                },
-            },
-            G: {
-                element: 'image',
-                key: 'G',
-                src: '//www.baidu.com/img/bd_logo1.png',
-                css: {
-                    backgroundColor: '#f5f5f5',
-                    fontSize: '28px',
-                    color: 'red',
-                },
-            },
-            H: {
-                element: 'image',
-                key: 'H',
-                src: '//www.baidu.com/img/bd_logo1.png',
-                css: {
-                    backgroundColor: '#f5f5f5',
-                    fontSize: '28px',
-                    color: 'red',
-                },
-                defaultJs: `
-setTimeout(() => {
-    console.error(222);
-}, 1000)`,
-            },
         },
-    };
-    const { index, htmlTree } = data;
-    const dirPath = `${path.resolve('./')}/public/html/${index}`;
+    };*/
+    let { id, title, desc, htmlTree, preview } = ctx.request.body;
+    const time = utils.dateFormat(new Date().getTime());
+    let pageResult = false;
+    let listResult = false;
+    let msg = '';
+    if (id) {
+        console.error('有数据');
+        try {
+            pageResult = await PageModule.update(
+                { id },
+                {
+                    $set: {
+                        title,
+                        desc,
+                        htmlTree,
+                        updateTime: time,
+                    },
+                },
+            );
+            listResult = await ListModule.update(
+                { id },
+                {
+                    $set: {
+                        title,
+                        desc,
+                        preview,
+                    },
+                },
+            );
+        } catch (e) {
+            msg = e;
+        }
+    } else {
+        console.error('无数据');
+        id = utils.uuid();
+        const _page = new PageModule({
+            id,
+            title,
+            desc,
+            htmlTree,
+            createTime: time,
+            updateTime: time,
+        });
+        const _list = new ListModule({
+            id,
+            title,
+            desc,
+            preview,
+        });
+
+        try {
+            pageResult = await _page.save();
+            listResult = await _list.save();
+        } catch (e) {
+            msg = e;
+        }
+    }
+
+    if (!!pageResult && !!listResult) {
+        ctx.body = utils.res(200, 'ok', { result: true });
+    } else {
+        ctx.body = utils.res(500, msg, {});
+    }
+};
+
+exports.pageBuild = async (ctx, next) => {
+    const result = await PageModule.findOne({ id: ctx.query.id });
+    if (!result) {
+        ctx.body = utils.res(500, 'no data', {});
+        return;
+    }
+    const { id, htmlTree } = result;
+    const dirPath = `${path.resolve('./')}/public/html/${id}`;
     // 判断目录存在
     const dirExists = fs.existsSync(dirPath);
     // 创建新目录
     if (!dirExists) fs.mkdirSync(dirPath);
 
-    writeHtml(dirPath, data, next);
+    writeHtml(dirPath, result, next);
     writeCss(dirPath, htmlTree, next);
     writeJs(dirPath, htmlTree, next);
 
@@ -105,6 +133,12 @@ setTimeout(() => {
         result: true,
     });
 };
+
+exports.pageDelete = async (ctx, next) => {};
+
+exports.pageRelease = async (ctx, next) => {}
+
+const dataIsExist = async (mod, data) => !!(await mod.findOne(data));
 
 // 写入js
 const writeJs = (dirPath, htmlTree, next) => {
@@ -144,9 +178,9 @@ ele${utils.delLine(key)}.on('${row.type}', () => {
 
 // 写入HTML
 const writeHtml = (dirPath, data, next) => {
-    const { index, title, htmlTree } = data;
+    const { id, title, htmlTree } = data;
     let html = renderHtml(htmlTree);
-    const htmlContext = defaultHtml(index, title, html);
+    const htmlContext = defaultHtml(id, title, html);
     fs.writeFileSync(`${dirPath}/index.html`, htmlContext);
 };
 
@@ -232,14 +266,15 @@ const writeCss = (dirPath, htmlTree, next) => {
 
 const pxToRem = text => {
     if (text.search(/[0-9]px/) > -1) {
-        return (parseInt(text) * 2 / 45).toFixed(6) + 'rem';
+        return ((parseInt(text) * 2) / 45).toFixed(6) + 'rem';
     } else {
         return text;
     }
-}
+};
 
 // 默认html
-const defaultHtml = (index, title = '', text = '') => `<!DOCTYPE html>
+const defaultHtml = (id, title = '', text = '') => {
+    return `<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -250,7 +285,7 @@ const defaultHtml = (index, title = '', text = '') => `<!DOCTYPE html>
         <meta name="apple-mobile-web-app-status-bar-style" content="white" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
-        <link rel="stylesheet" href="./${index}/css/index.css" />
+        <link rel="stylesheet" href="./${id}/css/index.css" />
         <script>
             !(function(x) {
                 function w() {
@@ -284,18 +319,19 @@ const defaultHtml = (index, title = '', text = '') => `<!DOCTYPE html>
             ${text}
         </div>
         <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
-        <script src="./${index}/js/index.js"></script>
+        <script src="./${id}/js/index.js"></script>
     </body>
 </html>`;
+};
 
 // 默认css
-const defaultCss = (text = '') => `* {
+const defaultCss = () => {
+    return `* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     outline: none;
     max-width: 100%;
-    ${text}
 }
 
 body {
@@ -309,3 +345,4 @@ body {
     }
 }
 `;
+};
