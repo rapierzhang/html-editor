@@ -90,13 +90,13 @@ setTimeout(() => {
         },
     };
     const { index, htmlTree } = data;
-    const dirPath = `${path.resolve('./')}/views/${index}`;
+    const dirPath = `${path.resolve('./')}/public/html/${index}`;
     // 判断目录存在
     const dirExists = fs.existsSync(dirPath);
     // 创建新目录
     if (!dirExists) fs.mkdirSync(dirPath);
 
-    writeHtml(dirPath, htmlTree, next);
+    writeHtml(dirPath, data, next);
     writeCss(dirPath, htmlTree, next);
     writeJs(dirPath, htmlTree, next);
 
@@ -106,12 +106,12 @@ setTimeout(() => {
 };
 
 // 写入js
-const writeJs = (dirPath, data, next) => {
+const writeJs = (dirPath, htmlTree, next) => {
     const jsDirPath = `${dirPath}/js`;
     const jsDirExists = fs.existsSync(jsDirPath);
     if (!jsDirExists) fs.mkdirSync(jsDirPath);
     let jsContext = '';
-    const jsArr = utils.objToArr(data);
+    const jsArr = utils.objToArr(htmlTree);
     jsArr.forEach(item => {
         const { key, bindJs, defaultJs, extraJs } = item;
         // 绑定事件
@@ -143,8 +143,9 @@ ele${utils.delLine(key)}.on('${row.type}', () => {
 
 // 写入HTML
 const writeHtml = (dirPath, data, next) => {
-    let html = renderHtml(data);
-    const htmlContext = defaultHtml(html);
+    const { title, htmlTree } = data;
+    let html = renderHtml(htmlTree);
+    const htmlContext = defaultHtml(title, html);
     fs.writeFileSync(`${dirPath}/index.html`, htmlContext);
 };
 
@@ -197,12 +198,12 @@ const renderAttribute = data => {
 };
 
 // 写入css
-const writeCss = (dirPath, data, next) => {
+const writeCss = (dirPath, htmlTree, next) => {
     const cssDirPath = `${dirPath}/css`;
     const cssDirExists = fs.existsSync(cssDirPath);
     if (!cssDirExists) fs.mkdirSync(cssDirPath);
     let cssContext = defaultCss();
-    const cssArr = utils.objToArr(data);
+    const cssArr = utils.objToArr(htmlTree);
     cssArr.forEach(item => {
         let cssContent = '';
         const { css } = item;
@@ -229,12 +230,17 @@ const writeCss = (dirPath, data, next) => {
 };
 
 // 默认html
-const defaultHtml = (text = '') => `<!DOCTYPE html>
+const defaultHtml = (title = '', text = '') => `<!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-        <link rel="stylesheet" href="./css/index.css">
+        <meta charset="UTF-8" />
+        <meta 
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        />
+        <meta name="format-detection" content="telephone=no" />
+        <title>${title}</title>
+        <link rel="stylesheet" href="./css/index.css" />
     </head>
     <body>
         <div>

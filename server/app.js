@@ -5,6 +5,9 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+const staticFiles = require('koa-static');
+
+const path = require('path');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -20,7 +23,7 @@ app.use(
 );
 app.use(json());
 app.use(logger());
-app.use(require('koa-static')(__dirname + '/public'));
+app.use(staticFiles(__dirname + '/public'));
 
 app.use(
     views(__dirname + '/views', {
