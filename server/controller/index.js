@@ -84,7 +84,7 @@ exports.build = async (ctx, next) => {
                 },
                 defaultJs: `
 setTimeout(() => {
-    alert(222);
+    console.error(222);
 }, 1000)`,
             },
         },
@@ -211,7 +211,7 @@ const writeCss = (dirPath, htmlTree, next) => {
             const cssLen = Object.keys(css).length;
             let cssRowIdx = 0;
             for (let key in css) {
-                cssContent += `${utils.toLine(key)}: ${css[key]};`;
+                cssContent += `${utils.toLine(key)}: ${pxToRem(css[key])};`;
                 cssRowIdx++;
                 if (cssRowIdx < cssLen) {
                     cssContent += `
@@ -228,6 +228,14 @@ const writeCss = (dirPath, htmlTree, next) => {
     });
     fs.writeFileSync(`${cssDirPath}/index.css`, cssContext);
 };
+
+const pxToRem = text => {
+    if (text.search(/[0-9]px/) > -1) {
+        return parseInt(text) / 40 + 'rem';
+    } else {
+        return text;
+    }
+}
 
 // 默认html
 const defaultHtml = (index, title = '', text = '') => `<!DOCTYPE html>
@@ -271,7 +279,7 @@ const defaultHtml = (index, title = '', text = '') => `<!DOCTYPE html>
         </script>
     </head>
     <body>
-        <div>
+        <div class="container">
             ${text}
         </div>
         <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
@@ -285,6 +293,18 @@ const defaultCss = (text = '') => `* {
     margin: 0;
     box-sizing: border-box;
     outline: none;
+    max-width: 100%;
     ${text}
+}
+
+body {
+    background: #f5f5f5;
+}
+
+@media screen and (min-width: 600px) {
+    .container {
+        width: 375px;
+        margin: 0 auto;
+    }
 }
 `;

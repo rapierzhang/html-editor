@@ -7,5 +7,5 @@ eleA.on('mouseover', () => {
 });
 
 setTimeout(() => {
-    alert(222);
+    console.error(222);
 }, 1000)
