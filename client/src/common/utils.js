@@ -115,7 +115,7 @@ const utils = {
         }
         render(initObj)
         return list
-    }
+    },
 };
 
 export default utils;

@@ -93,13 +93,6 @@ module.exports = {
     plugins: [
         // new webpack.HotModuleReplacementPlugin()
         new CleanWebpackPlugin(['dist']),
-        new copyWebpackPlugin([
-            {
-                //复制static到dist
-                from: __dirname + '/src/static', //打包的静态资源目录地址
-                to: './static', //打包到dist下面的static
-            },
-        ]),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html'), //模板
             filename: 'index.html',
