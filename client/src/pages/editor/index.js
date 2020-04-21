@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
 import './editor.scss';
+import { elementsUpdate } from './actions'
 
 const eleList = ['div', 'span'];
 
@@ -148,6 +150,7 @@ class Editor extends Component {
                 [key]: eleObj,
             },
         });
+        this.props.dispatch(elementsUpdate({}))
     }
 
     // 设置元素失败
@@ -214,42 +217,48 @@ class Editor extends Component {
         return (
             <div className='editor'>
                 {/*------ 拖拽虚拟元素 ------*/}
+                <div className='header'></div>
+                <div className='content'>
+                    {/*------ 元素列表 ------*/}
+                    <div className='ele-list'>
+                        {eleList.map((item, idx) => (
+                            <div key={`item-${idx}`} className='ele-item' onMouseDown={this.msDown.bind(this, item)}>
+                                {item}
+                            </div>
+                        ))}
+                    </div>
+                    {/*------ 画布 ------*/}
+                    <div className='table'>
+                        <div className='context' ref='ctx'>
+                            {this.renderElements(elements)}
+                        </div>
+                    </div>
+                    {/*------ 属性 ------*/}
+                    <div className='side-bar'>
+                        <ArrtForm
+                            activeKey={activeKey}
+                            isEdit={isEdit}
+                            elements={elements}
+                            onSelectNode={this.onNodeSelect.bind(this)}
+                            onAttrChange={this.onAttrChange.bind(this)}
+                            onElementRemove={this.onElementRemove.bind(this)}
+                            clearActiveKey={this.clearActiveKey.bind(this)}
+                            updateTree={this.updateTree.bind(this)}
+                        />
+                    </div>
+                </div>
                 <div
                     className={classNames('shadow-ele', { show: isDown })}
                     style={{ left: `${movingX}px`, top: `${movingY}px` }}
                 >
                     {dragName}
                 </div>
-                {/*------ 元素列表 ------*/}
-                <div className='ele-list'>
-                    {eleList.map((item, idx) => (
-                        <div key={`item-${idx}`} className='ele-item' onMouseDown={this.msDown.bind(this, item)}>
-                            {item}
-                        </div>
-                    ))}
-                </div>
-                {/*------ 画布 ------*/}
-                <div className='table'>
-                    <div className='context' ref='ctx'>
-                        {this.renderElements(elements)}
-                    </div>
-                </div>
-                {/*------ 属性 ------*/}
-                <div className='side-bar'>
-                    <ArrtForm
-                        activeKey={activeKey}
-                        isEdit={isEdit}
-                        elements={elements}
-                        onSelectNode={this.onNodeSelect.bind(this)}
-                        onAttrChange={this.onAttrChange.bind(this)}
-                        onElementRemove={this.onElementRemove.bind(this)}
-                        clearActiveKey={this.clearActiveKey.bind(this)}
-                        updateTree={this.updateTree.bind(this)}
-                    />
-                </div>
             </div>
         );
     }
 }
 
-export default Editor;
+export default connect(
+    ({EditorInfo}) => ({EditorInfo}),
+    dispatch => ({ dispatch }),
+)(Editor);
