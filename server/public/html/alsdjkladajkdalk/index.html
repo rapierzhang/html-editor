@@ -1,14 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" />
-        <meta 
-            name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-        />
-        <meta name="format-detection" content="telephone=no" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-touch-fullscreen" content="yes" />
+        <meta name="format-detection" content="telephone=no,address=no" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>测试</title>
-        <link rel="stylesheet" href="./css/index.css" />
+        <link rel="stylesheet" href="./alsdjkladajkdalk/css/index.css" />
+        <script>
+            !(function(x) {
+                function w() {
+                    let v,
+                        u,
+                        s = x.document,
+                        r = s.documentElement,
+                        a = r.getBoundingClientRect().width;
+                    if (!v && !u) {
+                        var n = !!x.navigator.appVersion.match(/AppleWebKit.*Mobile.*/);
+                        v = x.devicePixelRatio;
+                        (v = n ? v : 1), (u = 1 / v);
+                    }
+                    if (a >= 640) {
+                        r.style.fontSize = '40px';
+                    } else {
+                        if (a <= 320) {
+                            r.style.fontSize = '20px';
+                        } else {
+                            r.style.fontSize = (a / 320) * 20 + 'px';
+                        }
+                    }
+                }
+                x.addEventListener('resize', () => w());
+                w();
+            })(window);
+        </script>
     </head>
     <body>
         <div>
@@ -32,6 +60,6 @@
             <image id='H' class='H' src='//www.baidu.com/img/bd_logo1.png'/>
         </div>
         <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
-        <script src="./js/index.js"></script>
+        <script src="./alsdjkladajkdalk/js/index.js"></script>
     </body>
 </html>

@@ -143,9 +143,9 @@ ele${utils.delLine(key)}.on('${row.type}', () => {
 
 // 写入HTML
 const writeHtml = (dirPath, data, next) => {
-    const { title, htmlTree } = data;
+    const { index, title, htmlTree } = data;
     let html = renderHtml(htmlTree);
-    const htmlContext = defaultHtml(title, html);
+    const htmlContext = defaultHtml(index, title, html);
     fs.writeFileSync(`${dirPath}/index.html`, htmlContext);
 };
 
@@ -230,24 +230,52 @@ const writeCss = (dirPath, htmlTree, next) => {
 };
 
 // 默认html
-const defaultHtml = (title = '', text = '') => `<!DOCTYPE html>
+const defaultHtml = (index, title = '', text = '') => `<!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" />
-        <meta 
-            name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-        />
-        <meta name="format-detection" content="telephone=no" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-touch-fullscreen" content="yes" />
+        <meta name="format-detection" content="telephone=no,address=no" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
-        <link rel="stylesheet" href="./css/index.css" />
+        <link rel="stylesheet" href="./${index}/css/index.css" />
+        <script>
+            !(function(x) {
+                function w() {
+                    let v,
+                        u,
+                        s = x.document,
+                        r = s.documentElement,
+                        a = r.getBoundingClientRect().width;
+                    if (!v && !u) {
+                        var n = !!x.navigator.appVersion.match(/AppleWebKit.*Mobile.*/);
+                        v = x.devicePixelRatio;
+                        (v = n ? v : 1), (u = 1 / v);
+                    }
+                    if (a >= 640) {
+                        r.style.fontSize = '40px';
+                    } else {
+                        if (a <= 320) {
+                            r.style.fontSize = '20px';
+                        } else {
+                            r.style.fontSize = (a / 320) * 20 + 'px';
+                        }
+                    }
+                }
+                x.addEventListener('resize', () => w());
+                w();
+            })(window);
+        </script>
     </head>
     <body>
         <div>
             ${text}
         </div>
         <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
-        <script src="./js/index.js"></script>
+        <script src="./${index}/js/index.js"></script>
     </body>
 </html>`;
 
