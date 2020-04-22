@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
 import './editor.scss';
-import { activeKeySet, elementsUpdate, indexIncrement, isEditSet } from './actions';
+import { activeKeySet, elementSelect, elementsUpdate, indexIncrement, isEditSet } from './actions';
 
 const eleList = ['div', 'span'];
 
@@ -112,12 +112,9 @@ class Editor extends Component {
     }
 
     // 选中元素
-    onNodeSelect(key) {
-        const {
-            editorInfo: { activeKey },
-        } = this.props;
-        this.props.dispatch(activeKeySet(key));
-        this.props.dispatch(isEditSet(key == activeKey)); //双击编辑
+    onNodeSelect(id) {
+        const { activeKey, elements } = this.props.editorInfo;
+        this.props.dispatch(elementSelect(id, activeKey, elements));
     }
 
     // 渲染画布中元素
@@ -169,7 +166,7 @@ class Editor extends Component {
                     </div>
                     {/*------ 属性 ------*/}
                     <div className='side-bar'>
-                        <ArrtForm/>
+                        <ArrtForm />
                     </div>
                 </div>
                 <div

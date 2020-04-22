@@ -11,6 +11,7 @@ const editorInfo = {
 };
 
 export default (state = editorInfo, action) => {
+    // console.error(action)
     switch (action.type) {
         // index自增
         case INDEX_INCREMENT:
@@ -24,6 +25,7 @@ export default (state = editorInfo, action) => {
         // 元素更新
         case ELEMENTS_UPDATE:
             return { ...state, elements: action.elements };
+            // 元素加载
         case ATTRIBUTE_LOAD:
             return { ...state, activeEle: action.activeEle };
         default:

@@ -18,40 +18,12 @@ class ArrtForm extends Component {
             treeBottom: 0,
             treeLeft: 0,
             treeRight: 0,
-
-            // 属性
-            text: '',
-
-            backgroundImage: '',
-            backgroundColor: '',
-
-            fontSize: '12px',
-            color: '#000',
-            fontFamily: '',
-
-            marginTop: '',
-            marginRight: '',
-            marginBottom: '',
-            marginLeft: '',
-
-            borderTop: '',
-            borderRight: '',
-            borderBottom: '',
-            borderLeft: '',
-
-            paddingTop: '',
-            paddingRight: '',
-            paddingBottom: '',
-            paddingLeft: '',
-
-            width: '',
-            height: '',
         };
     }
 
     static getDerivedStateFromProps(props, state) {
-        // console.error(props.editorInfo)
-        return null
+        // console.error(props.editorInfo.activeEle)
+        return null;
     }
 
     // 切换导航
@@ -63,7 +35,6 @@ class ArrtForm extends Component {
     onAttrChange(attr, e) {
         const { elements, activeKey } = this.props.editorInfo;
         const val = e.target.value;
-        this.setState({ [attr]: val });
         const thisNode = utils.deepSearch(elements, activeKey);
         const newNode = {
             ...thisNode,
@@ -76,9 +47,9 @@ class ArrtForm extends Component {
     // 样式更改
     onStyleBlur(attr, e) {
         const { elements, activeKey } = this.props.editorInfo;
-        const thisNode = elements[activeKey];
-        const thisStyle = thisNode.style || {};
         const val = e.target.value;
+        const thisNode = utils.deepSearch(elements, activeKey);
+        const thisStyle = thisNode.style || {};
         const newNode = {
             ...thisNode,
             style: { ...thisStyle, [attr]: val },
@@ -139,7 +110,7 @@ class ArrtForm extends Component {
     // 选择节点
     selectNode(ele) {
         const { activeKey, elements } = this.props.editorInfo;
-        this.props.dispatch(elementSelect(ele.id, activeKey, elements))
+        this.props.dispatch(elementSelect(ele.id, activeKey, elements));
     }
 
     // 拖拽树的节点
@@ -199,11 +170,8 @@ class ArrtForm extends Component {
 
     render() {
         const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
+        const { navIndex, isDown, movingX, movingY } = this.state;
         const {
-            navIndex,
-            isDown,
-            movingX,
-            movingY,
             text,
             backgroundImage,
             backgroundColor,
@@ -229,8 +197,7 @@ class ArrtForm extends Component {
 
             width,
             height,
-        } = this.state;
-        const thisEle = elements[activeKey];
+        } = activeEle;
 
         return (
             <div className='attribute'>

@@ -1,4 +1,4 @@
-import { ELEMENTS_UPDATE, ATTRIBUTE_LOAD, INDEX_INCREMENT, ACTIVE_KEY_SET, EDIT_STATUS_SET } from './action-types';
+import { ELEMENTS_UPDATE, INDEX_INCREMENT, ACTIVE_KEY_SET, EDIT_STATUS_SET, ATTRIBUTE_LOAD } from './action-types';
 import utils from '../../common/utils';
 
 // index自增
@@ -33,20 +33,19 @@ export const isEditSet = isEdit => dispatch => {
 };
 
 // 设置选中元素的属性
-const attributeLoad = (elements, activeKey) => dispatch =>{
+export const attributeLoad = (elements, activeKey) => dispatch => {
     const activeEle = utils.deepSearch(elements, activeKey);
     dispatch({
         type: ATTRIBUTE_LOAD,
         activeEle,
     });
-}
+};
 
 // 选择编辑
 export const elementSelect = (id, activeKey, elements) => dispatch => {
-    console.error(id, activeKey)
-    dispatch(activeKeySet(id))
+    dispatch(activeKeySet(id));
     if (id == activeKey) {
-        dispatch(isEditSet(true))
-        dispatch(attributeLoad(elements, activeKey))
+        dispatch(isEditSet(true));
+        dispatch(attributeLoad(elements, activeKey));
     }
-}
+};
