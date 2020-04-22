@@ -1,9 +1,8 @@
 import { ELEMENT_UPDATE } from './action-types';
 
-export const elementsUpdate = data => dispatch => {
-    console.error(555, data);
+export const elementsUpdate = elements => dispatch => {
     dispatch({
         type: ELEMENT_UPDATE,
-        data,
+        elements
     });
 };

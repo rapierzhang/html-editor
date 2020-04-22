@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
 import './editor.scss';
-import { elementsUpdate } from './actions'
+import { elementsUpdate } from './actions';
 
 const eleList = ['div', 'span'];
 
@@ -63,8 +63,8 @@ class Editor extends Component {
                 Z: {
                     element: 'div',
                     key: 'Z',
-                    text: 'zzz'
-                }
+                    text: 'zzz',
+                },
             },
         };
     }
@@ -150,7 +150,12 @@ class Editor extends Component {
                 [key]: eleObj,
             },
         });
-        this.props.dispatch(elementsUpdate({}))
+        this.props.dispatch(
+            elementsUpdate({
+                ...elements,
+                [key]: eleObj,
+            }),
+        );
     }
 
     // 设置元素失败
@@ -175,7 +180,7 @@ class Editor extends Component {
     // 更改属性
     onAttrChange(newNode) {
         const { activeKey, elements } = this.state;
-        const newElements = utils.deepUpdate(elements, {[activeKey]: newNode});
+        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.setState({ elements: newElements });
     }
 
@@ -206,13 +211,14 @@ class Editor extends Component {
 
     // 更新节点
     updateTree(elements) {
-        this.setState({ elements })
+        this.setState({ elements });
     }
 
     render() {
         const { isDown, dragName, activeKey, isEdit, elements, movingX, movingY } = this.state;
         const list = Object.values(elements);
         // activeKey && console.error(111, elements, activeKey);
+        console.error(this.props.editorInfo)
 
         return (
             <div className='editor'>
@@ -259,6 +265,6 @@ class Editor extends Component {
 }
 
 export default connect(
-    ({EditorInfo}) => ({EditorInfo}),
+    ({ editorInfo }) => ({ editorInfo }),
     dispatch => ({ dispatch }),
 )(Editor);
