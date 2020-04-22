@@ -1,4 +1,11 @@
-import { ELEMENTS_UPDATE, INDEX_INCREMENT, ACTIVE_KEY_SET, EDIT_STATUS_SET, ATTRIBUTE_LOAD } from './action-types';
+import {
+    ELEMENTS_UPDATE,
+    INDEX_INCREMENT,
+    ACTIVE_KEY_SET,
+    EDIT_STATUS_SET,
+    ATTRIBUTE_LOAD,
+    CANVAS_POSITION_SET,
+} from './action-types';
 
 const editorInfo = {
     index: 0, // 元素索引
@@ -7,7 +14,13 @@ const editorInfo = {
     activeKey: '', // 选中元素的key
     activeEle: {}, // 选中的元素
 
-    elements: {},
+    canvasPosition: {
+        ctxTop: 0,
+        ctxBottom: 0,
+        ctxLeft: 0,
+        ctxRight: 0,
+    }, //画布位置
+    elements: {}
 };
 
 export default (state = editorInfo, action) => {
@@ -28,6 +41,9 @@ export default (state = editorInfo, action) => {
             // 元素加载
         case ATTRIBUTE_LOAD:
             return { ...state, activeEle: action.activeEle };
+        // 设置画布位置
+        case CANVAS_POSITION_SET:
+            return { ...state, canvasPosition: action.canvasPosition }
         default:
             return state;
     }

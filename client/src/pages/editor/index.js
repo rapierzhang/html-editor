@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
 import './editor.scss';
-import { activeKeySet, elementSelect, elementsUpdate, indexIncrement, isEditSet } from './actions';
+import { activeKeySet, canvasPositionSet, elementSelect, elementsUpdate, indexIncrement, isEditSet } from './actions';
 
 const eleList = ['div', 'span'];
 
@@ -17,12 +17,6 @@ class Editor extends Component {
             // 移动中位置
             movingX: 0,
             movingY: 0,
-
-            // 画布位置
-            ctxTop: 0,
-            ctxBottom: 0,
-            ctxLeft: 0,
-            ctxRight: 0,
         };
     }
 
@@ -40,14 +34,14 @@ class Editor extends Component {
 
     // 获取画布位置
     ctxPosition() {
-        const ctx = this.refs.ctx;
-        const { offsetTop, offsetHeight, offsetLeft, offsetWidth } = ctx;
-        this.setState({
+        const { offsetTop, offsetHeight, offsetLeft, offsetWidth } = this.refs.ctx;
+        const canvasPosition = {
             ctxTop: offsetTop,
             ctxBottom: offsetTop + offsetHeight,
             ctxLeft: offsetLeft,
             ctxRight: offsetLeft + offsetWidth,
-        });
+        };
+        this.props.dispatch(canvasPositionSet(canvasPosition));
     }
 
     // 开始拖拽
@@ -71,10 +65,12 @@ class Editor extends Component {
         };
         // 拖拽结束
         window.onmouseup = e => {
-            const { isDown, ctxTop, ctxBottom, ctxLeft, ctxRight } = this.state;
+            const { isDown } = this.state;
+            const {
+                canvasPosition: { ctxTop, ctxBottom, ctxLeft, ctxRight },
+            } = this.props.editorInfo;
             if (!isDown) return;
             this.setState({ isDown: false, movingX: 0, movingY: 0 });
-
             const endX = e.clientX;
             const endY = e.clientY;
             // 判断是否在画布内

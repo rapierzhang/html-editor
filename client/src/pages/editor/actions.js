@@ -1,4 +1,11 @@
-import { ELEMENTS_UPDATE, INDEX_INCREMENT, ACTIVE_KEY_SET, EDIT_STATUS_SET, ATTRIBUTE_LOAD } from './action-types';
+import {
+    ELEMENTS_UPDATE,
+    INDEX_INCREMENT,
+    ACTIVE_KEY_SET,
+    EDIT_STATUS_SET,
+    ATTRIBUTE_LOAD,
+    CANVAS_POSITION_SET,
+} from './action-types';
 import utils from '../../common/utils';
 
 // index自增
@@ -49,3 +56,11 @@ export const elementSelect = (id, activeKey, elements) => dispatch => {
         dispatch(attributeLoad(elements, activeKey));
     }
 };
+
+// 设置画布位置
+export const canvasPositionSet = canvasPosition => dispatch => {
+    dispatch({
+        type: CANVAS_POSITION_SET,
+        canvasPosition
+    })
+}

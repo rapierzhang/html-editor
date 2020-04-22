@@ -1,7 +1,11 @@
 .ele-box {
     position: relative;
+    background: lightpink;
+    outline: transparent dashed 1px;
 
     &.active {
+        outline: #ea413c dashed 1px;
+
         .ctrl-point {
             position: absolute;
             width: 6px;
@@ -10,27 +14,36 @@
             border: 1px solid #ea413c;
             background: #fff;
             z-index: 9999;
-            cursor: pointer;
 
 
             &.top {
                 top: -3px;
                 left: calc(50% - 3px);
+                cursor: n-resize;
             }
 
             &.right {
                 top: calc(50% - 3px);
                 right: -3px;
+                cursor: e-resize;
             }
 
             &.bottom {
                 bottom: -3px;
                 left: calc(50% - 3px);
+                cursor: s-resize;
             }
 
             &.left {
                 left: -3px;
                 top: calc(50% - 3px);
+                cursor: w-resize;
+            }
+
+            &.center {
+                left: calc(50% - 3px);
+                top: calc(50% - 3px);
+                cursor: move;
             }
         }
     }
@@ -38,11 +51,6 @@
     .ele-div {
         width: 100%;
         min-height: 50px;
-        background: lightpink;
-
-        &.active {
-            outline: #ea413c dashed 1px;
-        }
     }
 
 }
