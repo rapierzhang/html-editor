@@ -89,7 +89,9 @@ class Editor extends Component {
     // 设置元素成功
     setSucc(ele) {
         console.error('set success!!!');
-        const { editorInfo: { elements, index } } = this.props;
+        const {
+            editorInfo: { elements, index },
+        } = this.props;
         const key = this.uniqueKey(index);
         const eleObj = {
             element: ele,
@@ -99,7 +101,7 @@ class Editor extends Component {
             text: '',
             onClick: this.onNodeSelect.bind(this, key),
         };
-        this.props.dispatch(indexIncrement())
+        this.props.dispatch(indexIncrement());
         this.props.dispatch(
             elementsUpdate({
                 ...elements,
@@ -115,42 +117,47 @@ class Editor extends Component {
 
     // 选中元素
     onNodeSelect(key) {
-        const { editorInfo: { activeKey } } = this.props;
-        this.props.dispatch(activeKeySet(key))
-        this.props.dispatch(isEditSet( key == activeKey)) //双击编辑
+        const {
+            editorInfo: { activeKey },
+        } = this.props;
+        this.props.dispatch(activeKeySet(key));
+        this.props.dispatch(isEditSet(key == activeKey)); //双击编辑
     }
 
     // 取消选中元素
     clearActiveKey() {
-        this.props.dispatch(activeKeySet(false))
-        this.props.dispatch(isEditSet(false))
+        this.props.dispatch(activeKeySet(false));
+        this.props.dispatch(isEditSet(false));
     }
 
     // 更改属性
     onAttrChange(newNode) {
-        const { editorInfo: { elements, activeKey } } = this.props;
+        const {
+            editorInfo: { elements, activeKey },
+        } = this.props;
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
-        this.props.dispatch(
-            elementsUpdate({
-                elements: newElements
-            }),
+        this.props.dispatch(elementsUpdate(newElements),
         );
     }
 
     // 删除元素
     onElementRemove(key) {
-        const { editorInfo: { elements } } = this.props;
+        const {
+            editorInfo: { elements },
+        } = this.props;
         const newElements = utils.deepRemove(elements, key);
         this.props.dispatch(
             elementsUpdate({
-                elements: newElements
+                elements: newElements,
             }),
         );
     }
 
     // 渲染画布中元素
     renderElements(elements) {
-        const { editorInfo: { activeKey } } = this.props;
+        const {
+            editorInfo: { activeKey },
+        } = this.props;
         const list = Object.values(elements);
         return list.map((item, idx) => {
             return (
@@ -168,18 +175,16 @@ class Editor extends Component {
 
     // 更新节点
     updateTree(elements) {
-        this.props.dispatch(
-            elementsUpdate({
-                elements
-            }),
-        );
+        this.props.dispatch(elementsUpdate({ elements }));
     }
 
     render() {
-        const { elements, activeKey, isEdit } = this.props.editorInfo;
+        const {
+            editorInfo: { elements, activeKey, isEdit },
+        } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
         const list = Object.values(elements);
-        console.error(elements)
+        console.error(elements);
 
         return (
             <div className='editor'>
@@ -206,10 +211,6 @@ class Editor extends Component {
                             activeKey={activeKey}
                             isEdit={isEdit}
                             elements={elements}
-                            onSelectNode={this.onNodeSelect.bind(this)}
-                            onAttrChange={this.onAttrChange.bind(this)}
-                            onElementRemove={this.onElementRemove.bind(this)}
-                            clearActiveKey={this.clearActiveKey.bind(this)}
                             updateTree={this.updateTree.bind(this)}
                         />
                     </div>
