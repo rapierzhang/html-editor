@@ -170,7 +170,8 @@ class ArrtForm extends Component {
                 const endX = e.clientX;
                 const endY = e.clientY;
                 if (endX > treeLeft && endX < treeRight && endY > treeTop && endY < treeBottom) {
-                    const newElements = utils.deepRemove(elements, ele.key);
+                    // 先删除节点
+                    const removedElements = utils.deepRemove(elements, ele.key);
                     // 深度优先遍历子节点
                     const treeArr = utils.objDepthFirstTraversal(elements);
                     // 重置虚拟元素
@@ -178,13 +179,13 @@ class ArrtForm extends Component {
                     // 判断加载哪个元素的前后
                     const index = Math.floor(endY / 30); // 第几个元素
                     const dot = ((endY / 30).toFixed(1) - index).toFixed(1);
-                    let newTree;
                     const isBefore = treeArr.length - 1 > index ? true : dot < 0.5; //前后
                     const hoverKey = treeArr[Math.min(index, treeArr.length - 1)]; // 最后悬停时的元素key
                     if (hoverKey == ele.key) return; // 没变return
-                    newTree = utils.deepInsertSameFloor(newElements, hoverKey, isBefore, { [ele.key]: ele });
-                    console.error(111, newTree);
-                    this.props.updateTree(newTree);
+                    const newElements = utils.deepInsertSameFloor(removedElements, hoverKey, isBefore, {
+                        [ele.id]: ele,
+                    });
+                    this.props.dispatch(elementsUpdate(newElements));
                     console.error('在里面');
                 } else {
                     console.error('在外面');
@@ -195,7 +196,7 @@ class ArrtForm extends Component {
     }
 
     initAttr(ele) {
-        console.error(ele);
+        console.error("initAttr:", ele);
         this.setState({
             ...ele,
         });

@@ -13,24 +13,16 @@ export default (state = editorInfo, action) => {
     switch (action.type) {
         // index自增
         case INDEX_INCREMENT:
-            return Object.assign({}, state, {
-                index: editorInfo.index + 1,
-            });
+            return { ...state, index: state.index + 1 };
         // 选中状态
         case ACTIVE_KEY_SET:
-            return Object.assign({}, state, {
-                activeKey: action.activeKey,
-            });
+            return { ...state, activeKey: action.activeKey };
         // 设置编辑状态
         case EDIT_STATUS_SET:
-            return Object.assign({}, state, {
-                isEdit: action.isEdit,
-            });
+            return { ...state, isEdit: action.isEdit };
         // 元素更新
         case ELEMENT_UPDATE:
-            return Object.assign({}, state, {
-                elements: action.elements,
-            });
+            return { ...state, elements: action.elements };
         default:
             return state;
     }

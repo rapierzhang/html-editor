@@ -89,14 +89,11 @@ class Editor extends Component {
     // 设置元素成功
     setSucc(ele) {
         console.error('set success!!!');
-        const {
-            editorInfo: { elements, index },
-        } = this.props;
+        const { elements, index } = this.props.editorInfo;
+        console.error(555, elements, index)
         const key = this.uniqueKey(index);
         const eleObj = {
             element: ele,
-            key,
-            className: key,
             id: key,
             text: '',
             onClick: this.onNodeSelect.bind(this, key),
@@ -122,35 +119,6 @@ class Editor extends Component {
         } = this.props;
         this.props.dispatch(activeKeySet(key));
         this.props.dispatch(isEditSet(key == activeKey)); //双击编辑
-    }
-
-    // 取消选中元素
-    clearActiveKey() {
-        this.props.dispatch(activeKeySet(false));
-        this.props.dispatch(isEditSet(false));
-    }
-
-    // 更改属性
-    onAttrChange(newNode) {
-        const {
-            editorInfo: { elements, activeKey },
-        } = this.props;
-        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
-        this.props.dispatch(elementsUpdate(newElements),
-        );
-    }
-
-    // 删除元素
-    onElementRemove(key) {
-        const {
-            editorInfo: { elements },
-        } = this.props;
-        const newElements = utils.deepRemove(elements, key);
-        this.props.dispatch(
-            elementsUpdate({
-                elements: newElements,
-            }),
-        );
     }
 
     // 渲染画布中元素
@@ -184,7 +152,7 @@ class Editor extends Component {
         } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
         const list = Object.values(elements);
-        console.error(elements);
+        // console.error(elements);
 
         return (
             <div className='editor'>
