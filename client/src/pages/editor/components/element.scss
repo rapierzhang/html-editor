@@ -1,10 +1,49 @@
-.ele-div {
-    width: 100%;
-    min-height: 50px;
-    background: lightpink;
+.ele-box {
+    position: relative;
 
     &.active {
-        outline: #ea413c dashed 1px;
+        .ctrl-point {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 3px;
+            border: 1px solid #ea413c;
+            background: #fff;
+            z-index: 9999;
+            cursor: pointer;
+
+
+            &.top {
+                top: -3px;
+                left: calc(50% - 3px);
+            }
+
+            &.right {
+                top: calc(50% - 3px);
+                right: -3px;
+            }
+
+            &.bottom {
+                bottom: -3px;
+                left: calc(50% - 3px);
+            }
+
+            &.left {
+                left: -3px;
+                top: calc(50% - 3px);
+            }
+        }
     }
+
+    .ele-div {
+        width: 100%;
+        min-height: 50px;
+        background: lightpink;
+
+        &.active {
+            outline: #ea413c dashed 1px;
+        }
+    }
+
 }
 

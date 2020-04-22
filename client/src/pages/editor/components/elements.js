@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
-import './element.scss'
+import './element.scss';
 
 class Element extends Component {
     constructor() {
-        super(...arguments)
+        super(...arguments);
     }
 
     selectNode(key, e) {
-        e.stopPropagation()
-        this.props.onNodeSelect(key)
+        e.stopPropagation();
+        this.props.onNodeSelect(key);
     }
 
-
-    render() {
-        const { item, active } = this.props;
-
+    renderElement(item) {
+        const { activeKey } = this.props.editorInfo;
+        const active = activeKey == item.id;
         switch (item.element) {
             case 'div':
                 return (
@@ -35,6 +35,27 @@ class Element extends Component {
                 return <div>default</div>;
         }
     }
+
+    render() {
+        const {
+            item,
+            editorInfo: { activeKey },
+        } = this.props;
+        const active = item.id == activeKey;
+
+        return (
+            <div className={classNames('ele-box', { active })}>
+                <div className='ctrl-point top' />
+                <div className='ctrl-point right' />
+                <div className='ctrl-point bottom' />
+                <div className='ctrl-point left' />
+                {this.renderElement(item)}
+            </div>
+        );
+    }
 }
 
-export default Element;
+export default connect(
+    ({ editorInfo }) => ({ editorInfo }),
+    dispatch => ({ dispatch }),
+)(Element);

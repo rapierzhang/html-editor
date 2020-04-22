@@ -119,9 +119,7 @@ class Editor extends Component {
 
     // 渲染画布中元素
     renderElements(elements) {
-        const {
-            editorInfo: { activeKey },
-        } = this.props;
+        const { activeKey } = this.props.editorInfo;
         const list = Object.values(elements);
         return list.map((item, idx) => {
             return (
