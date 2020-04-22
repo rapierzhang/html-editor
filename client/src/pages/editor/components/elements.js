@@ -2,16 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import './element.scss';
+import utils from '../../../common/utils';
+import { elementsUpdate } from '../actions';
 
 class Element extends Component {
     constructor() {
         super(...arguments);
         this.state = {
             isDown: false,
+
+            // 起始拖拽位置
+            startX: 0,
+            startY: 0,
             // 移动中位置
             movingX: 0,
             movingY: 0,
-        }
+        };
     }
 
     selectNode(key, e) {
@@ -41,36 +47,49 @@ class Element extends Component {
     }
 
     onDrag(direction, evt) {
-        this.setState({
-            isDown: true,
-            movingX: evt.clientX,
-            movingY: evt.clientY,
-        });
+        const {
+            canvasPosition: { ctxTop, ctxBottom, ctxLeft, ctxRight },
+        } = this.props.editorInfo;
+        this.setState({ isDown: true });
+        const startX = evt.clientX;
+        const startY = evt.clientY;
+        const boxEle = this.refs.box;
+        const boxWidth = boxEle.offsetWidth;
+        const boxHeight = boxEle.offsetHeight;
 
         // 拖拽中
         window.onmousemove = e => {
             if (!this.state.isDown) return;
-            //获取x和y
-            this.setState({
-                movingX: e.clientX,
-                movingY: e.clientY,
-            });
+            const movingX = e.clientX;
+            const movingY = e.clientY;
+            // 超出画布
+            if (movingX < ctxLeft || movingX > ctxRight || movingY < ctxTop || movingY > ctxBottom) return;
+            // 计算宽高
+            const height = boxHeight + movingY - startY;
+            const width = boxWidth + movingX - startX;
+            // 设置宽高
+            if (direction == 'top' || direction == 'bottom') this.onStyleChange('height', height);
+            if (direction == 'left' || direction == 'right') this.onStyleChange('width', width);
         };
 
-        window.onmouseup = e => {
-            const { isDown, ctxTop, ctxBottom, ctxLeft, ctxRight } = this.state;
+        // 拖拽结束
+        window.onmouseup = () => {
+            const { isDown } = this.state;
             if (!isDown) return;
-            this.setState({ isDown: false, movingX: 0, movingY: 0 });
-
-            const endX = e.clientX;
-            const endY = e.clientY;
-            // 判断是否在画布内
-            if (endX > ctxLeft && endX < ctxRight && endY > ctxTop && endY < ctxBottom) {
-                this.setSucc(ele);
-            } else {
-                this.setFail();
-            }
+            this.setState({ isDown: false });
         };
+    }
+
+    onStyleChange(attr, val) {
+        const { elements, activeKey } = this.props.editorInfo;
+        const thisNode = utils.deepSearch(elements, activeKey);
+        const thisStyle = thisNode.style || {};
+        const newNode = {
+            ...thisNode,
+            style: { ...thisStyle, [attr]: utils.autoComplete(attr, val) },
+        };
+        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        this.props.dispatch(elementsUpdate(newElements));
     }
 
     render() {
@@ -78,15 +97,17 @@ class Element extends Component {
             item,
             editorInfo: { activeKey },
         } = this.props;
+        const { movingX, movingY } = this.state;
         const active = item.id == activeKey;
 
         return (
-            <div className={classNames('ele-box', { active })}>
-                <div className='ctrl-point top' />
-                <div className='ctrl-point right' />
-                <div className='ctrl-point bottom' />
-                <div className='ctrl-point left' />
+            <div className={classNames('ele-box', { active })} ref='box' style={item.style}>
+                <div className='ctrl-point top' onMouseDown={this.onDrag.bind(this, 'top')} />
+                <div className='ctrl-point right' onMouseDown={this.onDrag.bind(this, 'right')} />
+                <div className='ctrl-point bottom' onMouseDown={this.onDrag.bind(this, 'bottom')} />
+                <div className='ctrl-point left' onMouseDown={this.onDrag.bind(this, 'left')} />
                 <div className='ctrl-point center' />
+                <div className='border' />
                 {this.renderElement(item)}
             </div>
         );
