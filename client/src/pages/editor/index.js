@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
 import './editor.scss';
-import { elementsUpdate } from './actions';
+import { elementsUpdate, indexIncrement } from './actions';
 
 const eleList = ['div', 'span'];
 
@@ -12,7 +12,6 @@ class Editor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 5, // 元素索引
             isDown: false,
             dragName: '',
             activeKey: '',
@@ -26,46 +25,6 @@ class Editor extends Component {
             ctxBottom: 0,
             ctxLeft: 0,
             ctxRight: 0,
-
-            elements: {
-                A: {
-                    element: 'div',
-                    key: 'A',
-                    text: '1111',
-                },
-                B: {
-                    element: 'div',
-                    key: 'B',
-                    children: {
-                        C: {
-                            element: 'div',
-                            key: 'C',
-                            text: '3333',
-                        },
-                        D: {
-                            element: 'div',
-                            key: 'D',
-                            children: {
-                                E: {
-                                    element: 'div',
-                                    key: 'E',
-                                    text: '444',
-                                },
-                                F: {
-                                    element: 'div',
-                                    key: 'F',
-                                    text: '555',
-                                },
-                            },
-                        },
-                    },
-                },
-                Z: {
-                    element: 'div',
-                    key: 'Z',
-                    text: 'zzz',
-                },
-            },
         };
     }
 
@@ -132,8 +91,7 @@ class Editor extends Component {
     // 设置元素成功
     setSucc(ele) {
         console.error('set success!!!');
-        let { index, elements } = this.state;
-        index++;
+        const { editorInfo: { elements, index } } = this.props;
         const key = this.uniqueKey(index);
         const eleObj = {
             element: ele,
@@ -143,13 +101,7 @@ class Editor extends Component {
             text: '',
             onClick: this.onNodeSelect.bind(this, key),
         };
-        this.setState({
-            index,
-            elements: {
-                ...elements,
-                [key]: eleObj,
-            },
-        });
+        this.props.dispatch(indexIncrement())
         this.props.dispatch(
             elementsUpdate({
                 ...elements,
@@ -179,16 +131,25 @@ class Editor extends Component {
 
     // 更改属性
     onAttrChange(newNode) {
-        const { activeKey, elements } = this.state;
+        const { editorInfo: { elements } } = this.props;
+        const { activeKey } = this.state;
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
-        this.setState({ elements: newElements });
+        this.props.dispatch(
+            elementsUpdate({
+                elements: newElements
+            }),
+        );
     }
 
     // 删除元素
     onElementRemove(key) {
-        const { elements } = this.state;
+        const { editorInfo: { elements } } = this.props;
         const newElements = utils.deepRemove(elements, key);
-        this.setState({ elements: newElements });
+        this.props.dispatch(
+            elementsUpdate({
+                elements: newElements
+            }),
+        );
     }
 
     // 渲染画布中元素
@@ -200,7 +161,7 @@ class Editor extends Component {
                 <Element
                     key={`item-${idx}`}
                     item={item}
-                    active={activeKey == item.key}
+                    active={activeKey == item.id}
                     onNodeSelect={this.onNodeSelect.bind(this)}
                 >
                     {item.children && this.renderElements(item.children)}
@@ -211,14 +172,18 @@ class Editor extends Component {
 
     // 更新节点
     updateTree(elements) {
-        this.setState({ elements });
+        this.props.dispatch(
+            elementsUpdate({
+                elements
+            }),
+        );
     }
 
     render() {
-        const { isDown, dragName, activeKey, isEdit, elements, movingX, movingY } = this.state;
+        const { elements } = this.props.editorInfo;
+        const { isDown, dragName, activeKey, isEdit, movingX, movingY } = this.state;
         const list = Object.values(elements);
-        // activeKey && console.error(111, elements, activeKey);
-        console.error(this.props.editorInfo)
+        console.error(elements)
 
         return (
             <div className='editor'>

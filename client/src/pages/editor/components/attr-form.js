@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import './attr-form.scss';
 import utils from '../../../common/utils';
+import { connect } from 'react-redux';
 
 class ArrtForm extends Component {
     constructor() {
@@ -54,7 +55,8 @@ class ArrtForm extends Component {
 
     // 属性更改
     onAttrChange(attr, e) {
-        const { activeKey, elements } = this.props;
+        const { activeKey, editorInfo } = this.props;
+        const { elements } = editorInfo;
         const val = e.target.value;
         const thisNode = utils.deepSearch(elements, activeKey);
         const newNode = {
@@ -66,7 +68,8 @@ class ArrtForm extends Component {
 
     // 样式更改
     onStyleBlur(attr, e) {
-        const { activeKey, elements } = this.props;
+        const { activeKey, editorInfo } = this.props;
+        const { elements } = editorInfo;
         const thisNode = elements[activeKey];
         console.error(thisNode)
         const thisStyle = thisNode.style || {};
@@ -154,7 +157,7 @@ class ArrtForm extends Component {
                 this.selectNode(ele);
                 this.setState({ isDown: false });
             } else {
-                const { elements } = this.props;
+                const { elements } = this.props.editorInfo;
                 const { isDown, treeTop, treeBottom, treeLeft, treeRight } = this.state;
                 if (!isDown) return;
 
@@ -191,7 +194,7 @@ class ArrtForm extends Component {
         });
     }
 
-    onAttrChange(attr, e) {
+    /*onAttrChange(attr, e) {
         this.setState({
             [attr]: e.target.value
         })
@@ -201,10 +204,11 @@ class ArrtForm extends Component {
         this.setState({
             [attr]: e.target.value
         })
-    }
+    }*/
 
     render() {
-        const { activeKey, isEdit, elements } = this.props;
+        const { activeKey, isEdit, editorInfo } = this.props;
+        const { elements } = editorInfo;
         const {
             navIndex,
             isDown,
@@ -285,7 +289,7 @@ class ArrtForm extends Component {
                                             <input
                                                 type='text'
                                                 onBlur={this.onAttrChange.bind(this, 'text')}
-                                                onChange={this.onAttrChange.bind(this)}
+                                                onChange={this.onAttrChange.bind(this, 'text')}
                                                 value={text}
                                             />
                                         </div>
@@ -511,4 +515,8 @@ class ArrtForm extends Component {
     }
 }
 
-export default ArrtForm;
+export default connect(
+    ({ editorInfo }) => ({ editorInfo }),
+    dispatch => ({ dispatch }),
+)(ArrtForm);
+
