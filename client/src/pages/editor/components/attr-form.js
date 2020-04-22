@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import './attr-form.scss';
 import utils from '../../../common/utils';
 import { connect } from 'react-redux';
-import { activeKeySet, elementsUpdate, isEditSet } from '../actions';
+import { activeKeySet, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
 class ArrtForm extends Component {
     constructor() {
@@ -49,6 +49,11 @@ class ArrtForm extends Component {
         };
     }
 
+    static getDerivedStateFromProps(props, state) {
+        // console.error(props.editorInfo)
+        return null
+    }
+
     // 切换导航
     switchNav(navIndex) {
         this.setState({ navIndex });
@@ -56,8 +61,7 @@ class ArrtForm extends Component {
 
     // 属性更改
     onAttrChange(attr, e) {
-        const { activeKey, editorInfo } = this.props;
-        const { elements } = editorInfo;
+        const { elements, activeKey } = this.props.editorInfo;
         const val = e.target.value;
         this.setState({ [attr]: val });
         const thisNode = utils.deepSearch(elements, activeKey);
@@ -134,10 +138,8 @@ class ArrtForm extends Component {
 
     // 选择节点
     selectNode(ele) {
-        const { activeKey } = this.props.editorInfo;
-        this.props.dispatch(activeKeySet(ele.id));
-        if (ele.id == activeKey) this.props.dispatch(isEditSet(true));
-        this.initAttr(ele);
+        const { activeKey, elements } = this.props.editorInfo;
+        this.props.dispatch(elementSelect(ele.id, activeKey, elements))
     }
 
     // 拖拽树的节点
@@ -195,16 +197,8 @@ class ArrtForm extends Component {
         };
     }
 
-    initAttr(ele) {
-        console.error("initAttr:", ele);
-        this.setState({
-            ...ele,
-        });
-    }
-
     render() {
-        const { activeKey, isEdit, editorInfo } = this.props;
-        const { elements } = editorInfo;
+        const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
         const {
             navIndex,
             isDown,
@@ -284,7 +278,6 @@ class ArrtForm extends Component {
                                             <span>文字 </span>
                                             <input
                                                 type='text'
-                                                onBlur={this.onAttrChange.bind(this, 'text')}
                                                 onChange={this.onAttrChange.bind(this, 'text')}
                                                 value={text}
                                             />
@@ -311,7 +304,6 @@ class ArrtForm extends Component {
                                             <span>背景图: </span>
                                             <input
                                                 type='text'
-                                                onChange={this.onStyleChange.bind(this, 'backgroundImage')}
                                                 onBlur={this.onStyleBlur.bind(this, 'backgroundImage')}
                                                 value={backgroundImage}
                                             />
@@ -320,7 +312,6 @@ class ArrtForm extends Component {
                                             <span>背景颜色: </span>
                                             <input
                                                 type='text'
-                                                onChange={this.onStyleChange.bind(this, 'backgroundColor')}
                                                 onBlur={this.onStyleBlur.bind(this, 'backgroundColor')}
                                                 value={backgroundColor}
                                             />
@@ -335,7 +326,6 @@ class ArrtForm extends Component {
                                             <span>字号: </span>
                                             <input
                                                 type='text'
-                                                onChange={this.onStyleChange.bind(this, 'fontSize')}
                                                 onBlur={this.onStyleBlur.bind(this, 'fontSize')}
                                                 value={fontSize}
                                             />
@@ -344,7 +334,6 @@ class ArrtForm extends Component {
                                             <span>颜色: </span>
                                             <input
                                                 type='text'
-                                                onChange={this.onStyleChange.bind(this, 'color')}
                                                 onBlur={this.onStyleBlur.bind(this, 'color')}
                                                 value={color}
                                             />
@@ -353,7 +342,6 @@ class ArrtForm extends Component {
                                             <span>字体: </span>
                                             <input
                                                 type='text'
-                                                onChange={this.onStyleChange.bind(this, 'fontFamily')}
                                                 onBlur={this.onStyleBlur.bind(this, 'fontFamily')}
                                                 value={fontFamily}
                                             />
@@ -370,7 +358,6 @@ class ArrtForm extends Component {
                                                 className='box-input'
                                                 type='text'
                                                 placeholder='-'
-                                                onChange={this.onStyleChange.bind(this, 'marginLeft')}
                                                 onBlur={this.onStyleBlur.bind(this, 'marginLeft')}
                                                 value={marginLeft}
                                             />
@@ -379,7 +366,6 @@ class ArrtForm extends Component {
                                                     className='box-input'
                                                     type='text'
                                                     placeholder='-'
-                                                    onChange={this.onStyleChange.bind(this, 'marginTop')}
                                                     onBlur={this.onStyleBlur.bind(this, 'marginTop')}
                                                     value={marginTop}
                                                 />
@@ -389,7 +375,6 @@ class ArrtForm extends Component {
                                                         className='box-input'
                                                         type='text'
                                                         placeholder='-'
-                                                        onChange={this.onStyleChange.bind(this, 'borderLeft')}
                                                         onBlur={this.onStyleBlur.bind(this, 'borderLeft')}
                                                         value={borderLeft}
                                                     />
@@ -398,7 +383,6 @@ class ArrtForm extends Component {
                                                             className='box-input'
                                                             type='text'
                                                             placeholder='-'
-                                                            onChange={this.onStyleChange.bind(this, 'borderTop')}
                                                             onBlur={this.onStyleBlur.bind(this, 'borderTop')}
                                                             value={borderTop}
                                                         />
@@ -409,7 +393,6 @@ class ArrtForm extends Component {
                                                                 className='padding-input'
                                                                 type='text'
                                                                 placeholder='-'
-                                                                onChange={this.onStyleChange.bind(this, 'paddingLeft')}
                                                                 onBlur={this.onStyleBlur.bind(this, 'paddingLeft')}
                                                                 value={paddingLeft}
                                                             />
@@ -418,10 +401,6 @@ class ArrtForm extends Component {
                                                                     className='padding-input'
                                                                     type='text'
                                                                     placeholder='-'
-                                                                    onChange={this.onStyleChange.bind(
-                                                                        this,
-                                                                        'paddingTop',
-                                                                    )}
                                                                     onBlur={this.onStyleBlur.bind(this, 'paddingTop')}
                                                                     value={paddingTop}
                                                                 />
@@ -430,10 +409,6 @@ class ArrtForm extends Component {
                                                                         className='entity-input'
                                                                         type='text'
                                                                         placeholder='width'
-                                                                        onChange={this.onStyleChange.bind(
-                                                                            this,
-                                                                            'width',
-                                                                        )}
                                                                         onBlur={this.onStyleBlur.bind(this, 'width')}
                                                                         value={width}
                                                                     />
@@ -442,10 +417,6 @@ class ArrtForm extends Component {
                                                                         className='entity-input'
                                                                         type='text'
                                                                         placeholder='height'
-                                                                        onChange={this.onStyleChange.bind(
-                                                                            this,
-                                                                            'height',
-                                                                        )}
                                                                         onBlur={this.onStyleBlur.bind(this, 'height')}
                                                                         value={height}
                                                                     />
@@ -454,10 +425,6 @@ class ArrtForm extends Component {
                                                                     className='padding-input'
                                                                     type='text'
                                                                     placeholder='-'
-                                                                    onChange={this.onStyleChange.bind(
-                                                                        this,
-                                                                        'paddingBottom',
-                                                                    )}
                                                                     onBlur={this.onStyleBlur.bind(
                                                                         this,
                                                                         'paddingBottom',
@@ -469,7 +436,6 @@ class ArrtForm extends Component {
                                                                 className='padding-input'
                                                                 type='text'
                                                                 placeholder='-'
-                                                                onChange={this.onStyleChange.bind(this, 'paddingRight')}
                                                                 onBlur={this.onStyleBlur.bind(this, 'paddingRight')}
                                                                 value={paddingRight}
                                                             />
@@ -478,7 +444,6 @@ class ArrtForm extends Component {
                                                             className='box-input'
                                                             type='text'
                                                             placeholder='-'
-                                                            onChange={this.onStyleChange.bind(this, 'borderBottom')}
                                                             onBlur={this.onStyleBlur.bind(this, 'borderBottom')}
                                                             value={borderBottom}
                                                         />
@@ -487,7 +452,6 @@ class ArrtForm extends Component {
                                                         className='box-input'
                                                         type='text'
                                                         placeholder='-'
-                                                        onChange={this.onStyleChange.bind(this, 'borderRight')}
                                                         onBlur={this.onStyleBlur.bind(this, 'borderRight')}
                                                         value={borderRight}
                                                     />
@@ -496,7 +460,6 @@ class ArrtForm extends Component {
                                                     className='box-input'
                                                     type='text'
                                                     placeholder='-'
-                                                    onChange={this.onStyleChange.bind(this, 'marginBottom')}
                                                     onBlur={this.onStyleBlur.bind(this, 'marginBottom')}
                                                     value={marginBottom}
                                                 />
@@ -505,7 +468,6 @@ class ArrtForm extends Component {
                                                 className='box-input'
                                                 type='text'
                                                 placeholder='-'
-                                                onChange={this.onStyleChange.bind(this, 'marginRight')}
                                                 onBlur={this.onStyleBlur.bind(this, 'marginRight')}
                                                 value={marginRight}
                                             />

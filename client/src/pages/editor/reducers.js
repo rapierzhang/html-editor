@@ -1,11 +1,12 @@
-import { ELEMENT_UPDATE, INDEX_INCREMENT, ACTIVE_KEY_SET, EDIT_STATUS_SET } from './action-types';
+import { ELEMENTS_UPDATE, INDEX_INCREMENT, ACTIVE_KEY_SET, EDIT_STATUS_SET, ATTRIBUTE_LOAD } from './action-types';
 
 const editorInfo = {
     index: 0, // 元素索引
-    isDown: false,
-    dragName: '',
-    activeKey: '',
-    isEdit: false,
+
+    isEdit: false, // 是否编辑状态
+    activeKey: '', // 选中元素的key
+    activeEle: {}, // 选中的元素
+
     elements: {},
 };
 
@@ -21,8 +22,10 @@ export default (state = editorInfo, action) => {
         case EDIT_STATUS_SET:
             return { ...state, isEdit: action.isEdit };
         // 元素更新
-        case ELEMENT_UPDATE:
+        case ELEMENTS_UPDATE:
             return { ...state, elements: action.elements };
+        case ATTRIBUTE_LOAD:
+            return { ...state, activeEle: action.activeEle };
         default:
             return state;
     }

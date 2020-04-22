@@ -90,7 +90,6 @@ class Editor extends Component {
     setSucc(ele) {
         console.error('set success!!!');
         const { elements, index } = this.props.editorInfo;
-        console.error(555, elements, index)
         const key = this.uniqueKey(index);
         const eleObj = {
             element: ele,
@@ -141,18 +140,13 @@ class Editor extends Component {
         });
     }
 
-    // 更新节点
-    updateTree(elements) {
-        this.props.dispatch(elementsUpdate({ elements }));
-    }
-
     render() {
         const {
-            editorInfo: { elements, activeKey, isEdit },
+            editorInfo: { elements, activeKey, isEdit, activeEle },
         } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
         const list = Object.values(elements);
-        // console.error(elements);
+        // console.error(activeKey, isEdit);
 
         return (
             <div className='editor'>
@@ -175,12 +169,7 @@ class Editor extends Component {
                     </div>
                     {/*------ 属性 ------*/}
                     <div className='side-bar'>
-                        <ArrtForm
-                            activeKey={activeKey}
-                            isEdit={isEdit}
-                            elements={elements}
-                            updateTree={this.updateTree.bind(this)}
-                        />
+                        <ArrtForm/>
                     </div>
                 </div>
                 <div
