@@ -47,7 +47,7 @@ class ArrtForm extends Component {
     // 样式更改
     onStyleBlur(attr, e) {
         const { elements, activeKey } = this.props.editorInfo;
-        const val = e.target.value;
+        const val = utils.autoComplete(attr, e.target.value);
         const thisNode = utils.deepSearch(elements, activeKey);
         const thisStyle = thisNode.style || {};
         const newNode = {
@@ -222,17 +222,13 @@ class ArrtForm extends Component {
                             >
                                 样式
                             </span>
+                            <button className='close' onClick={this.close.bind(this)}>
+                                X
+                            </button>
                         </div>
-                        <div className='blank' />
                         {/*------ 属性 ------*/}
                         {navIndex === 0 && (
                             <div className='attr-box'>
-                                <div className='attr-title'>
-                                    <span>属性</span>
-                                    <button className='close' onClick={this.close.bind(this)}>
-                                        X
-                                    </button>
-                                </div>
                                 <div className='attr-card'>
                                     <div className='card-title'>定位</div>
                                     <div className='card-content'>
@@ -256,13 +252,6 @@ class ArrtForm extends Component {
                         {/*------ 样式 ------*/}
                         {navIndex === 1 && (
                             <div className='style-box'>
-                                <div className='attr-title'>
-                                    <span>样式</span>
-                                    <button className='close' onClick={this.close.bind(this)}>
-                                        close
-                                    </button>
-                                </div>
-
                                 {/*------ 背景 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>背景</div>

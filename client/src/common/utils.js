@@ -1,4 +1,5 @@
 const utils = {
+    // 节点查询
     deepSearch: (obj, key) => {
         if (obj.hasOwnProperty(key)) {
             return obj[key];
@@ -10,6 +11,7 @@ const utils = {
             }
         }
     },
+    // 节点更改
     deepUpdate: (obj1, obj2) => {
         const k = Object.keys(obj2)[0];
         let target = {};
@@ -26,6 +28,7 @@ const utils = {
         }
         return target;
     },
+    // 节点插入
     deepInsert: (obj, k, idx, insertObj) => {
         let target = {};
         for (let key in obj) {
@@ -53,6 +56,7 @@ const utils = {
         }
         return target;
     },
+    // 插入到某个元素的前后
     deepInsertSameFloor: (obj, k, before, insertObj) => {
         let target = {};
         if (obj.hasOwnProperty(k)) {
@@ -71,14 +75,18 @@ const utils = {
         } else {
             for (let key in obj) {
                 if (obj[key].children) {
-                    target[key] = {...obj[key], children: utils.deepInsertSameFloor(obj[key].children, k, before, insertObj)};
+                    target[key] = {
+                        ...obj[key],
+                        children: utils.deepInsertSameFloor(obj[key].children, k, before, insertObj),
+                    };
                 } else {
                     target[key] = obj[key];
                 }
             }
         }
-        return target
+        return target;
     },
+    // 节点删除
     deepRemove: (obj, k) => {
         let target = {};
         if (!!obj[k]) {
@@ -101,20 +109,35 @@ const utils = {
         }
         return target;
     },
-    objDepthFirstTraversal: (initObj) => {
+    // 深度优先对象扁平化
+    objDepthFirstTraversal: initObj => {
         let list = [];
-        const render = (obj) => {
+        const render = obj => {
             Object.values(obj).map((item, idx) => {
                 if (item.children) {
-                    list.push(item.key)
-                    render(item.children)
+                    list.push(item.key);
+                    render(item.children);
                 } else {
-                    list.push(item.key)
+                    list.push(item.key);
                 }
-            })
-        }
-        render(initObj)
-        return list
+            });
+        };
+        render(initObj);
+        return list;
+    },
+    has: (strOrArr, text) => strOrArr.indexOf(text) > -1,
+    // 属性自动补全
+    autoComplete: (attr, text) => {
+        const pxArr = [
+            ...['fontSize', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
+            ...['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'width', 'height'],
+        ];
+        const colorArr = ['color', 'backgroundColor'];
+        const urlArr = ['backgroundImage'];
+        if (utils.has(pxArr, attr)) return `${text}px`;
+        if (utils.has(colorArr, attr)) return `#${text}`;
+        if (utils.has(urlArr, attr)) return `url(${text})`;
+        return text;
     },
 };
 

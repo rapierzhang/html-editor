@@ -49,20 +49,6 @@
         .actived {
             color: red;
         }
-    }
-
-    .attr-title {
-        height: 70px;
-        width: 100%;
-        font-size: 32px;
-        padding: 0 20px;
-        position: absolute;
-        left: 0;
-        top: 50px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
 
         // ^^^^^^
         .save {
@@ -88,18 +74,10 @@
         }
     }
 
-    .blank {
-        width: 100%;
-        height: 100px;
-    }
-
     .attr-card {
         padding: 20px;
         border-top: 1px solid #d8d8d8;
 
-        &:first-child {
-            margin-top: 50px;
-        }
 
         .card-title {
             font-size: 28px;
