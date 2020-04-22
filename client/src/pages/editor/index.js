@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
 import './editor.scss';
-import { elementsUpdate, indexIncrement } from './actions';
+import { activeKeySet, elementsUpdate, indexIncrement, isEditSet } from './actions';
 
 const eleList = ['div', 'span'];
 
@@ -14,8 +14,6 @@ class Editor extends Component {
         this.state = {
             isDown: false,
             dragName: '',
-            activeKey: '',
-            isEdit: false,
             // 移动中位置
             movingX: 0,
             movingY: 0,
@@ -117,22 +115,20 @@ class Editor extends Component {
 
     // 选中元素
     onNodeSelect(key) {
-        const { activeKey } = this.state;
-        this.setState({
-            activeKey: key,
-            isEdit: key == activeKey, // 双击编辑
-        });
+        const { editorInfo: { activeKey } } = this.props;
+        this.props.dispatch(activeKeySet(key))
+        this.props.dispatch(isEditSet( key == activeKey)) //双击编辑
     }
 
     // 取消选中元素
     clearActiveKey() {
-        this.setState({ activeKey: false, isEdit: false });
+        this.props.dispatch(activeKeySet(false))
+        this.props.dispatch(isEditSet(false))
     }
 
     // 更改属性
     onAttrChange(newNode) {
-        const { editorInfo: { elements } } = this.props;
-        const { activeKey } = this.state;
+        const { editorInfo: { elements, activeKey } } = this.props;
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(
             elementsUpdate({
@@ -154,7 +150,7 @@ class Editor extends Component {
 
     // 渲染画布中元素
     renderElements(elements) {
-        const { activeKey } = this.state;
+        const { editorInfo: { activeKey } } = this.props;
         const list = Object.values(elements);
         return list.map((item, idx) => {
             return (
@@ -180,8 +176,8 @@ class Editor extends Component {
     }
 
     render() {
-        const { elements } = this.props.editorInfo;
-        const { isDown, dragName, activeKey, isEdit, movingX, movingY } = this.state;
+        const { elements, activeKey, isEdit } = this.props.editorInfo;
+        const { isDown, dragName, movingX, movingY } = this.state;
         const list = Object.values(elements);
         console.error(elements)
 
