@@ -29,12 +29,7 @@ class Element extends Component {
         switch (item.element) {
             case 'div':
                 return (
-                    <div
-                        id={item.id}
-                        className={classNames('ele-div', item.id)}
-                        style={item.style}
-                        onClick={this.selectNode.bind(this, item.id)}
-                    >
+                    <div id={item.id} className={classNames('ele-div', item.id)} style={item.style}>
                         {this.props.children}
                         {item.text}
                     </div>
@@ -56,6 +51,7 @@ class Element extends Component {
         const boxEle = this.refs.box;
         const boxWidth = boxEle.offsetWidth;
         const boxHeight = boxEle.offsetHeight;
+        const ctxWidth = ctxRight - ctxLeft;
 
         // 拖拽中
         window.onmousemove = e => {
@@ -67,6 +63,9 @@ class Element extends Component {
             // 计算宽高
             const height = boxHeight + movingY - startY;
             const width = boxWidth + movingX - startX;
+
+            if (width > ctxWidth) return;
+
             // 设置宽高
             if (direction == 'top' || direction == 'bottom') this.onStyleChange('height', height);
             if (direction == 'left' || direction == 'right') this.onStyleChange('width', width);
@@ -101,7 +100,12 @@ class Element extends Component {
         const active = item.id == activeKey;
 
         return (
-            <div className={classNames('ele-box', { active })} ref='box' style={item.style}>
+            <div
+                className={classNames('ele-box', { active })}
+                ref='box'
+                style={item.style}
+                onClick={this.selectNode.bind(this, item.id)}
+            >
                 <div className='ctrl-point top' onMouseDown={this.onDrag.bind(this, 'top')} />
                 <div className='ctrl-point right' onMouseDown={this.onDrag.bind(this, 'right')} />
                 <div className='ctrl-point bottom' onMouseDown={this.onDrag.bind(this, 'bottom')} />

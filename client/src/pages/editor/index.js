@@ -87,19 +87,18 @@ class Editor extends Component {
         console.error('set success!!!');
         const { elements, index } = this.props.editorInfo;
         const key = this.uniqueKey(index);
-        const eleObj = {
+        const defaultEle = {
             element: ele,
             id: key,
             text: '',
             onClick: this.onNodeSelect.bind(this, key),
         };
+        const newElements = {
+            ...elements,
+            [key]: defaultEle,
+        };
         this.props.dispatch(indexIncrement());
-        this.props.dispatch(
-            elementsUpdate({
-                ...elements,
-                [key]: eleObj,
-            }),
-        );
+        this.props.dispatch(elementsUpdate(newElements));
     }
 
     // 设置元素失败
@@ -133,10 +132,9 @@ class Editor extends Component {
 
     render() {
         const {
-            editorInfo: { elements, activeKey, isEdit, activeEle },
+            editorInfo: { elements , activeKey},
         } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
-        const list = Object.values(elements);
         // console.error(activeKey, isEdit);
 
         return (

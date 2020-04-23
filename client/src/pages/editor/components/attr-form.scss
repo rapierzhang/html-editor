@@ -84,12 +84,16 @@
         }
 
         .card-content {
-            padding: 10px 0;
+            padding: 10px 0 0;
 
             .row {
                 min-height: 30px;
                 overflow: hidden;
-                margin-bottom: 20px;
+                margin-top: 20px;
+
+                &:first-child {
+                    margin: 0;
+                }
 
                 span {
                     display: inline-block;

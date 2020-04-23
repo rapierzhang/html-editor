@@ -1,0 +1,10 @@
+@import "../../../style/common.scss";
+
+.select {
+    width: 200px;
+    height: 30px;
+    border: 1px solid #d9d9d9;
+    padding: 0 20px;
+    display: flex;
+
+}

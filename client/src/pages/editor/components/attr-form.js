@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
-import './attr-form.scss';
-import utils from '../../../common/utils';
 import { connect } from 'react-redux';
+import utils from '../../../common/utils';
+import classNames from 'classnames';
+import { Select } from '../../../component'
+import './attr-form.scss';
 import { activeKeySet, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
 class ArrtForm extends Component {
     constructor() {
         super(...arguments);
         this.state = {
-            navIndex: 0,
+            navIndex: 1,
             isDown: false,
             movingX: 0,
             movingY: 0,
@@ -168,6 +169,10 @@ class ArrtForm extends Component {
         };
     }
 
+    selectChange(e) {
+        console.error(222, e)
+    }
+
     render() {
         const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
@@ -252,6 +257,24 @@ class ArrtForm extends Component {
                         {/*------ 样式 ------*/}
                         {navIndex === 1 && (
                             <div className='style-box'>
+                                {/*------ 定位 ------*/}
+                                <div className='attr-card'>
+                                    <div className='card-title'>定位</div>
+                                    <div className='card-content'>
+                                        <div className='row'>
+                                            <span>背景图: </span>
+                                            <Select list={[
+                                                'initial',
+                                                'absolute',
+                                                'fixed',
+                                                'relative',
+                                                'static',
+                                                'sticky',
+                                                'inherit',
+                                            ]} />
+                                        </div>
+                                    </div>
+                                </div>
                                 {/*------ 背景 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>背景</div>
