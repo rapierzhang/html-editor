@@ -132,7 +132,7 @@ class Editor extends Component {
 
     render() {
         const {
-            editorInfo: { elements , activeKey},
+            editorInfo: { elements },
         } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
         // console.error(activeKey, isEdit);

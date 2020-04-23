@@ -51,7 +51,6 @@ export const attributeLoad = (elements, activeKey) => dispatch => {
 // 选择编辑
 export const elementSelect = (id, activeKey, elements) => dispatch => {
     dispatch(activeKeySet(id));
-    console.error(111, id, 222, activeKey)
     if (id == activeKey) {
         dispatch(isEditSet(true));
         dispatch(attributeLoad(elements, activeKey));

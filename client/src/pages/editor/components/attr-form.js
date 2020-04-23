@@ -33,30 +33,34 @@ class ArrtForm extends Component {
     }
 
     // 属性更改
-    onAttrChange(attr, e) {
+    onAttrChange(attrName, e) {
         const { elements, activeKey } = this.props.editorInfo;
-        const val = e.target.value;
         const thisNode = utils.deepSearch(elements, activeKey);
         const newNode = {
             ...thisNode,
-            [attr]: val,
+            [attrName]: e.target.value,
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
     }
 
     // 样式更改
-    onStyleBlur(attr, e) {
+    onStyleBlur(attrName, e) {
         const { elements, activeKey } = this.props.editorInfo;
-        const val = utils.autoComplete(attr, e.target.value);
         const thisNode = utils.deepSearch(elements, activeKey);
         const thisStyle = thisNode.style || {};
         const newNode = {
             ...thisNode,
-            style: { ...thisStyle, [attr]: val },
+            style: { ...thisStyle, [attrName]: utils.autoComplete(attrName, e.target.value) },
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
+    }
+
+    onChange(attr, attrName, e) {
+        const { value } = e.target;
+        if (attr === 'attr') this.onAttrChange(attrName, value);
+        if (attr === 'style') this.onStyleBlur(attrName, value)
     }
 
     // 删除节点
@@ -262,7 +266,7 @@ class ArrtForm extends Component {
                                     <div className='card-title'>定位</div>
                                     <div className='card-content'>
                                         <div className='row'>
-                                            <span>背景图: </span>
+                                            <span>定位: </span>
                                             <Select list={[
                                                 'initial',
                                                 'absolute',
@@ -271,7 +275,7 @@ class ArrtForm extends Component {
                                                 'static',
                                                 'sticky',
                                                 'inherit',
-                                            ]} />
+                                            ]}  />
                                         </div>
                                     </div>
                                 </div>
