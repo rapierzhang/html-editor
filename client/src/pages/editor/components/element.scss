@@ -1,7 +1,8 @@
 .ele-box {
     position: relative;
-    background: lightpink;
-    //height: 50px;
+    background: #fff;
+    min-width: 10px;
+    min-height: 10px;
 
     &.active {
         .ctrl-point {

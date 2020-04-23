@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import utils from '../../../common/utils';
 import classNames from 'classnames';
-import { Select } from '../../../component'
+import { Select } from '../../../component';
 import './attr-form.scss';
 import { activeKeySet, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
@@ -34,11 +34,13 @@ class ArrtForm extends Component {
 
     // 属性更改
     onAttrChange(attrName, e) {
+        // 判断是event传入的值还是组件传入的值
+        const value = !!e.target ? e.target.value : e;
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
         const newNode = {
             ...thisNode,
-            [attrName]: e.target.value,
+            [attrName]: value,
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -46,24 +48,18 @@ class ArrtForm extends Component {
 
     // 样式更改
     onStyleBlur(attrName, e) {
+        const value = typeof e == 'object' ? e.target.value : e;
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
         const thisStyle = thisNode.style || {};
         const newNode = {
             ...thisNode,
-            style: { ...thisStyle, [attrName]: utils.autoComplete(attrName, e.target.value) },
+            style: { ...thisStyle, [attrName]: utils.autoComplete(attrName, value) },
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
     }
 
-    onChange(attr, attrName, e) {
-        const { value } = e.target;
-        if (attr === 'attr') this.onAttrChange(attrName, value);
-        if (attr === 'style') this.onStyleBlur(attrName, value)
-    }
-
-    // 删除节点
     removeEle() {
         const { elements, activeKey } = this.props.editorInfo;
         const newElements = utils.deepRemove(elements, activeKey);
@@ -173,10 +169,6 @@ class ArrtForm extends Component {
         };
     }
 
-    selectChange(e) {
-        console.error(222, e)
-    }
-
     render() {
         const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
@@ -267,15 +259,18 @@ class ArrtForm extends Component {
                                     <div className='card-content'>
                                         <div className='row'>
                                             <span>定位: </span>
-                                            <Select list={[
-                                                'initial',
-                                                'absolute',
-                                                'fixed',
-                                                'relative',
-                                                'static',
-                                                'sticky',
-                                                'inherit',
-                                            ]}  />
+                                            <Select
+                                                list={[
+                                                    'initial',
+                                                    'absolute',
+                                                    'fixed',
+                                                    'relative',
+                                                    'static',
+                                                    'sticky',
+                                                    'inherit',
+                                                ]}
+                                                onChange={this.onStyleBlur.bind(this, 'position')}
+                                            />
                                         </div>
                                     </div>
                                 </div>

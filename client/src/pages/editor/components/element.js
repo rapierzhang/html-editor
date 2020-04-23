@@ -43,7 +43,7 @@ class Element extends Component {
 
     onDrag(direction, evt) {
         const {
-            canvasPosition: { ctxTop, ctxBottom, ctxLeft, ctxRight },
+            canvasPosition: { ctxLeft, ctxRight },
         } = this.props.editorInfo;
         this.setState({ isDown: true });
         const startX = evt.clientX;

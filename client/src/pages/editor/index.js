@@ -45,7 +45,6 @@ class Editor extends Component {
             ctxLeft: offsetLeft,
             ctxRight: offsetLeft + offsetWidth,
         };
-        console.error(canvasPosition)
         this.props.dispatch(canvasPositionSet(canvasPosition));
     }
 
