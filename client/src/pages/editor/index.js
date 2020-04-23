@@ -21,9 +21,7 @@ class Editor extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            this.ctxPosition();
-        }, 500)
+        setTimeout(() => this.ctxPosition(), 500)
     }
 
     // 设置唯一key
@@ -143,7 +141,15 @@ class Editor extends Component {
         return (
             <div className='editor'>
                 {/*------ 拖拽虚拟元素 ------*/}
-                <div className='header'></div>
+                <div className='header'>
+                    <div className='title'>商城页面</div>
+                    <div className='btn-box'>
+                        <div className='button primary'>保存</div>
+                        <div className='button warring'>生成</div>
+                        <div className='button success'>打开</div>
+                        <div className='button danger'>删除</div>
+                    </div>
+                </div>
                 <div className='content'>
                     {/*------ 元素列表 ------*/}
                     <div className='ele-list'>

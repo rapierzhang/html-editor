@@ -10,6 +10,27 @@
         width: 100%;
         height: 50px;
         border-bottom: 1px solid #d9d9d9;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+
+        .title {
+            font-size: 32px;
+            color: #262626;
+        }
+
+        .btn-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            .button {
+                margin-left: 10px;
+            }
+        }
     }
 
     .content {
