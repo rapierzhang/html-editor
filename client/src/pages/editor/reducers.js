@@ -10,8 +10,8 @@ import {
 const editorInfo = {
     index: 0, // 元素索引
 
-    isEdit: true, // 是否编辑状态
-    activeKey: 'A', // 选中元素的key
+    isEdit: false, // 是否编辑状态
+    activeKey: '', // 选中元素的key
     activeEle: {}, // 选中的元素
 
     canvasPosition: {
@@ -21,10 +21,6 @@ const editorInfo = {
         ctxRight: 0,
     }, //画布位置
     elements: {
-        A: {
-            element: 'div',
-            id: 'A',
-        },
     },
 };
 

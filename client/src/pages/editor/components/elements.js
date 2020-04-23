@@ -58,17 +58,20 @@ class Element extends Component {
             if (!this.state.isDown) return;
             const movingX = e.clientX;
             const movingY = e.clientY;
-            // 超出画布
-            if (movingX < ctxLeft || movingX > ctxRight || movingY < ctxTop || movingY > ctxBottom) return;
+
             // 计算宽高
             const height = boxHeight + movingY - startY;
             const width = boxWidth + movingX - startX;
 
-            if (width > ctxWidth) return;
-
-            // 设置宽高
             if (direction == 'top' || direction == 'bottom') this.onStyleChange('height', height);
-            if (direction == 'left' || direction == 'right') this.onStyleChange('width', width);
+            if (direction == 'left' || direction == 'right') {
+                // 超出最大宽度
+                if (width >= ctxWidth) {
+                    this.onStyleChange('width', ctxWidth);
+                } else {
+                    this.onStyleChange('width', width);
+                }
+            }
         };
 
         // 拖拽结束
@@ -96,7 +99,6 @@ class Element extends Component {
             item,
             editorInfo: { activeKey },
         } = this.props;
-        const { movingX, movingY } = this.state;
         const active = item.id == activeKey;
 
         return (

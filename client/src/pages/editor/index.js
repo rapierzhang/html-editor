@@ -20,7 +20,11 @@ class Editor extends Component {
         };
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        setTimeout(() => {
+            this.ctxPosition();
+        }, 500)
+    }
 
     // 设置唯一key
     uniqueKey(num) {
@@ -41,12 +45,12 @@ class Editor extends Component {
             ctxLeft: offsetLeft,
             ctxRight: offsetLeft + offsetWidth,
         };
+        console.error(canvasPosition)
         this.props.dispatch(canvasPositionSet(canvasPosition));
     }
 
     // 开始拖拽
     msDown(ele, evt) {
-        this.ctxPosition();
         this.setState({
             isDown: true,
             dragName: ele,
