@@ -1,4 +1,5 @@
 import {
+    PID_SET,
     ELEMENTS_UPDATE,
     INDEX_INCREMENT,
     ACTIVE_KEY_SET,
@@ -6,7 +7,22 @@ import {
     ATTRIBUTE_LOAD,
     CANVAS_POSITION_SET,
 } from './action-types';
-import utils from '../../common/utils';
+import { utils, fetch } from '../../common';
+
+export const pidSet = pid => dispatch => {
+    dispatch({
+        type: PID_SET,
+        pid
+    })
+}
+
+export const pageInit = params => {
+    return fetch({
+        url: '/api/page/get',
+        method: 'post',
+        params,
+    }).then(res => res.data);
+}
 
 // index自增
 export const indexIncrement = () => dispatch => {
@@ -61,6 +77,15 @@ export const elementSelect = (id, activeKey, elements) => dispatch => {
 export const canvasPositionSet = canvasPosition => dispatch => {
     dispatch({
         type: CANVAS_POSITION_SET,
-        canvasPosition
-    })
-}
+        canvasPosition,
+    });
+};
+
+// 保存数据
+export const htmlSave = params => {
+    return fetch({
+        url: '/api/page/save',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
+};

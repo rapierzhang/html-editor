@@ -3,7 +3,7 @@ const controller = require('../controller/index');
 // 设置url前缀
 router.prefix('/api/page')
 
-router.get('/get', controller.pageGet)
+router.post('/get', controller.pageGet)
 
 router.post('/save', controller.pageSave)
 

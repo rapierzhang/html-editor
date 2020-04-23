@@ -4,10 +4,11 @@ import {
     ACTIVE_KEY_SET,
     EDIT_STATUS_SET,
     ATTRIBUTE_LOAD,
-    CANVAS_POSITION_SET,
+    CANVAS_POSITION_SET, PID_SET,
 } from './action-types';
 
 const editorInfo = {
+    pid: '',
     index: 1, // 元素索引
 
     isEdit: true, // 是否编辑状态
@@ -31,6 +32,8 @@ const editorInfo = {
 export default (state = editorInfo, action) => {
     // console.error(action)
     switch (action.type) {
+        case PID_SET:
+            return {...state, pid: action.pid}
         // index自增
         case INDEX_INCREMENT:
             return { ...state, index: state.index + 1 };

@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter, useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
+import query from 'query-string';
 import './editor.scss';
-import { activeKeySet, canvasPositionSet, elementSelect, elementsUpdate, indexIncrement, isEditSet } from './actions';
+import {
+    pageInit,
+    pidSet,
+    canvasPositionSet,
+    elementSelect,
+    elementsUpdate,
+    htmlSave,
+    indexIncrement,
+} from './actions';
 
 const eleList = ['div', 'span'];
 
@@ -21,7 +31,22 @@ class Editor extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => this.ctxPosition(), 500)
+        setTimeout(() => this.ctxPosition(), 500);
+        this.init();
+        console.error(location);
+    }
+    init() {
+        const { pid } = query.parse(this.props.location.search);
+        pageInit({ pid })
+            .then(res => {
+                const {pid, htmlTree} = res
+                this.props.dispatch(pidSet(pid));
+                this.props.dispatch(elementsUpdate(htmlTree))
+                location.href = `${location.origin}/#/editor?pid=${pid}`;
+            })
+            .catch(err => {
+                console.error(222, err);
+            });
     }
 
     // 设置唯一key
@@ -131,6 +156,20 @@ class Editor extends Component {
         });
     }
 
+    // 保存
+    save() {
+        const { elements, pid } = this.props.editorInfo;
+        htmlSave({
+            pid,
+            title: '题目题目',
+            desc: '测试简介',
+            htmlTree: elements,
+            // preview
+        }).then(res => {
+            console.error(111, res);
+        });
+    }
+
     render() {
         const {
             editorInfo: { elements },
@@ -144,7 +183,9 @@ class Editor extends Component {
                 <div className='header'>
                     <div className='title'>商城页面</div>
                     <div className='btn-box'>
-                        <div className='button primary'>保存</div>
+                        <div className='button primary' onClick={this.save.bind(this)}>
+                            保存
+                        </div>
                         <div className='button warring'>生成</div>
                         <div className='button success'>打开</div>
                         <div className='button danger'>删除</div>

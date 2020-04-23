@@ -4,7 +4,7 @@ const db = require('./database');
 const { Schema } = mongoose;
 
 const listSchema = new Schema({
-    id: String,
+    pid: String,
     title: String,
     desc: String,
     preview: String,

@@ -6,57 +6,28 @@ const PageModule = require('../module/page');
 const ListModule = require('../module/list');
 
 exports.pageGet = async (ctx, next) => {
-    const { id } = ctx.query;
-    const result = await PageModule.findOne({ id });
+    let { pid } = ctx.request.body;
+    const result = await PageModule.findOne({ pid });
+    console.log(pid, result)
     if (result) {
         ctx.body = utils.res(200, 'ok', result);
     } else {
-        ctx.body = utils.res(500, 'no data', {});
+        pid = utils.uuid();
+        ctx.body = utils.res(200, 'ok', { pid });
     }
 };
 
 exports.pageSave = async (ctx, next) => {
-    /*const data = {
-        id: 'aaabbbccc',
-        title: '测试',
-        desc: '测试desc',
-        preview: '',
-        htmlTree: {
-            A: {
-                element: 'div',
-                key: 'A',
-                text: '1111',
-                css: {
-                    backgroundColor: '#f5f5f5',
-                    fontSize: '28px',
-                    color: 'red',
-                    width: '375px',
-                },
-                bindJs: [
-                    {
-                        type: 'click',
-                        func: `alert(111)`,
-                    },
-                    {
-                        type: 'mouseover',
-                        func: `alert(333)`,
-                    },
-                ],
-                defaultJs: '',
-                extraJs: '',
-            },
-        },
-    };*/
-    let { id, title, desc, htmlTree, preview } = ctx.request.body;
+    let { pid, title, desc, htmlTree, preview } = ctx.request.body;
     const time = utils.dateFormat(new Date().getTime());
     let pageResult = false;
     let listResult = false;
     let msg = '';
-    if (id) {
+    if (pid) {
         console.error('有数据');
         try {
             pageResult = await PageModule.update(
-                { id },
+                { pid },
                 {
                     $set: {
                         title,
@@ -67,7 +38,7 @@ exports.pageSave = async (ctx, next) => {
                 },
             );
             listResult = await ListModule.update(
-                { id },
+                { pid },
                 {
                     $set: {
                         title,
@@ -81,9 +52,9 @@ exports.pageSave = async (ctx, next) => {
         }
     } else {
         console.error('无数据');
-        id = utils.uuid();
+        pid = utils.uuid();
         const _page = new PageModule({
-            id,
+            pid,
             title,
             desc,
             htmlTree,
@@ -91,7 +62,7 @@ exports.pageSave = async (ctx, next) => {
             updateTime: time,
         });
         const _list = new ListModule({
-            id,
+            pid,
             title,
             desc,
             preview,
@@ -113,13 +84,13 @@ exports.pageSave = async (ctx, next) => {
 };
 
 exports.pageBuild = async (ctx, next) => {
-    const result = await PageModule.findOne({ id: ctx.query.id });
+    const result = await PageModule.findOne({ pid: ctx.query.pid });
     if (!result) {
         ctx.body = utils.res(500, 'no data', {});
         return;
     }
-    const { id, htmlTree } = result;
-    const dirPath = `${path.resolve('./')}/public/html/${id}`;
+    const { pid, htmlTree } = result;
+    const dirPath = `${path.resolve('./')}/public/html/${pid}`;
     // 判断目录存在
     const dirExists = fs.existsSync(dirPath);
     // 创建新目录
@@ -136,7 +107,7 @@ exports.pageBuild = async (ctx, next) => {
 
 exports.pageDelete = async (ctx, next) => {};
 
-exports.pageRelease = async (ctx, next) => {}
+exports.pageRelease = async (ctx, next) => {};
 
 const dataIsExist = async (mod, data) => !!(await mod.findOne(data));
 
@@ -178,9 +149,9 @@ ele${utils.delLine(key)}.on('${row.type}', () => {
 
 // 写入HTML
 const writeHtml = (dirPath, data, next) => {
-    const { id, title, htmlTree } = data;
+    const { pid, title, htmlTree } = data;
     let html = renderHtml(htmlTree);
-    const htmlContext = defaultHtml(id, title, html);
+    const htmlContext = defaultHtml(pid, title, html);
     fs.writeFileSync(`${dirPath}/index.html`, htmlContext);
 };
 
@@ -273,7 +244,7 @@ const pxToRem = text => {
 };
 
 // 默认html
-const defaultHtml = (id, title = '', text = '') => {
+const defaultHtml = (pid, title = '', text = '') => {
     return `<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -285,7 +256,7 @@ const defaultHtml = (id, title = '', text = '') => {
         <meta name="apple-mobile-web-app-status-bar-style" content="white" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
-        <link rel="stylesheet" href="./${id}/css/index.css" />
+        <link rel="stylesheet" href="./${pid}/css/index.css" />
         <script>
             !(function(x) {
                 function w() {
@@ -319,7 +290,7 @@ const defaultHtml = (id, title = '', text = '') => {
             ${text}
         </div>
         <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
-        <script src="./${id}/js/index.js"></script>
+        <script src="./${pid}/js/index.js"></script>
     </body>
 </html>`;
 };

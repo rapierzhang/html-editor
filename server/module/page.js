@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const pageSchema = new Schema({
-    id: String,
+    pid: String,
     title: String,
     desc: String,
     htmlTree: Object,

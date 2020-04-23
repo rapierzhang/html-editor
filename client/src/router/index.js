@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Switch, useHistory } from 'react-router-dom';
+import { HashRouter, Route, Switch, useHistory, withRouter } from 'react-router-dom';
 import List from '../pages/list/';
 import Editor from '../pages/editor';
 
