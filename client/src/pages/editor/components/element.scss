@@ -14,29 +14,9 @@
             background: #fff;
             z-index: 9999;
 
-
-            &.top {
-                top: -3px;
-                left: calc(50% - 3px);
-                cursor: n-resize;
-            }
-
-            &.right {
-                top: calc(50% - 3px);
-                right: -3px;
-                cursor: e-resize;
-            }
-
-            &.bottom {
+            &.right-botom {
                 bottom: -3px;
-                left: calc(50% - 3px);
-                cursor: s-resize;
-            }
-
-            &.left {
-                left: -3px;
-                top: calc(50% - 3px);
-                cursor: w-resize;
+                right: -3px;
             }
 
             &.center {

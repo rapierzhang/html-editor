@@ -41,17 +41,13 @@ class Element extends Component {
         }
     }
 
-    onDrag(direction, evt) {
-        const {
-            canvasPosition: { ctxLeft, ctxRight },
-        } = this.props.editorInfo;
+    changeSize(evt) {
         this.setState({ isDown: true });
         const startX = evt.clientX;
         const startY = evt.clientY;
         const boxEle = this.refs.box;
         const boxWidth = boxEle.offsetWidth;
         const boxHeight = boxEle.offsetHeight;
-        const ctxWidth = ctxRight - ctxLeft;
 
         // 拖拽中
         window.onmousemove = e => {
@@ -63,14 +59,11 @@ class Element extends Component {
             const height = boxHeight + movingY - startY;
             const width = boxWidth + movingX - startX;
 
-            if (direction == 'top' || direction == 'bottom') this.onStyleChange('height', height);
-            if (direction == 'left' || direction == 'right') {
-                // 超出最大宽度
-                if (width >= ctxWidth) {
-                    this.onStyleChange('width', ctxWidth);
-                } else {
-                    this.onStyleChange('width', width);
-                }
+            // 超出最大宽度
+            if (width >= 375) {
+                this.onStyleChange(375, height);
+            } else {
+                this.onStyleChange(width, height);
             }
         };
 
@@ -82,13 +75,17 @@ class Element extends Component {
         };
     }
 
-    onStyleChange(attr, val) {
+    onStyleChange(width, height) {
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
         const thisStyle = thisNode.css || {};
         const newNode = {
             ...thisNode,
-            css: { ...thisStyle, [attr]: utils.autoComplete(attr, val) },
+            css: {
+                ...thisStyle,
+                width: utils.autoComplete('width', width) ,
+                height: utils.autoComplete('height', height)
+            },
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -108,10 +105,7 @@ class Element extends Component {
                 style={item.css}
                 onClick={this.selectNode.bind(this, item.id)}
             >
-                <div className='ctrl-point top' onMouseDown={this.onDrag.bind(this, 'top')} />
-                <div className='ctrl-point right' onMouseDown={this.onDrag.bind(this, 'right')} />
-                <div className='ctrl-point bottom' onMouseDown={this.onDrag.bind(this, 'bottom')} />
-                <div className='ctrl-point left' onMouseDown={this.onDrag.bind(this, 'left')} />
+                <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
                 <div className='ctrl-point center' />
                 <div className='border' />
                 {this.renderElement(item)}

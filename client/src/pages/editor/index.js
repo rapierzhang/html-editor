@@ -70,6 +70,8 @@ class Editor extends Component {
             ctxBottom: offsetTop + offsetHeight,
             ctxLeft: offsetLeft,
             ctxRight: offsetLeft + offsetWidth,
+            ctxHeight: offsetHeight,
+            ctxWidth: offsetWidth,
         };
         this.props.dispatch(canvasPositionSet(canvasPosition));
     }

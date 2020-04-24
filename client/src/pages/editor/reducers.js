@@ -17,12 +17,15 @@ const editorInfo = {
     activeKey: '', // 选中元素的key
     activeEle: {}, // 选中的元素
 
+    //画布位置
     canvasPosition: {
         ctxTop: 0,
         ctxBottom: 0,
         ctxLeft: 0,
         ctxRight: 0,
-    }, //画布位置
+        ctxHeight: 0,
+        ctxWidth: 0,
+    },
     elements: {},
 };
 
