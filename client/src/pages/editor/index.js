@@ -16,6 +16,7 @@ import {
     htmlSave,
     htmlBuild,
     htmlOpen,
+    indexSet,
 } from './actions';
 
 const eleList = ['div', 'span'];
@@ -42,8 +43,9 @@ class Editor extends Component {
         const { pid } = query.parse(this.props.location.search);
         pageInit({ pid })
             .then(res => {
-                const { pid, htmlTree } = res;
+                const { pid, index, htmlTree } = res;
                 this.props.dispatch(pidSet(pid));
+                index && this.props.dispatch(indexSet(index));
                 htmlTree && this.props.dispatch(elementsUpdate(htmlTree));
                 location.href = `${location.origin}/#/editor?pid=${pid}`;
             })
@@ -163,9 +165,10 @@ class Editor extends Component {
 
     // 保存
     save() {
-        const { elements, pid } = this.props.editorInfo;
+        const { elements, pid, index } = this.props.editorInfo;
         htmlSave({
             pid,
+            index,
             title: '题目题目',
             desc: '测试简介',
             htmlTree: elements,

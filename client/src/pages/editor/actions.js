@@ -1,6 +1,7 @@
 import {
     PID_SET,
     ELEMENTS_UPDATE,
+    INDEX_SET,
     INDEX_INCREMENT,
     ACTIVE_KEY_SET,
     EDIT_STATUS_SET,
@@ -24,6 +25,13 @@ export const pageInit = params => {
         params,
     }).then(res => res.data);
 };
+
+export const indexSet = index => dispatch => {
+    dispatch({
+        type: INDEX_SET,
+        index
+    });
+}
 
 // index自增
 export const indexIncrement = () => dispatch => {

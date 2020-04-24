@@ -1,5 +1,6 @@
 import {
     ELEMENTS_UPDATE,
+    INDEX_SET,
     INDEX_INCREMENT,
     ACTIVE_KEY_SET,
     EDIT_STATUS_SET,
@@ -34,6 +35,8 @@ export default (state = editorInfo, action) => {
     switch (action.type) {
         case PID_SET:
             return { ...state, pid: action.pid };
+        case INDEX_SET:
+            return { ...state, index: action.index };
         // index自增
         case INDEX_INCREMENT:
             return { ...state, index: state.index + 1 };

@@ -18,12 +18,14 @@ exports.pageGet = async (ctx, next) => {
 };
 
 exports.pageSave = async (ctx, next) => {
-    let { pid, title, desc, htmlTree, preview } = ctx.request.body;
+    let { pid, index, title, desc, htmlTree, preview } = ctx.request.body;
+    console.log(111, pid, index, title, desc, htmlTree, preview)
     const time = utils.dateFormat(new Date().getTime());
     let pageResult = false;
     let listResult = false;
     let msg = '';
     const result = await PageModule.findOne({ pid });
+    console.log(222, result)
     if (result) {
         console.error('有数据');
         try {
@@ -53,9 +55,9 @@ exports.pageSave = async (ctx, next) => {
         }
     } else {
         console.error('无数据');
-        pid = utils.uuid();
         const _page = new PageModule({
             pid,
+            index,
             title,
             desc,
             htmlTree,
@@ -76,6 +78,7 @@ exports.pageSave = async (ctx, next) => {
             msg = e;
         }
     }
+    console.error(pageResult)
 
     if (!!pageResult && !!listResult) {
         ctx.body = utils.res(200, 'ok', { result: true });

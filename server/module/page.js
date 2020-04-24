@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 
 const pageSchema = new Schema({
     pid: String,
+    index: Number,
     title: String,
     desc: String,
     htmlTree: Object,
