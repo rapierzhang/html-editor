@@ -209,8 +209,6 @@ class ArrtForm extends Component {
                 height,
             } = {},
         } = activeEle;
-        console.error(activeEle.css)
-        console.error(555, utils.has(['absolute', 'fixed', 'relative'], position), position)
 
         return (
             <div className='attribute'>

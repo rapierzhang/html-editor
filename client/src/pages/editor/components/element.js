@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import './element.scss';
 import utils from '../../../common/utils';
-import { elementsUpdate } from '../actions';
+import { attributeUpdate, elementsUpdate } from '../actions';
+
+const canMoveList = ['absolute', 'fixed', 'relative']
 
 class Element extends Component {
     constructor() {
@@ -78,6 +80,31 @@ class Element extends Component {
         };
     }
 
+    changePosition(evt) {
+        this.setState({ isDown: true });
+        const startX = evt.clientX;
+        const startY = evt.clientY;
+        const boxEle = this.refs.box;
+        const boxTop = boxEle.offsetTop;
+        const boxLeft = boxEle.offsetLeft;
+
+        // 拖拽中
+        window.onmousemove = e => {
+            if (!this.state.isDown) return;
+            const movingX = e.clientX;
+            const movingY = e.clientY;
+            const changeX = movingX - startX;
+            const changeY = movingY - startY;
+
+        };
+
+        // 拖拽结束
+        window.onmouseup = () => {
+            if (!this.state.isDown) return;
+            this.setState({ isDown: false });
+        };
+    }
+
     onStyleChange(width, height) {
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
@@ -92,7 +119,9 @@ class Element extends Component {
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
+        // this.props.dispatch(attributeUpdate(newNode));
     }
+
 
     render() {
         const {
@@ -110,7 +139,7 @@ class Element extends Component {
                 onClick={this.selectNode.bind(this, id)}
             >
                 <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
-                {css && utils.has(['absolute', 'fixed'], css.position) && <div className='ctrl-point center' />}
+                {css && utils.has(canMoveList, css.position) && <div className='ctrl-point center'onMouseDown={this.changePosition.bind(this)}  />}
 
                 <div className='border' />
                 {this.renderElement(item)}
