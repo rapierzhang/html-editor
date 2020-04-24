@@ -6,15 +6,8 @@ import { Select } from '../../../component';
 import './attr-form.scss';
 import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
-const positionList = [
-    'initial',
-    'absolute',
-    'fixed',
-    'relative',
-    'static',
-    'sticky',
-    'inherit',
-];
+const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sticky', 'inherit'];
+const directionList = ['top', 'right', 'bottom', 'left'];
 
 class ArrtForm extends Component {
     constructor() {
@@ -52,10 +45,10 @@ class ArrtForm extends Component {
             ...thisNode,
             [attrName]: value,
         };
-        console.error(value)
+        console.error(value);
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
-        this.props.dispatch(attributeUpdate(elements, activeKey));
+        this.props.dispatch(attributeUpdate(newNode));
     }
 
     // 样式更改
@@ -70,6 +63,7 @@ class ArrtForm extends Component {
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(newNode));
     }
 
     removeEle() {
@@ -184,10 +178,11 @@ class ArrtForm extends Component {
     render() {
         const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
-        console.error(elements, activeEle)
         const {
             text,
             css: {
+                position,
+
                 backgroundImage,
                 backgroundColor,
 
@@ -212,8 +207,10 @@ class ArrtForm extends Component {
 
                 width,
                 height,
-            } = {}
+            } = {},
         } = activeEle;
+        console.error(activeEle.css)
+        console.error(555, utils.has(['absolute', 'fixed', 'relative'], position), position)
 
         return (
             <div className='attribute'>
@@ -276,11 +273,24 @@ class ArrtForm extends Component {
                                             <span>定位: </span>
                                             <Select
                                                 list={positionList}
+                                                defaultVal={position}
                                                 onChange={this.onStyleBlur.bind(this, 'position')}
                                             />
                                         </div>
                                     </div>
                                 </div>
+                                {utils.has(['absolute', 'fixed', 'relative'], position) && (
+                                    directionList.map((row, idx) => (
+                                        <div key={`row-${idx}`} className='row'>
+                                            <span>{row}: </span>
+                                            <input
+                                                type='text'
+                                                onBlur={this.onStyleBlur.bind(this, row)}
+                                                value={activeEle.css[row]}
+                                            />
+                                        </div>
+                                    ))
+                                )}
                                 {/*------ 背景 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>背景</div>

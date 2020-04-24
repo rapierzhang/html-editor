@@ -125,12 +125,15 @@ const utils = {
         render(initObj);
         return list;
     },
-    has: (strOrArr, text) => strOrArr.indexOf(text) > -1,
+    has: (strOrArr, text) => {
+        return strOrArr.indexOf(text) > -1
+    },
     // 属性自动补全
     autoComplete: (attr, text) => {
         const pxArr = [
             ...['fontSize', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
             ...['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'width', 'height'],
+            ...['top', 'right', 'bottom', 'left'],
         ];
         const colorArr = ['color', 'backgroundColor'];
         const urlArr = ['backgroundImage'];
