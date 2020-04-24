@@ -45,7 +45,6 @@ class ArrtForm extends Component {
             ...thisNode,
             [attrName]: value,
         };
-        console.error(value);
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));

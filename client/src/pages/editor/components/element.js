@@ -5,7 +5,7 @@ import './element.scss';
 import utils from '../../../common/utils';
 import { attributeUpdate, elementsUpdate } from '../actions';
 
-const canMoveList = ['absolute', 'fixed', 'relative']
+const canMoveList = ['absolute', 'fixed', 'relative'];
 
 class Element extends Component {
     constructor() {
@@ -33,7 +33,7 @@ class Element extends Component {
         switch (item.element) {
             case 'div':
                 return (
-                    <div id={item.id} className={classNames('ele-div', item.id)} style={item.css}>
+                    <div id={item.id} className={classNames('ele-div', item.id)}>
                         {this.props.children}
                         {textList.map((row, idx) => (
                             <div key={`row-${idx}`}>{row}</div>
@@ -67,9 +67,9 @@ class Element extends Component {
 
             // 超出最大宽度
             if (width >= 375) {
-                this.onStyleChange(375, height);
+                this.onStyleChange({ width: 375, height });
             } else {
-                this.onStyleChange(width, height);
+                this.onStyleChange({ width, height });
             }
         };
 
@@ -82,11 +82,18 @@ class Element extends Component {
 
     changePosition(evt) {
         this.setState({ isDown: true });
+        const {
+            canvasPosition: { ctxTop, ctxRight, ctxBottom, ctxLeft },
+        } = this.props.editorInfo;
         const startX = evt.clientX;
         const startY = evt.clientY;
         const boxEle = this.refs.box;
         const boxTop = boxEle.offsetTop;
         const boxLeft = boxEle.offsetLeft;
+        const halfWidth = boxEle.offsetWidth / 2;
+        const halfHeight = boxEle.offsetHeight / 2;
+
+        console.error(this.props.editorInfo);
 
         // 拖拽中
         window.onmousemove = e => {
@@ -95,7 +102,19 @@ class Element extends Component {
             const movingY = e.clientY;
             const changeX = movingX - startX;
             const changeY = movingY - startY;
-
+            const top = boxTop + changeY;
+            const left = boxLeft + changeX;
+            if (movingX - halfWidth < ctxLeft) {
+                this.onStyleChange({ top, ctxLeft });
+            } else if (movingY - halfHeight < ctxTop) {
+                this.onStyleChange({ ctxTop, left });
+            } else if (movingX + halfWidth > ctxRight) {
+                this.onStyleChange({ top, ctxRight });
+            } else if (movingY + halfHeight > ctxBottom) {
+                this.onStyleChange({ ctxBottom, left });
+            } else {
+                this.onStyleChange({ top, left });
+            }
         };
 
         // 拖拽结束
@@ -105,23 +124,23 @@ class Element extends Component {
         };
     }
 
-    onStyleChange(width, height) {
+    onStyleChange(data) {
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
-        const thisStyle = thisNode.css || {};
+        const thisCss = thisNode.css || {};
         const newNode = {
             ...thisNode,
             css: {
-                ...thisStyle,
-                width: utils.autoComplete('width', width),
-                height: utils.autoComplete('height', height),
+                ...thisCss,
             },
         };
+        for (let k in data) {
+            newNode.css[k] = utils.autoComplete('width', data[k]);
+        }
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
-        // this.props.dispatch(attributeUpdate(newNode));
+        this.props.dispatch(attributeUpdate(newNode));
     }
-
 
     render() {
         const {
@@ -139,7 +158,11 @@ class Element extends Component {
                 onClick={this.selectNode.bind(this, id)}
             >
                 <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
-                {css && utils.has(canMoveList, css.position) && <div className='ctrl-point center'onMouseDown={this.changePosition.bind(this)}  />}
+                {css && utils.has(canMoveList, css.position) && (
+                    <div className='ctrl-point center' onMouseDown={this.changePosition.bind(this)} />
+                )}
+                {css && active && <div className='width-num'>{css.width}</div>}
+                {css && active && <div className='height-num'>{css.height}</div>}
 
                 <div className='border' />
                 {this.renderElement(item)}

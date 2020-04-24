@@ -4,6 +4,7 @@
     min-width: 10px;
     min-height: 10px;
 
+
     &.active {
         .ctrl-point {
             position: absolute;
@@ -36,6 +37,24 @@
             border: 1px dashed #ea413c;
             background: transparent;
             z-index: 9998;
+        }
+
+        .width-num {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ea413c;
+            font-size: 12px;
+        }
+
+        .height-num {
+            position: absolute;
+            right: -5px;
+            top: 50%;
+            transform: translate(100%, -50%);
+            color: #ea413c;
+            font-size: 12px;
         }
     }
 
