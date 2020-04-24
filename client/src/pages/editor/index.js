@@ -17,6 +17,8 @@ import {
     htmlBuild,
     htmlOpen,
     indexSet,
+    titleSet,
+    descSet,
 } from './actions';
 
 const eleList = ['div', 'span'];
@@ -30,6 +32,9 @@ class Editor extends Component {
             // 移动中位置
             movingX: 0,
             movingY: 0,
+
+            titleEdit: false,
+            descEdit: false,
         };
     }
 
@@ -43,15 +48,38 @@ class Editor extends Component {
         const { pid } = query.parse(this.props.location.search);
         pageInit({ pid })
             .then(res => {
-                const { pid, index, htmlTree } = res;
+                const { pid, index, title, desc, htmlTree } = res;
                 this.props.dispatch(pidSet(pid));
                 index && this.props.dispatch(indexSet(index));
                 htmlTree && this.props.dispatch(elementsUpdate(htmlTree));
+                title && this.props.dispatch(titleSet(title));
+                desc && this.props.dispatch(descSet(desc));
                 location.href = `${location.origin}/#/editor?pid=${pid}`;
             })
             .catch(err => {
                 console.error(222, err);
             });
+    }
+
+    // 控制标题
+    async handleTitle(status) {
+        await this.setState({ titleEdit: status });
+        if (status) {
+            this.props.dispatch(titleSet(''));
+        } else {
+            if (!this.props.editorInfo.title) this.props.dispatch(titleSet('未命名页面'));
+        }
+    }
+    // 标题更改
+    titleChange(e) {
+        const title = e.target.value;
+        this.props.dispatch(titleSet(title));
+    }
+
+    // 标题更改
+    descChange(e) {
+        const desc = e.target.value;
+        this.props.dispatch(descSet(desc));
     }
 
     // 设置唯一key
@@ -208,16 +236,32 @@ class Editor extends Component {
 
     render() {
         const {
-            editorInfo: { elements },
+            editorInfo: { title, desc, elements },
         } = this.props;
-        const { isDown, dragName, movingX, movingY } = this.state;
+        const { isDown, dragName, movingX, movingY, titleEdit, descEdit } = this.state;
         // console.error(activeKey, isEdit);
 
         return (
             <div className='editor'>
                 {/*------ 拖拽虚拟元素 ------*/}
                 <div className='header'>
-                    <div className='title'>商城页面</div>
+                    <div>
+                        <input
+                            type='text'
+                            className='title-input'
+                            value={title}
+                            onChange={this.titleChange.bind(this)}
+                            onFocus={this.handleTitle.bind(this, true)}
+                            onBlur={this.handleTitle.bind(this, false)}
+                        />
+                        <input
+                            type='text'
+                            className='desc-input'
+                            value={desc}
+                            placeholder='请输入简介'
+                            onChange={this.descChange.bind(this)}
+                        />
+                    </div>
                     <div className='btn-box'>
                         <div className='button primary' onClick={this.save.bind(this)}>
                             保存

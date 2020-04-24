@@ -8,9 +8,12 @@ import {
     ATTRIBUTE_LOAD,
     ATTRIBUTE_UPDATE,
     CANVAS_POSITION_SET,
+    TITLE_SET,
+    DESC_SET,
 } from './action-types';
 import { utils, fetch } from '../../common';
 
+// 设置pid
 export const pidSet = pid => dispatch => {
     dispatch({
         type: PID_SET,
@@ -18,20 +21,13 @@ export const pidSet = pid => dispatch => {
     });
 };
 
-export const pageInit = params => {
-    return fetch({
-        url: '/api/page/get',
-        method: 'post',
-        params,
-    }).then(res => res.data);
-};
-
+// 初始化设置index
 export const indexSet = index => dispatch => {
     dispatch({
         type: INDEX_SET,
-        index
+        index,
     });
-}
+};
 
 // index自增
 export const indexIncrement = () => dispatch => {
@@ -98,6 +94,29 @@ export const canvasPositionSet = canvasPosition => dispatch => {
     });
 };
 
+export const titleSet = title => dispatch => {
+    dispatch({
+        type: TITLE_SET,
+        title,
+    });
+};
+
+export const descSet = desc => dispatch => {
+    dispatch({
+        type: DESC_SET,
+        desc,
+    });
+};
+
+// 页面初始化请求
+export const pageInit = params => {
+    return fetch({
+        url: '/api/page/get',
+        method: 'post',
+        params,
+    }).then(res => res.data);
+};
+
 // 保存数据
 export const htmlSave = params => {
     return fetch({
@@ -107,6 +126,7 @@ export const htmlSave = params => {
     }).then(res => res.data);
 };
 
+// 构建页面
 export const htmlBuild = params => {
     return fetch({
         url: '/api/page/build',
@@ -115,10 +135,11 @@ export const htmlBuild = params => {
     }).then(res => res.data);
 };
 
+// 打开生成的页面
 export const htmlOpen = params => {
     return fetch({
         url: '/api/page/open',
         method: 'POST',
         params,
     }).then(res => res.data);
-}
+};

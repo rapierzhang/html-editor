@@ -7,12 +7,14 @@ import {
     ATTRIBUTE_LOAD,
     CANVAS_POSITION_SET,
     PID_SET,
-    ATTRIBUTE_UPDATE,
+    ATTRIBUTE_UPDATE, TITLE_SET, DESC_SET,
 } from './action-types';
 
 const editorInfo = {
     pid: '',
     index: 0, // 元素索引
+    title: '未命名页面', // 标题
+    desc: '', // 简介
 
     isEdit: false, // 是否编辑状态
     activeKey: '', // 选中元素的key
@@ -58,6 +60,10 @@ export default (state = editorInfo, action) => {
         // 设置画布位置
         case CANVAS_POSITION_SET:
             return { ...state, canvasPosition: action.canvasPosition };
+        case TITLE_SET:
+            return { ...state, title: action.title }
+        case DESC_SET:
+            return {...state, desc: action.desc}
         default:
             return state;
     }

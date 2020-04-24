@@ -7,3 +7,5 @@ export const ATTRIBUTE_LOAD = 'attribute/load';
 export const ATTRIBUTE_UPDATE = 'attribute/update';
 export const CANVAS_POSITION_SET = 'canvas/position/set';
 export const PID_SET = 'pid/set';
+export const TITLE_SET = 'title/set';
+export const DESC_SET = 'desc/set';
