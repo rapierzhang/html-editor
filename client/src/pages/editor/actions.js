@@ -106,3 +106,11 @@ export const htmlBuild = params => {
         params,
     }).then(res => res.data);
 };
+
+export const htmlOpen = params => {
+    return fetch({
+        url: '/api/page/open',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
+}

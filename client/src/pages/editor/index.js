@@ -14,7 +14,7 @@ import {
     elementSelect,
     elementsUpdate,
     htmlSave,
-    htmlBuild,
+    htmlBuild, htmlOpen,
 } from './actions';
 
 const eleList = ['div', 'span'];
@@ -179,6 +179,15 @@ class Editor extends Component {
         })
     }
 
+    open() {
+        const { pid } = this.props.editorInfo;
+        htmlOpen({ pid }).then(res => {
+            window.open(res.url)
+        }).catch(err => {
+            console.error(222, err)
+        })
+    }
+
     render() {
         const {
             editorInfo: { elements },
@@ -196,7 +205,7 @@ class Editor extends Component {
                             保存
                         </div>
                         <div className='button warring' onClick={this.build.bind(this)}>生成</div>
-                        <div className='button success'>打开</div>
+                        <div className='button success' onClick={this.open.bind(this)}>打开</div>
                         <div className='button danger'>删除</div>
                     </div>
                 </div>

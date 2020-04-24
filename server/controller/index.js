@@ -98,14 +98,26 @@ exports.pageBuild = async (ctx, next) => {
     // 创建新目录
     if (!dirExists) fs.mkdirSync(dirPath);
 
-    writeHtml(dirPath, result, next);
-    writeCss(dirPath, htmlTree, next);
-    writeJs(dirPath, htmlTree, next);
+    writeHtml(dirPath, result);
+    writeCss(dirPath, htmlTree);
+    writeJs(dirPath, htmlTree);
 
     ctx.body = utils.res(200, 'ok', {
         result: true,
     });
 };
+
+exports.pageOpen = async (ctx, next) => {
+    const { pid } = ctx.request.body;
+    const result = await PageModule.findOne({ pid });
+    if (result) {
+        ctx.body = utils.res(200, 'ok', {
+            url: `http://localhost:3000/html/${pid}`, // ^^^^^^
+        });
+    } else {
+        ctx.body = utils.res(500, '无此页面', {});
+    }
+}
 
 exports.pageDelete = async (ctx, next) => {};
 
@@ -114,7 +126,7 @@ exports.pageRelease = async (ctx, next) => {};
 const dataIsExist = async (mod, data) => !!(await mod.findOne(data));
 
 // 写入js
-const writeJs = (dirPath, htmlTree, next) => {
+const writeJs = (dirPath, htmlTree) => {
     const jsDirPath = `${dirPath}/js`;
     const jsDirExists = fs.existsSync(jsDirPath);
     if (!jsDirExists) fs.mkdirSync(jsDirPath);
@@ -150,7 +162,7 @@ ele${utils.delLine(id)}.on('${row.type}', () => {
 };
 
 // 写入HTML
-const writeHtml = (dirPath, data, next) => {
+const writeHtml = (dirPath, data) => {
     const { pid, title, htmlTree } = data;
     let html = renderHtml(htmlTree);
     const htmlContext = defaultHtml(pid, title, html);
@@ -206,7 +218,7 @@ const renderAttribute = data => {
 };
 
 // 写入css
-const writeCss = (dirPath, htmlTree, next) => {
+const writeCss = (dirPath, htmlTree) => {
     const cssDirPath = `${dirPath}/css`;
     const cssDirExists = fs.existsSync(cssDirPath);
     if (!cssDirExists) fs.mkdirSync(cssDirPath);

@@ -1,13 +1,15 @@
 const router = require('koa-router')();
 const controller = require('../controller/index');
 // 设置url前缀
-router.prefix('/api/page')
+router.prefix('/api/page');
 
-router.post('/get', controller.pageGet)
+router.post('/get', controller.pageGet);
 
-router.post('/save', controller.pageSave)
+router.post('/save', controller.pageSave);
 
 router.post('/build', controller.pageBuild);
+
+router.post('/open', controller.pageOpen);
 
 router.post('/delete', controller.pageDelete);
 
@@ -38,7 +40,7 @@ router.post('/test', async (ctx, next) => {
     console.log('ctx.status: ', ctx.status);
     console.log('ctx.message: ', ctx.message);
     console.log('ctx.headerSent: ', ctx.headerSent);
-    console.log('ctx.request.body:', ctx.request.body)
+    console.log('ctx.request.body:', ctx.request.body);
     console.log('-------------');
 
     ctx.body = {
