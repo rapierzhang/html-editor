@@ -147,7 +147,7 @@ class Element extends Component {
             item,
             editorInfo: { activeKey },
         } = this.props;
-        const { id, css } = item;
+        const { id, css = {} } = item;
         const active = item.id == activeKey;
 
         return (
@@ -158,11 +158,11 @@ class Element extends Component {
                 onClick={this.selectNode.bind(this, id)}
             >
                 <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
-                {css && utils.has(canMoveList, css.position) && (
+                {utils.has(canMoveList, css.position) && (
                     <div className='ctrl-point center' onMouseDown={this.changePosition.bind(this)} />
                 )}
-                {css && active && <div className='width-num'>{css.width}</div>}
-                {css && active && <div className='height-num'>{css.height}</div>}
+                {active && <div className='width-num'>{css.width}</div>}
+                {active && <div className='height-num'>{css.height}</div>}
 
                 <div className='border' />
                 {this.renderElement(item)}
