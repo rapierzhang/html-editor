@@ -105,13 +105,13 @@ class Element extends Component {
             const top = boxTop + changeY;
             const left = boxLeft + changeX;
             if (movingX - halfWidth < ctxLeft) {
-                this.onStyleChange({ top, ctxLeft });
+                this.onStyleChange({ top, left: ctxLeft });
             } else if (movingY - halfHeight < ctxTop) {
-                this.onStyleChange({ ctxTop, left });
+                this.onStyleChange({ top: ctxTop, left });
             } else if (movingX + halfWidth > ctxRight) {
-                this.onStyleChange({ top, ctxRight });
+                this.onStyleChange({ top, left: ctxRight });
             } else if (movingY + halfHeight > ctxBottom) {
-                this.onStyleChange({ ctxBottom, left });
+                this.onStyleChange({ top: ctxBottom, left });
             } else {
                 this.onStyleChange({ top, left });
             }

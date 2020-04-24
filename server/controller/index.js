@@ -19,13 +19,11 @@ exports.pageGet = async (ctx, next) => {
 
 exports.pageSave = async (ctx, next) => {
     let { pid, index, title, desc, htmlTree, preview } = ctx.request.body;
-    console.log(111, pid, index, title, desc, htmlTree, preview)
     const time = utils.dateFormat(new Date().getTime());
     let pageResult = false;
     let listResult = false;
     let msg = '';
     const result = await PageModule.findOne({ pid });
-    console.log(222, result)
     if (result) {
         console.error('有数据');
         try {
@@ -330,6 +328,8 @@ body {
     .container {
         width: 375px;
         margin: 0 auto;
+        min-height: 1px;
+        position: relative;
     }
 }
 `;
