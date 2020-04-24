@@ -26,12 +26,16 @@ class Element extends Component {
     }
 
     renderElement(item) {
+        // 折行处理
+        const textList = item.text.split('\n');
         switch (item.element) {
             case 'div':
                 return (
                     <div id={item.id} className={classNames('ele-div', item.id)} style={item.css}>
                         {this.props.children}
-                        {item.text}
+                        {textList.map((row, idx) => (
+                            <div key={`row-${idx}`}>{row}</div>
+                        ))}
                     </div>
                 );
             case 'input':
@@ -69,8 +73,7 @@ class Element extends Component {
 
         // 拖拽结束
         window.onmouseup = () => {
-            const { isDown } = this.state;
-            if (!isDown) return;
+            if (!this.state.isDown) return;
             this.setState({ isDown: false });
         };
     }
@@ -83,8 +86,8 @@ class Element extends Component {
             ...thisNode,
             css: {
                 ...thisStyle,
-                width: utils.autoComplete('width', width) ,
-                height: utils.autoComplete('height', height)
+                width: utils.autoComplete('width', width),
+                height: utils.autoComplete('height', height),
             },
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
@@ -96,6 +99,7 @@ class Element extends Component {
             item,
             editorInfo: { activeKey },
         } = this.props;
+        const { id, css } = item;
         const active = item.id == activeKey;
 
         return (
@@ -103,10 +107,11 @@ class Element extends Component {
                 className={classNames('ele-box', { active })}
                 ref='box'
                 style={item.css}
-                onClick={this.selectNode.bind(this, item.id)}
+                onClick={this.selectNode.bind(this, id)}
             >
                 <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
-                <div className='ctrl-point center' />
+                {css && utils.has(['absolute', 'fixed'], css.position) && <div className='ctrl-point center' />}
+
                 <div className='border' />
                 {this.renderElement(item)}
             </div>

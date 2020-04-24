@@ -6,6 +6,16 @@ import { Select } from '../../../component';
 import './attr-form.scss';
 import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
+const positionList = [
+    'initial',
+    'absolute',
+    'fixed',
+    'relative',
+    'static',
+    'sticky',
+    'inherit',
+];
+
 class ArrtForm extends Component {
     constructor() {
         super(...arguments);
@@ -42,6 +52,7 @@ class ArrtForm extends Component {
             ...thisNode,
             [attrName]: value,
         };
+        console.error(value)
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(elements, activeKey));
@@ -173,32 +184,35 @@ class ArrtForm extends Component {
     render() {
         const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
+        console.error(elements, activeEle)
         const {
             text,
-            backgroundImage,
-            backgroundColor,
+            css: {
+                backgroundImage,
+                backgroundColor,
 
-            fontSize,
-            color,
-            fontFamily,
+                fontSize,
+                color,
+                fontFamily,
 
-            marginTop,
-            marginRight,
-            marginBottom,
-            marginLeft,
+                marginTop,
+                marginRight,
+                marginBottom,
+                marginLeft,
 
-            borderTop,
-            borderRight,
-            borderBottom,
-            borderLeft,
+                borderTop,
+                borderRight,
+                borderBottom,
+                borderLeft,
 
-            paddingTop,
-            paddingRight,
-            paddingBottom,
-            paddingLeft,
+                paddingTop,
+                paddingRight,
+                paddingBottom,
+                paddingLeft,
 
-            width,
-            height,
+                width,
+                height,
+            } = {}
         } = activeEle;
 
         return (
@@ -241,7 +255,7 @@ class ArrtForm extends Component {
                                         </div>
                                         <div className='row'>
                                             <span>文字 </span>
-                                            <input
+                                            <textarea
                                                 type='text'
                                                 onChange={this.onAttrChange.bind(this, 'text')}
                                                 value={text}
@@ -261,15 +275,7 @@ class ArrtForm extends Component {
                                         <div className='row'>
                                             <span>定位: </span>
                                             <Select
-                                                list={[
-                                                    'initial',
-                                                    'absolute',
-                                                    'fixed',
-                                                    'relative',
-                                                    'static',
-                                                    'sticky',
-                                                    'inherit',
-                                                ]}
+                                                list={positionList}
                                                 onChange={this.onStyleBlur.bind(this, 'position')}
                                             />
                                         </div>
