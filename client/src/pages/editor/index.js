@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
-import utils from '../../common/utils';
+import { utils, toast } from '../../common';
 import query from 'query-string';
 import './editor.scss';
 import {
@@ -14,7 +14,8 @@ import {
     elementSelect,
     elementsUpdate,
     htmlSave,
-    htmlBuild, htmlOpen,
+    htmlBuild,
+    htmlOpen,
 } from './actions';
 
 const eleList = ['div', 'span'];
@@ -35,13 +36,15 @@ class Editor extends Component {
         setTimeout(() => this.ctxPosition(), 500);
         this.init();
     }
+
+    // 初始化
     init() {
         const { pid } = query.parse(this.props.location.search);
         pageInit({ pid })
             .then(res => {
-                const {pid, htmlTree} = res
+                const { pid, htmlTree } = res;
                 this.props.dispatch(pidSet(pid));
-                htmlTree && this.props.dispatch(elementsUpdate(htmlTree))
+                htmlTree && this.props.dispatch(elementsUpdate(htmlTree));
                 location.href = `${location.origin}/#/editor?pid=${pid}`;
             })
             .catch(err => {
@@ -165,27 +168,37 @@ class Editor extends Component {
             desc: '测试简介',
             htmlTree: elements,
             // preview
-        }).then(res => {
-            console.error(111, res);
-        });
+        })
+            .then(res => {
+                res.result === true ? toast('保存成功') : toast('保存失败');
+            })
+            .catch(err => {
+                toast(['保存失败', err.msg]);
+            });
     }
 
+    // 构建
     build() {
         const { pid } = this.props.editorInfo;
-        htmlBuild({ pid }).then(res => {
-            console.error(111, res)
-        }).catch(err => {
-            console.error(222, err)
-        })
+        htmlBuild({ pid })
+            .then(res => {
+                console.error(111, res);
+            })
+            .catch(err => {
+                console.error(222, err);
+            });
     }
 
+    // 打开
     open() {
         const { pid } = this.props.editorInfo;
-        htmlOpen({ pid }).then(res => {
-            window.open(res.url)
-        }).catch(err => {
-            console.error(222, err)
-        })
+        htmlOpen({ pid })
+            .then(res => {
+                window.open(res.url);
+            })
+            .catch(err => {
+                console.error(222, err);
+            });
     }
 
     render() {
@@ -204,8 +217,12 @@ class Editor extends Component {
                         <div className='button primary' onClick={this.save.bind(this)}>
                             保存
                         </div>
-                        <div className='button warring' onClick={this.build.bind(this)}>生成</div>
-                        <div className='button success' onClick={this.open.bind(this)}>打开</div>
+                        <div className='button warring' onClick={this.build.bind(this)}>
+                            生成
+                        </div>
+                        <div className='button success' onClick={this.open.bind(this)}>
+                            打开
+                        </div>
                         <div className='button danger'>删除</div>
                     </div>
                 </div>

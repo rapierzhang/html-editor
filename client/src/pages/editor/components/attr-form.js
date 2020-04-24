@@ -200,7 +200,6 @@ class ArrtForm extends Component {
             width,
             height,
         } = activeEle;
-        console.error(1111, activeEle)
 
         return (
             <div className='attribute'>

@@ -4,7 +4,9 @@ import {
     ACTIVE_KEY_SET,
     EDIT_STATUS_SET,
     ATTRIBUTE_LOAD,
-    CANVAS_POSITION_SET, PID_SET, ATTRIBUTE_UPDATE,
+    CANVAS_POSITION_SET,
+    PID_SET,
+    ATTRIBUTE_UPDATE,
 } from './action-types';
 
 const editorInfo = {
@@ -28,7 +30,7 @@ export default (state = editorInfo, action) => {
     // console.error(action)
     switch (action.type) {
         case PID_SET:
-            return {...state, pid: action.pid}
+            return { ...state, pid: action.pid };
         // index自增
         case INDEX_INCREMENT:
             return { ...state, index: state.index + 1 };
@@ -46,7 +48,7 @@ export default (state = editorInfo, action) => {
             return { ...state, activeEle: action.activeEle };
         // 元素属性更改
         case ATTRIBUTE_UPDATE:
-            return {...state, activeEle: action.activeEle};
+            return { ...state, activeEle: action.activeEle };
         // 设置画布位置
         case CANVAS_POSITION_SET:
             return { ...state, canvasPosition: action.canvasPosition };
