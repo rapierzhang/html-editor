@@ -8,12 +8,13 @@ import query from 'query-string';
 import './editor.scss';
 import {
     pageInit,
+    indexIncrement,
     pidSet,
     canvasPositionSet,
     elementSelect,
     elementsUpdate,
     htmlSave,
-    indexIncrement,
+    htmlBuild,
 } from './actions';
 
 const eleList = ['div', 'span'];
@@ -33,7 +34,6 @@ class Editor extends Component {
     componentDidMount() {
         setTimeout(() => this.ctxPosition(), 500);
         this.init();
-        console.error(location);
     }
     init() {
         const { pid } = query.parse(this.props.location.search);
@@ -41,7 +41,7 @@ class Editor extends Component {
             .then(res => {
                 const {pid, htmlTree} = res
                 this.props.dispatch(pidSet(pid));
-                this.props.dispatch(elementsUpdate(htmlTree))
+                htmlTree && this.props.dispatch(elementsUpdate(htmlTree))
                 location.href = `${location.origin}/#/editor?pid=${pid}`;
             })
             .catch(err => {
@@ -170,6 +170,15 @@ class Editor extends Component {
         });
     }
 
+    build() {
+        const { pid } = this.props.editorInfo;
+        htmlBuild({ pid }).then(res => {
+            console.error(111, res)
+        }).catch(err => {
+            console.error(222, err)
+        })
+    }
+
     render() {
         const {
             editorInfo: { elements },
@@ -186,7 +195,7 @@ class Editor extends Component {
                         <div className='button primary' onClick={this.save.bind(this)}>
                             保存
                         </div>
-                        <div className='button warring'>生成</div>
+                        <div className='button warring' onClick={this.build.bind(this)}>生成</div>
                         <div className='button success'>打开</div>
                         <div className='button danger'>删除</div>
                     </div>

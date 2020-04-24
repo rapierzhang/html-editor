@@ -4,7 +4,7 @@ import utils from '../../../common/utils';
 import classNames from 'classnames';
 import { Select } from '../../../component';
 import './attr-form.scss';
-import { activeKeySet, elementSelect, elementsUpdate, isEditSet } from '../actions';
+import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
 class ArrtForm extends Component {
     constructor() {
@@ -44,6 +44,7 @@ class ArrtForm extends Component {
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(elements, activeKey));
     }
 
     // 样式更改
@@ -51,10 +52,10 @@ class ArrtForm extends Component {
         const value = typeof e == 'object' ? e.target.value : e;
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
-        const thisStyle = thisNode.style || {};
+        const thisStyle = thisNode.css || {};
         const newNode = {
             ...thisNode,
-            style: { ...thisStyle, [attrName]: utils.autoComplete(attrName, value) },
+            css: { ...thisStyle, [attrName]: utils.autoComplete(attrName, value) },
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -199,6 +200,7 @@ class ArrtForm extends Component {
             width,
             height,
         } = activeEle;
+        console.error(1111, activeEle)
 
         return (
             <div className='attribute'>

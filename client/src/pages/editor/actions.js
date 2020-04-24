@@ -5,6 +5,7 @@ import {
     ACTIVE_KEY_SET,
     EDIT_STATUS_SET,
     ATTRIBUTE_LOAD,
+    ATTRIBUTE_UPDATE,
     CANVAS_POSITION_SET,
 } from './action-types';
 import { utils, fetch } from '../../common';
@@ -12,9 +13,9 @@ import { utils, fetch } from '../../common';
 export const pidSet = pid => dispatch => {
     dispatch({
         type: PID_SET,
-        pid
-    })
-}
+        pid,
+    });
+};
 
 export const pageInit = params => {
     return fetch({
@@ -22,7 +23,7 @@ export const pageInit = params => {
         method: 'post',
         params,
     }).then(res => res.data);
-}
+};
 
 // index自增
 export const indexIncrement = () => dispatch => {
@@ -64,6 +65,14 @@ export const attributeLoad = (elements, activeKey) => dispatch => {
     });
 };
 
+// 更改选中元素属性
+export const attributeUpdate = activeEle => dispatch => {
+    dispatch({
+        type: ATTRIBUTE_UPDATE,
+        activeEle,
+    });
+};
+
 // 选择编辑
 export const elementSelect = (id, activeKey, elements) => dispatch => {
     dispatch(activeKeySet(id));
@@ -85,6 +94,14 @@ export const canvasPositionSet = canvasPosition => dispatch => {
 export const htmlSave = params => {
     return fetch({
         url: '/api/page/save',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
+};
+
+export const htmlBuild = params => {
+    return fetch({
+        url: '/api/page/build',
         method: 'POST',
         params,
     }).then(res => res.data);

@@ -29,7 +29,7 @@ class Element extends Component {
         switch (item.element) {
             case 'div':
                 return (
-                    <div id={item.id} className={classNames('ele-div', item.id)} style={item.style}>
+                    <div id={item.id} className={classNames('ele-div', item.id)} style={item.css}>
                         {this.props.children}
                         {item.text}
                     </div>
@@ -85,10 +85,10 @@ class Element extends Component {
     onStyleChange(attr, val) {
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
-        const thisStyle = thisNode.style || {};
+        const thisStyle = thisNode.css || {};
         const newNode = {
             ...thisNode,
-            style: { ...thisStyle, [attr]: utils.autoComplete(attr, val) },
+            css: { ...thisStyle, [attr]: utils.autoComplete(attr, val) },
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -105,7 +105,7 @@ class Element extends Component {
             <div
                 className={classNames('ele-box', { active })}
                 ref='box'
-                style={item.style}
+                style={item.css}
                 onClick={this.selectNode.bind(this, item.id)}
             >
                 <div className='ctrl-point top' onMouseDown={this.onDrag.bind(this, 'top')} />

@@ -23,7 +23,8 @@ exports.pageSave = async (ctx, next) => {
     let pageResult = false;
     let listResult = false;
     let msg = '';
-    if (pid) {
+    const result = await PageModule.findOne({ pid });
+    if (result) {
         console.error('有数据');
         try {
             pageResult = await PageModule.update(
@@ -84,12 +85,13 @@ exports.pageSave = async (ctx, next) => {
 };
 
 exports.pageBuild = async (ctx, next) => {
-    const result = await PageModule.findOne({ pid: ctx.query.pid });
+    const { pid } = ctx.request.body;
+    const result = await PageModule.findOne({ pid });
     if (!result) {
         ctx.body = utils.res(500, 'no data', {});
         return;
     }
-    const { pid, htmlTree } = result;
+    const { htmlTree } = result;
     const dirPath = `${path.resolve('./')}/public/html/${pid}`;
     // 判断目录存在
     const dirExists = fs.existsSync(dirPath);
@@ -119,13 +121,13 @@ const writeJs = (dirPath, htmlTree, next) => {
     let jsContext = '';
     const jsArr = utils.objToArr(htmlTree);
     jsArr.forEach(item => {
-        const { key, bindJs, defaultJs, extraJs } = item;
+        const { id, bindJs, defaultJs, extraJs } = item;
         // 绑定事件
         if (bindJs) {
-            jsContext += `const ele${utils.delLine(key)} = $('#${key}');`;
+            jsContext += `const ele${utils.delLine(id)} = $('#${id}');`;
             bindJs.map(row => {
                 jsContext += `
-ele${utils.delLine(key)}.on('${row.type}', () => {
+ele${utils.delLine(id)}.on('${row.type}', () => {
     ${row.func}
 });`;
             });
@@ -161,16 +163,16 @@ const renderHtml = (data, floor = 0) => {
     let idx = 0;
     for (let eleKey in data) {
         const item = data[eleKey];
-        const { key, element, text, children } = item;
+        const { id, element, text, children } = item;
         const labelType = utils.labelJudge(element);
         if (idx > 0) {
             html += `
             ${renderTab(floor)}`;
         }
         if (labelType === 1) {
-            html += `<${element} id='${key}' class='${key}' ${renderAttribute(item)}/>`;
+            html += `<${element} id='${id}' class='${id}' ${renderAttribute(item)}/>`;
         } else if (labelType === 2) {
-            html += `<${element} id='${key}' class='${key}' ${renderAttribute(item)}>
+            html += `<${element} id='${id}' class='${id}' ${renderAttribute(item)}>
                 ${renderTab(floor)}${children ? renderHtml(children, floor + 1) : text}
             ${renderTab(floor)}</${element}>`;
         } else {
@@ -225,7 +227,7 @@ const writeCss = (dirPath, htmlTree, next) => {
                 }
             }
             const cssItem = `
-.${item.key} { 
+.${item.id} { 
     ${cssContent} 
 }
 `;
