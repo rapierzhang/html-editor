@@ -150,7 +150,7 @@ const utils = {
     positionFilter(css) {
         let obj = {};
         for (let k in css) {
-            if (!utils.has(['position', 'top', 'right', 'bottom', 'left'], k)){
+            if (!utils.has(['position', 'top', 'right', 'bottom', 'left', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'], k)){
                 obj[k] = css[k]
             }
         }

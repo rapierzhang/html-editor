@@ -104,15 +104,12 @@ class Element extends Component {
         const {
             canvasPosition: { ctxTop, ctxRight, ctxBottom, ctxLeft },
         } = this.props.editorInfo;
+        const boxEle = this.refs.box;
         const startX = evt.clientX;
         const startY = evt.clientY;
-        const boxEle = this.refs.box;
-        const boxTop = boxEle.offsetTop;
-        const boxLeft = boxEle.offsetLeft;
-        const halfWidth = boxEle.offsetWidth / 2;
-        const halfHeight = boxEle.offsetHeight / 2;
-
-        console.error(this.props.editorInfo);
+        const { offsetTop: boxTop, offsetLeft: boxLeft, offsetWidth: boxWidth, offsetHeight: boxHeight } = boxEle;
+        const halfWidth = boxWidth / 2;
+        const halfHeight = boxHeight / 2;
 
         // 拖拽中
         window.onmousemove = e => {
@@ -124,13 +121,17 @@ class Element extends Component {
             const top = boxTop + changeY;
             const left = boxLeft + changeX;
             if (movingX - halfWidth < ctxLeft) {
-                this.onStyleChange({ top, left: ctxLeft });
+                // 超出左侧
+                this.onStyleChange({ top, left: 0 });
             } else if (movingY - halfHeight < ctxTop) {
-                this.onStyleChange({ top: ctxTop, left });
+                // 超出上部
+                this.onStyleChange({ top: 0, left });
             } else if (movingX + halfWidth > ctxRight) {
-                this.onStyleChange({ top, left: ctxRight });
+                // 超出右侧
+                this.onStyleChange({ top, left: 375 - boxEle.offsetWidth });
             } else if (movingY + halfHeight > ctxBottom) {
-                this.onStyleChange({ top: ctxBottom, left });
+                // 超出下册
+                this.onStyleChange({ top: null, bottom: 0, left });
             } else {
                 this.onStyleChange({ top, left });
             }
