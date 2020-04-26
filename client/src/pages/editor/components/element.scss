@@ -58,9 +58,21 @@
         }
     }
 
-    .ele-div {
+    .element {
         width: 100%;
         height: 50px;
+
+        &.view {
+
+        }
+
+        &.scroll-view {
+            overflow: scroll;
+        }
+
+        &.swiper {
+
+        }
     }
 
 }

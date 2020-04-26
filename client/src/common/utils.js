@@ -146,6 +146,17 @@ const utils = {
     },
     // 弹层
     toast: msg => ({ ...Toast(msg) }),
+    // 过滤元素定位
+    positionFilter(css) {
+        let obj = {};
+        for (let k in css) {
+            if (!utils.has(['position', 'top', 'right', 'bottom', 'left'], k)){
+                obj[k] = css[k]
+            }
+        }
+        console.error(111, obj)
+        return obj
+    }
 };
 
 export default utils;

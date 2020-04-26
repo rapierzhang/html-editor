@@ -13,7 +13,7 @@ class ArrtForm extends Component {
     constructor() {
         super(...arguments);
         this.state = {
-            navIndex: 1,
+            navIndex: 0,
             isDown: false,
             movingX: 0,
             movingY: 0,

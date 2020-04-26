@@ -27,20 +27,39 @@ class Element extends Component {
         this.props.onNodeSelect(key);
     }
 
-    renderElement(item) {
+    renderElement(item, css) {
         // 折行处理
         const textList = item.text.split('\n');
         switch (item.element) {
-            case 'div':
+            case 'View':
                 return (
-                    <div id={item.id} className={classNames('ele-div', item.id)}>
+                    <div id={item.id} className={classNames('element', 'view', item.id)} style={item.css}>
                         {this.props.children}
                         {textList.map((row, idx) => (
                             <div key={`row-${idx}`}>{row}</div>
                         ))}
                     </div>
                 );
-            case 'input':
+            case 'ScrollView':
+                return (
+                    <div
+                        id={item.id}
+                        className={classNames('element', 'scroll-view', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    >
+                        {this.props.children}
+                        {textList.map((row, idx) => (
+                            <div key={`row-${idx}`}>{row}</div>
+                        ))}
+                    </div>
+                );
+            case 'Swiper':
+                return (
+                    <div id={item.id} className={classNames('element', 'swiper', item.id)} style={item.css}>
+                        swiper
+                    </div>
+                );
+            case 'Input':
                 return <input type='text' {...item} />;
             default:
                 return <div>default</div>;
@@ -154,8 +173,8 @@ class Element extends Component {
             <div
                 className={classNames('ele-box', { active })}
                 ref='box'
-                style={item.css}
                 onClick={this.selectNode.bind(this, id)}
+                style={css}
             >
                 <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
                 {utils.has(canMoveList, css.position) && (
@@ -165,7 +184,7 @@ class Element extends Component {
                 {active && <div className='height-num'>{css.height}</div>}
 
                 <div className='border' />
-                {this.renderElement(item)}
+                {this.renderElement(item, css)}
             </div>
         );
     }

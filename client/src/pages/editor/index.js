@@ -21,7 +21,7 @@ import {
     descSet,
 } from './actions';
 
-const eleList = ['div', 'span'];
+const eleList = ['View', 'ScrollView', 'Swiper'];
 
 class Editor extends Component {
     constructor(props) {
@@ -32,9 +32,6 @@ class Editor extends Component {
             // 移动中位置
             movingX: 0,
             movingY: 0,
-
-            titleEdit: false,
-            descEdit: false,
         };
     }
 
@@ -239,13 +236,14 @@ class Editor extends Component {
         const {
             editorInfo: { title, desc, elements },
         } = this.props;
-        const { isDown, dragName, movingX, movingY, titleEdit, descEdit } = this.state;
+        const { isDown, dragName, movingX, movingY } = this.state;
         // console.error(activeKey, isEdit);
 
         return (
             <div className='editor'>
                 {/*------ 拖拽虚拟元素 ------*/}
                 <div className='header'>
+                    {/*------ 标题 ------*/}
                     <div>
                         <input
                             type='text'
@@ -263,6 +261,7 @@ class Editor extends Component {
                             onChange={this.descChange.bind(this)}
                         />
                     </div>
+                    {/*------ 按钮组 ------*/}
                     <div className='btn-box'>
                         <div className='button primary' onClick={this.save.bind(this)}>
                             保存
