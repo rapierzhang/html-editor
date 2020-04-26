@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
-import { utils, toast } from '../../common';
+import { utils } from '../../common';
 import query from 'query-string';
 import './editor.scss';
 import {
@@ -203,10 +203,10 @@ class Editor extends Component {
             // preview
         })
             .then(res => {
-                res.result === true ? toast('保存成功') : toast('保存失败');
+                 utils.toast(res.result ? '保存成功' : '保存失败');
             })
             .catch(err => {
-                toast(['保存失败', err.msg]);
+                utils.toast(['保存失败', err.msg]);
             });
     }
 
@@ -215,10 +215,10 @@ class Editor extends Component {
         const { pid } = this.props.editorInfo;
         htmlBuild({ pid })
             .then(res => {
-                console.error(111, res);
+                 utils.toast(res.result ? '生成成功' : '生成失败');
             })
             .catch(err => {
-                console.error(222, err);
+                utils.toast('生成失败');
             });
     }
 
@@ -230,6 +230,7 @@ class Editor extends Component {
                 window.open(res.url);
             })
             .catch(err => {
+                utils.toast('无法打开');
                 console.error(222, err);
             });
     }

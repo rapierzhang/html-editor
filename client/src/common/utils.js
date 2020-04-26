@@ -1,3 +1,5 @@
+import { Toast } from '../component/';
+
 const utils = {
     // 节点查询
     deepSearch: (obj, key) => {
@@ -126,7 +128,7 @@ const utils = {
         return list;
     },
     has: (strOrArr, text) => {
-        return strOrArr.indexOf(text) > -1
+        return strOrArr.indexOf(text) > -1;
     },
     // 属性自动补全
     autoComplete: (attr, text) => {
@@ -142,6 +144,8 @@ const utils = {
         if (utils.has(urlArr, attr)) return `url(${text})`;
         return text;
     },
+    // 弹层
+    toast: msg => ({ ...Toast(msg) }),
 };
 
 export default utils;
