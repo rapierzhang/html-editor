@@ -21,7 +21,12 @@ import {
     descSet,
 } from './actions';
 
-const eleList = ['View', 'ScrollView', 'Swiper'];
+const eleList = [
+    ...['View', 'ScrollView', 'Swiper'], // View
+    ...['Text', 'Icon'], // 基础
+    ...['Form'], // 表单
+    ...['Audio', 'Video', 'Image'], // 媒体
+];
 
 class Editor extends Component {
     constructor(props) {

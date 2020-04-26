@@ -8,7 +8,6 @@ const ListModule = require('../module/list');
 exports.pageGet = async (ctx, next) => {
     let { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid });
-    console.log(pid, result)
     if (result) {
         ctx.body = utils.res(200, 'ok', result);
     } else {

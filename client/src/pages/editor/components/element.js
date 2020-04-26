@@ -31,6 +31,7 @@ class Element extends Component {
         // 折行处理
         const textList = item.text.split('\n');
         switch (item.element) {
+            // 容器
             case 'View':
                 return (
                     <div id={item.id} className={classNames('element', 'view', item.id)} style={item.css}>
@@ -59,8 +60,96 @@ class Element extends Component {
                         swiper
                     </div>
                 );
+            // 基础
+            case 'Text':
+                return <span id={item.id} className={classNames('element', 'text', item.id)} style={item.css}></span>;
+            case 'Icon':
+                return <i id={item.id} className={classNames('element', 'text', item.id)} style={item.css}></i>;
+            // 表单
+            case 'Form':
+                return (
+                    <div
+                        id={item.id}
+                        className={classNames('element', 'form', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    >
+                        {this.props.children}
+                        {textList.map((row, idx) => (
+                            <div key={`row-${idx}`}>{row}</div>
+                        ))}
+                    </div>
+                );
             case 'Input':
-                return <input type='text' {...item} />;
+                return (
+                    <input
+                        type='text'
+                        id={item.id}
+                        className={classNames('element', 'input', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    />
+                );
+            case 'TextArea':
+                return (
+                    <textarea
+                        id={item.id}
+                        className={classNames('element', 'textarea', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    ></textarea>
+                );
+            case 'CheckBox':
+                return (
+                    <div
+                        id={item.id}
+                        className={classNames('element', 'checkbox', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    >
+                        checkbox
+                    </div>
+                );
+            case 'Radio':
+                return (
+                    <div
+                        id={item.id}
+                        className={classNames('element', 'radio', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    >
+                        radio
+                    </div>
+                );
+            case 'Select':
+                return (
+                    <div
+                        id={item.id}
+                        className={classNames('element', 'select', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    ></div>
+                );
+            // 媒体
+            case 'Audio':
+                return (
+                    <audio
+                        id={item.id}
+                        className={classNames('element', 'audio', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    ></audio>
+                );
+            case 'Video':
+                return (
+                    <video
+                        id={item.id}
+                        className={classNames('element', 'video', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    ></video>
+                );
+            case 'Image':
+                return (
+                    <img
+                        id={item.id}
+                        className={classNames('element', 'image', item.id)}
+                        style={utils.positionFilter(item.css)}
+                    />
+                );
+                
             default:
                 return <div>default</div>;
         }
