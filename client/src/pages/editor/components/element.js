@@ -55,11 +55,15 @@ class Element extends Component {
                 );
             // 基础
             case 'Text':
-                return <span id={id} className={classNames('element', 'text', id)} style={css}>
-                  {textList.map((row, idx) => (
-                    <span key={`row-${idx}`} className='text-row'>{row}</span>
-                  ))}
-                </span>;
+                return (
+                    <span id={id} className={classNames('element', 'text', id)} style={css}>
+                        {textList.map((row, idx) => (
+                            <span key={`row-${idx}`} className='text-row'>
+                                {row}
+                            </span>
+                        ))}
+                    </span>
+                );
             case 'Icon':
                 return <i id={id} className={classNames('element', 'text', id)} style={css}></i>;
             // 表单
@@ -116,10 +120,10 @@ class Element extends Component {
                         id={id}
                         className={classNames('element', 'audio', id)}
                         style={utils.positionFilter(css)}
+                        {...attr}
                     ></audio>
                 );
             case 'Video':
-              console.error(attr)
                 return (
                     <video
                         id={id}
@@ -129,7 +133,14 @@ class Element extends Component {
                     ></video>
                 );
             case 'Image':
-                return <img id={id} className={classNames('element', 'image', id)} style={utils.positionFilter(css)} />;
+                return (
+                    <img
+                        id={id}
+                        className={classNames('element', 'image', id)}
+                        style={utils.positionFilter(css)}
+                        {...attr}
+                    />
+                );
 
             default:
                 return <div>default</div>;
@@ -259,6 +270,11 @@ class Element extends Component {
             </div>
         );
     }
+}
+
+Element.defaultProps = {
+    onNodeSelect: () => {},
+
 }
 
 export default connect(

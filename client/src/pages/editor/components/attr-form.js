@@ -254,7 +254,6 @@ class ArrtForm extends Component {
                                             <div className='row'>
                                                 <span>文字 </span>
                                                 <textarea
-                                                    type='text'
                                                     onChange={this.onAttrChange.bind(this, 'text')}
                                                     value={activeEle.text}
                                                 />
@@ -297,6 +296,18 @@ class ArrtForm extends Component {
                                                     <Switch
                                                         defaultValue={activeEle.autoPlay}
                                                         onChange={this.onAttrChange.bind(this, 'autoPlay')}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {activeEle.element == 'Image' && (
+                                            <div>
+                                                <div className='row'>
+                                                    <span>路径</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'src')}
+                                                        value={activeEle.src}
                                                     />
                                                 </div>
                                             </div>
