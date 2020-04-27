@@ -208,6 +208,25 @@ const utils = {
         }
         return obj;
     },
+    // 过滤object
+    objKeyFilter(obj, arr) {
+        let o = { ...obj };
+        for (let key in obj) {
+            if (utils.has(arr, key)) {
+                delete o[key];
+            }
+        }
+        return o;
+    },
+    objValFilter(obj, arr) {
+        let o = { ...obj };
+        for (let key in obj) {
+            if (utils.has(arr, obj[key])) {
+                delete o[key];
+            }
+        }
+        return o;
+    },
 };
 
 export default utils;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import utils from '../../../common/utils';
 import classNames from 'classnames';
-import { Select } from '../../../component';
+import { Select, Switch } from '../../../component';
 import './attr-form.scss';
 import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
@@ -39,13 +39,15 @@ class ArrtForm extends Component {
     onAttrChange(attrName, e) {
         // 判断是event传入的值还是组件传入的值
         const value = !!e.target ? e.target.value : e;
-        const { elements, activeKey } = this.props.editorInfo;
+        const { elements, activeKey, activeEle } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
         const newNode = {
             ...thisNode,
             [attrName]: value,
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        console.error(222, newElements);
+
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
     }
@@ -65,10 +67,12 @@ class ArrtForm extends Component {
         this.props.dispatch(attributeUpdate(newNode));
     }
 
+    // 删除元素
     removeEle() {
         const { elements, activeKey } = this.props.editorInfo;
         const newElements = utils.deepRemove(elements, activeKey);
         this.props.dispatch(elementsUpdate(newElements));
+        this.close();
     }
 
     // 关闭
@@ -179,7 +183,6 @@ class ArrtForm extends Component {
         const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
         const {
-            text,
             css: {
                 position,
 
@@ -253,8 +256,49 @@ class ArrtForm extends Component {
                                                 <textarea
                                                     type='text'
                                                     onChange={this.onAttrChange.bind(this, 'text')}
-                                                    value={text}
+                                                    value={activeEle.text}
                                                 />
+                                            </div>
+                                        )}
+                                        {activeEle.element == 'Video' && (
+                                            <div>
+                                                <div className='row'>
+                                                    <span>路径</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'src')}
+                                                        value={activeEle.src}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>封面图</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'poster')}
+                                                        value={activeEle.poster}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>控制条</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.controls}
+                                                        onChange={this.onAttrChange.bind(this, 'controls')}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>循环播放</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.loop}
+                                                        onChange={this.onAttrChange.bind(this, 'loop')}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>自动播放</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.autoPlay}
+                                                        onChange={this.onAttrChange.bind(this, 'autoPlay')}
+                                                    />
+                                                </div>
                                             </div>
                                         )}
                                     </div>

@@ -5,7 +5,7 @@
     min-height: 10px;
 
     &.active {
-        >.ctrl-point {
+        > .ctrl-point {
             position: absolute;
             width: 6px;
             height: 6px;
@@ -27,7 +27,7 @@
             }
         }
 
-        >.border {
+        > .border {
             position: absolute;
             left: 0;
             top: 0;
@@ -38,7 +38,7 @@
             z-index: 9998;
         }
 
-        >.width-num {
+        > .width-num {
             position: absolute;
             top: -20px;
             left: 50%;
@@ -47,7 +47,7 @@
             font-size: 12px;
         }
 
-        >.height-num {
+        > .height-num {
             position: absolute;
             right: -5px;
             top: 50%;
@@ -60,9 +60,17 @@
     .element {
         width: 100%;
         height: 50px;
+        vertical-align: middle;
 
         &.view {
+        }
 
+        &.text {
+            display: inline-block;
+
+            .text-row {
+                display: block;
+            }
         }
 
         &.scroll-view {
@@ -70,9 +78,6 @@
         }
 
         &.swiper {
-
         }
     }
-
 }
-

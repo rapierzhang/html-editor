@@ -27,52 +27,45 @@ class Element extends Component {
         this.props.onNodeSelect(key);
     }
 
-    renderElement(item, css) {
+    renderElement(item) {
+        const { id, css, text } = item;
         // 折行处理
-        const textList = item.text.split('\n');
+        const textList = text.split('\n');
+        let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text']);
+        attr = utils.objValFilter(attr, ['false']);
         switch (item.element) {
             // 容器
             case 'View':
                 return (
-                    <div id={item.id} className={classNames('element', 'view', item.id)} style={item.css}>
+                    <div id={id} className={classNames('element', 'view', id)} style={css}>
                         {this.props.children}
-                        {textList.map((row, idx) => (
-                            <div key={`row-${idx}`}>{row}</div>
-                        ))}
                     </div>
                 );
             case 'ScrollView':
                 return (
-                    <div
-                        id={item.id}
-                        className={classNames('element', 'scroll-view', item.id)}
-                        style={utils.positionFilter(item.css)}
-                    >
+                    <div id={id} className={classNames('element', 'scroll-view', id)} style={utils.positionFilter(css)}>
                         {this.props.children}
-                        {textList.map((row, idx) => (
-                            <div key={`row-${idx}`}>{row}</div>
-                        ))}
                     </div>
                 );
             case 'Swiper':
                 return (
-                    <div id={item.id} className={classNames('element', 'swiper', item.id)} style={item.css}>
+                    <div id={id} className={classNames('element', 'swiper', id)} style={css}>
                         swiper
                     </div>
                 );
             // 基础
             case 'Text':
-                return <span id={item.id} className={classNames('element', 'text', item.id)} style={item.css}></span>;
+                return <span id={id} className={classNames('element', 'text', id)} style={css}>
+                  {textList.map((row, idx) => (
+                    <span key={`row-${idx}`} className='text-row'>{row}</span>
+                  ))}
+                </span>;
             case 'Icon':
-                return <i id={item.id} className={classNames('element', 'text', item.id)} style={item.css}></i>;
+                return <i id={id} className={classNames('element', 'text', id)} style={css}></i>;
             // 表单
             case 'Form':
                 return (
-                    <div
-                        id={item.id}
-                        className={classNames('element', 'form', item.id)}
-                        style={utils.positionFilter(item.css)}
-                    >
+                    <div id={id} className={classNames('element', 'form', id)} style={utils.positionFilter(css)}>
                         {this.props.children}
                         {textList.map((row, idx) => (
                             <div key={`row-${idx}`}>{row}</div>
@@ -83,73 +76,61 @@ class Element extends Component {
                 return (
                     <input
                         type='text'
-                        id={item.id}
-                        className={classNames('element', 'input', item.id)}
-                        style={utils.positionFilter(item.css)}
+                        id={id}
+                        className={classNames('element', 'input', id)}
+                        style={utils.positionFilter(css)}
                     />
                 );
             case 'TextArea':
                 return (
                     <textarea
-                        id={item.id}
-                        className={classNames('element', 'textarea', item.id)}
-                        style={utils.positionFilter(item.css)}
+                        id={id}
+                        className={classNames('element', 'textarea', id)}
+                        style={utils.positionFilter(css)}
                     ></textarea>
                 );
             case 'CheckBox':
                 return (
-                    <div
-                        id={item.id}
-                        className={classNames('element', 'checkbox', item.id)}
-                        style={utils.positionFilter(item.css)}
-                    >
+                    <div id={id} className={classNames('element', 'checkbox', id)} style={utils.positionFilter(css)}>
                         checkbox
                     </div>
                 );
             case 'Radio':
                 return (
-                    <div
-                        id={item.id}
-                        className={classNames('element', 'radio', item.id)}
-                        style={utils.positionFilter(item.css)}
-                    >
+                    <div id={id} className={classNames('element', 'radio', id)} style={utils.positionFilter(css)}>
                         radio
                     </div>
                 );
             case 'Select':
                 return (
                     <div
-                        id={item.id}
-                        className={classNames('element', 'select', item.id)}
-                        style={utils.positionFilter(item.css)}
+                        id={id}
+                        className={classNames('element', 'select', id)}
+                        style={utils.positionFilter(css)}
                     ></div>
                 );
             // 媒体
             case 'Audio':
                 return (
                     <audio
-                        id={item.id}
-                        className={classNames('element', 'audio', item.id)}
-                        style={utils.positionFilter(item.css)}
+                        id={id}
+                        className={classNames('element', 'audio', id)}
+                        style={utils.positionFilter(css)}
                     ></audio>
                 );
             case 'Video':
+              console.error(attr)
                 return (
                     <video
-                        id={item.id}
-                        className={classNames('element', 'video', item.id)}
-                        style={utils.positionFilter(item.css)}
+                        id={id}
+                        className={classNames('element', 'video', id)}
+                        style={utils.positionFilter(css)}
+                        {...attr}
                     ></video>
                 );
             case 'Image':
-                return (
-                    <img
-                        id={item.id}
-                        className={classNames('element', 'image', item.id)}
-                        style={utils.positionFilter(item.css)}
-                    />
-                );
-                
+                return <img id={id} className={classNames('element', 'image', id)} style={utils.positionFilter(css)} />;
+
             default:
                 return <div>default</div>;
         }
@@ -274,7 +255,7 @@ class Element extends Component {
                 {active && <div className='height-num'>{css.height}</div>}
 
                 <div className='border' />
-                {this.renderElement(item, css)}
+                {this.renderElement(item)}
             </div>
         );
     }

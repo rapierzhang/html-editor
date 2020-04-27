@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    outline: none;
 }
 
 html,
@@ -9,10 +10,6 @@ body,
 #root {
     width: 100%;
     height: 100%;
-}
-
-input {
-    outline: none;
 }
 
 /*------ 按钮 ------*/
