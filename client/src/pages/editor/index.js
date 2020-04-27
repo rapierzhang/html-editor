@@ -138,7 +138,6 @@ class Editor extends Component {
         window.onmouseup = e => {
             const { isDown } = this.state;
             const {
-                activeKey,
                 canvasPosition: { ctxTop, ctxBottom, ctxLeft, ctxRight },
             } = this.props.editorInfo;
             if (!isDown) return;
@@ -155,25 +154,25 @@ class Editor extends Component {
     }
 
     // 设置元素成功
-    setSucc(ele) {
+    setSucc(element) {
         console.error('set success!!!');
-        const { elements, index, activeKey, activeEle } = this.props.editorInfo;
+        const { elements, index, activeKey } = this.props.editorInfo;
         const id = this.uniqueKey(index);
         const defaultEle = {
-            element: ele,
+            element,
             id,
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
         };
         let newElements;
+        // 嵌套
         if (activeKey) {
-          newElements = utils.deepInsert(elements,activeKey, {[id]: defaultEle})
-          console.error(newElements)
+            newElements = utils.deepInsert(elements, activeKey, { [id]: defaultEle });
         } else {
-          newElements = {
-            ...elements,
-            [id]: defaultEle,
-          };
+            newElements = {
+                ...elements,
+                [id]: defaultEle,
+            };
         }
         this.props.dispatch(indexIncrement());
         this.props.dispatch(elementsUpdate(newElements));
