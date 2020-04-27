@@ -78,9 +78,9 @@ export const attributeUpdate = activeEle => dispatch => {
 };
 
 // 选择编辑
-export const elementSelect = (id, activeKey, elements) => dispatch => {
+export const elementSelect = (id, activeKey, elements, confirm) => dispatch => {
     dispatch(activeKeySet(id));
-    if (id == activeKey) {
+    if (id == activeKey || confirm) {
         dispatch(isEditSet(true));
         dispatch(attributeLoad(elements, activeKey));
     }

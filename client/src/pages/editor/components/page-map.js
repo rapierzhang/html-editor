@@ -32,3 +32,26 @@ const src = [
         key: 'src',
     },
 ];
+
+export const renderAttr = (ele) => {
+  switch (ele) {
+    case 'View':
+    case 'ScrollView':
+    case 'Swiper':
+
+    case 'Text':
+    case 'Icon':
+
+    case 'Form':
+    case 'Input':
+    case 'TextArea':
+    case 'CheckBox':
+    case 'Radio':
+    case 'Select':
+
+    case 'Audio':
+    case 'Video':
+    case 'Video':
+
+  }
+}

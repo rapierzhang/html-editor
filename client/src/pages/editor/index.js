@@ -19,6 +19,8 @@ import {
     indexSet,
     titleSet,
     descSet,
+    activeKeySet,
+    isEditSet,
 } from './actions';
 
 const eleList = [
@@ -43,6 +45,12 @@ class Editor extends Component {
     componentDidMount() {
         setTimeout(() => this.ctxPosition(), 500);
         this.init();
+        // ^^^^^^ 鼠标右击
+        document.onmousedown = function(e) {
+            const event = e || window.event;
+            if (event.button == '2') {
+            }
+        };
     }
 
     // 初始化
@@ -59,7 +67,7 @@ class Editor extends Component {
                 location.href = `${location.origin}/#/editor?pid=${pid}`;
             })
             .catch(err => {
-                console.error(222, err);
+                console.error(err);
             });
     }
 
@@ -130,6 +138,7 @@ class Editor extends Component {
         window.onmouseup = e => {
             const { isDown } = this.state;
             const {
+                activeKey,
                 canvasPosition: { ctxTop, ctxBottom, ctxLeft, ctxRight },
             } = this.props.editorInfo;
             if (!isDown) return;
@@ -148,20 +157,22 @@ class Editor extends Component {
     // 设置元素成功
     setSucc(ele) {
         console.error('set success!!!');
-        const { elements, index } = this.props.editorInfo;
-        const key = this.uniqueKey(index);
+        const { elements, index, activeKey, activeEle } = this.props.editorInfo;
+        console.error(111, activeKey, 222, activeEle)
+        const id = this.uniqueKey(index);
         const defaultEle = {
             element: ele,
-            id: key,
+            id,
             text: '',
-            onClick: this.onNodeSelect.bind(this, key),
+            onClick: this.onNodeSelect.bind(this, id),
         };
         const newElements = {
             ...elements,
-            [key]: defaultEle,
+            [id]: defaultEle,
         };
         this.props.dispatch(indexIncrement());
         this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(elementSelect(id, defaultEle.element, elements));
     }
 
     // 设置元素失败
@@ -173,6 +184,12 @@ class Editor extends Component {
     onNodeSelect(id) {
         const { activeKey, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(id, activeKey, elements));
+    }
+
+    uncheck(e) {
+        e.stopPropagation();
+        this.props.dispatch(activeKeySet(false));
+        this.props.dispatch(isEditSet(false));
     }
 
     // 渲染画布中元素
@@ -205,7 +222,7 @@ class Editor extends Component {
             // preview
         })
             .then(res => {
-                 utils.toast(res.result ? '保存成功' : '保存失败');
+                utils.toast(res.result ? '保存成功' : '保存失败');
             })
             .catch(err => {
                 utils.toast(['保存失败', err.msg]);
@@ -217,7 +234,7 @@ class Editor extends Component {
         const { pid } = this.props.editorInfo;
         htmlBuild({ pid })
             .then(res => {
-                 utils.toast(res.result ? '生成成功' : '生成失败');
+                utils.toast(res.result ? '生成成功' : '生成失败');
             })
             .catch(err => {
                 utils.toast('生成失败');
@@ -233,7 +250,7 @@ class Editor extends Component {
             })
             .catch(err => {
                 utils.toast('无法打开');
-                console.error(222, err);
+                console.error(err);
             });
     }
 
@@ -242,7 +259,6 @@ class Editor extends Component {
             editorInfo: { title, desc, elements },
         } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
-        // console.error(activeKey, isEdit);
 
         return (
             <div className='editor'>
@@ -290,7 +306,7 @@ class Editor extends Component {
                         ))}
                     </div>
                     {/*------ 画布 ------*/}
-                    <div className='table'>
+                    <div className='table' onClick={this.uncheck.bind(this)}>
                         <div className='context' ref='ctx'>
                             {this.renderElements(elements)}
                         </div>

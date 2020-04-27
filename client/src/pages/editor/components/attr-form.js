@@ -7,7 +7,7 @@ import './attr-form.scss';
 import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
 const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sticky', 'inherit'];
-const directionList = ['top', 'right', 'bottom', 'left'];
+const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
 
 class ArrtForm extends Component {
     constructor() {
@@ -150,18 +150,19 @@ class ArrtForm extends Component {
                 const endY = e.clientY;
                 if (endX > treeLeft && endX < treeRight && endY > treeTop && endY < treeBottom) {
                     // 先删除节点
-                    const removedElements = utils.deepRemove(elements, ele.key);
+                    const removedElements = utils.deepRemove(elements, ele.id);
                     // 深度优先遍历子节点
                     const treeArr = utils.objDepthFirstTraversal(elements);
                     // 重置虚拟元素
                     this.setState({ isDown: false, movingX: 0, movingY: 0 });
                     // 判断加载哪个元素的前后
-                    const index = Math.floor(endY / 30); // 第几个元素
+                    const index = Math.floor(endY / 30) - 1; // 第几个元素
+
                     const dot = ((endY / 30).toFixed(1) - index).toFixed(1);
                     const isBefore = treeArr.length - 1 > index ? true : dot < 0.5; //前后
-                    const hoverKey = treeArr[Math.min(index, treeArr.length - 1)]; // 最后悬停时的元素key
-                    if (hoverKey == ele.key) return; // 没变return
-                    const newElements = utils.deepInsertSameFloor(removedElements, hoverKey, isBefore, {
+                    const hoverId = treeArr[Math.min(index, treeArr.length - 1)]; // 最后悬停时的元素key
+                    if (hoverId == ele.id) return; // 没变return
+                    const newElements = utils.deepInsertSameFloor(removedElements, hoverId, isBefore, {
                         [ele.id]: ele,
                     });
                     this.props.dispatch(elementsUpdate(newElements));
@@ -240,21 +241,22 @@ class ArrtForm extends Component {
                         {navIndex === 0 && (
                             <div className='attr-box'>
                                 <div className='attr-card'>
-                                    <div className='card-title'>定位</div>
                                     <div className='card-content'>
                                         <div className='row'>
                                             <button className='del-ele' onClick={this.removeEle.bind(this)}>
                                                 删除节点
                                             </button>
                                         </div>
-                                        <div className='row'>
-                                            <span>文字 </span>
-                                            <textarea
-                                                type='text'
-                                                onChange={this.onAttrChange.bind(this, 'text')}
-                                                value={text}
-                                            />
-                                        </div>
+                                        {activeEle.element == 'Text' && (
+                                            <div className='row'>
+                                                <span>文字 </span>
+                                                <textarea
+                                                    type='text'
+                                                    onChange={this.onAttrChange.bind(this, 'text')}
+                                                    value={text}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -270,13 +272,13 @@ class ArrtForm extends Component {
                                             <span>定位: </span>
                                             <Select
                                                 list={positionList}
-                                                defaultVal={position}
+                                                defaultVal={position || 'inherit'}
                                                 onChange={this.onStyleBlur.bind(this, 'position')}
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                {utils.has(['absolute', 'fixed', 'relative'], position) && (
+                                {utils.has(['absolute', 'fixed', 'relative'], position) &&
                                     directionList.map((row, idx) => (
                                         <div key={`row-${idx}`} className='row'>
                                             <span>{row}: </span>
@@ -286,8 +288,7 @@ class ArrtForm extends Component {
                                                 value={activeEle.css[row]}
                                             />
                                         </div>
-                                    ))
-                                )}
+                                    ))}
                                 {/*------ 背景 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>背景</div>

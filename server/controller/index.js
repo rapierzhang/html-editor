@@ -30,6 +30,7 @@ exports.pageSave = async (ctx, next) => {
                 { pid },
                 {
                     $set: {
+                        index,
                         title,
                         desc,
                         htmlTree,
@@ -75,7 +76,7 @@ exports.pageSave = async (ctx, next) => {
             msg = e;
         }
     }
-    console.error(pageResult)
+    console.error(pageResult);
 
     if (!!pageResult && !!listResult) {
         ctx.body = utils.res(200, 'ok', { result: true });
@@ -117,7 +118,7 @@ exports.pageOpen = async (ctx, next) => {
     } else {
         ctx.body = utils.res(500, '无此页面', {});
     }
-}
+};
 
 exports.pageDelete = async (ctx, next) => {};
 

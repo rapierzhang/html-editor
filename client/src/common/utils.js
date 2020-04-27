@@ -36,7 +36,6 @@ const utils = {
         for (let key in obj) {
             if (obj[key].children) {
                 if (obj[key].children.hasOwnProperty(k)) {
-                    // ddd
                     const row1 = obj;
                     const row2 = { ...obj[key].children };
                     const row3 = obj[key].children[k].children;
@@ -64,14 +63,14 @@ const utils = {
         if (obj.hasOwnProperty(k)) {
             const arr = Object.values(obj);
             arr.forEach(item => {
-                if (item.key === k) {
+                if (item.id === k) {
                     if (before) {
-                        target = { ...target, ...insertObj, [item.key]: item };
+                        target = { ...target, ...insertObj, [item.id]: item };
                     } else {
-                        target = { ...target, [item.key]: item, ...insertObj };
+                        target = { ...target, [item.id]: item, ...insertObj };
                     }
                 } else {
-                    target[item.key] = item;
+                    target[item.id] = item;
                 }
             });
         } else {
@@ -117,10 +116,10 @@ const utils = {
         const render = obj => {
             Object.values(obj).map((item, idx) => {
                 if (item.children) {
-                    list.push(item.key);
+                    list.push(item.id);
                     render(item.children);
                 } else {
-                    list.push(item.key);
+                    list.push(item.id);
                 }
             });
         };
@@ -154,7 +153,6 @@ const utils = {
                 obj[k] = css[k]
             }
         }
-        console.error(111, obj)
         return obj
     }
 };

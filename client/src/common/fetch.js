@@ -6,7 +6,6 @@ const fetch = (opts = {}) => {
     let method = (opts.method || 'GET').toLowerCase();
     let params = opts.params || {};
     let config = opts.config || {};
-    console.error(params)
 
     if (url.length === 0) {
         console.warn('utils.request: url未指定');
