@@ -35,25 +35,29 @@
             height: 100%;
             border: 1px dashed #ea413c;
             background: transparent;
-            z-index: 9998;
+            z-index: 9995;
         }
 
         > .width-num {
             position: absolute;
-            top: -20px;
+            top: 0px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             color: #ea413c;
             font-size: 12px;
+            background: #fff;
+            z-index: 9996;
         }
 
         > .height-num {
             position: absolute;
-            right: -5px;
+            right: 0px;
             top: 50%;
-            transform: translate(100%, -50%);
+            transform: translate(50%, -50%);
             color: #ea413c;
             font-size: 12px;
+            background: #fff;
+            z-index: 9996;
         }
     }
 
