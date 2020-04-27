@@ -72,18 +72,18 @@ const utils = {
     deepInsert: (obj, k, insertObj) => {
         let target = {};
         for (let key in obj) {
+            const item = obj[key]
             if (key === k) {
-                if (obj[key].hasOwnProperty('children')) {
-                    let { children } = obj[key];
-                    target[key] = { ...obj[key], children: { ...children, ...insertObj } };
+                if (item.hasOwnProperty('children')) {
+                    target[key] = { ...item, children: { ...item.children, ...insertObj } };
                 } else {
-                    target[key] = { ...obj[key], children: insertObj };
+                    target[key] = { ...item, children: insertObj };
                 }
             } else {
-                if (obj[key].hasOwnProperty('children')) {
-                    target[key] = { ...obj[key], children: utils.deepInsert(obj[key].children, k, insertObj)};
+                if (item.hasOwnProperty('children')) {
+                    target[key] = { ...item, children: utils.deepInsert(item.children, k, insertObj)};
                 } else {
-                    target[key] = obj[key];
+                    target[key] = item;
                 }
             }
         }

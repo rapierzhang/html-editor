@@ -180,7 +180,7 @@ class ArrtForm extends Component {
     }
 
     render() {
-        const { elements, isEdit, activeKey, activeEle } = this.props.editorInfo;
+        const { elements, isEdit, activeKey, activeEle = {} } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
         const {
             css: {
