@@ -31,10 +31,13 @@ const utils = {
         return target;
     },
     // 节点插入
-    deepInsert: (obj, k, idx, insertObj) => {
-        let target = {};
+    /*deepInsert: (obj, k, idx, insertObj) => {
+      console.error(333,obj, k, idx, insertObj)
+
+      let target = {};
         for (let key in obj) {
             if (obj[key].children) {
+                // 查询子元素是否有该key
                 if (obj[key].children.hasOwnProperty(k)) {
                     const row1 = obj;
                     const row2 = { ...obj[key].children };
@@ -42,17 +45,46 @@ const utils = {
                     const insertObjVal = Object.values(insertObj)[0];
                     let newObj = {};
                     let row3Vals = Object.values(row3);
-                    row3Vals.splice(idx, 0, insertObjVal);
+                    if (idx) {
+                      row3Vals.splice(idx, 0, insertObjVal);
+                    } else {
+                      row3Vals.push(insertObjVal)
+                    }
                     row3Vals.forEach(item => {
                         newObj[item.text] = item;
                     });
                     row2[k].children = newObj;
                     target[key] = { ...obj[key], children: row2 };
                 } else {
-                    target[key] = utils.deepInsert(obj[key].children, k, idx, insertObj);
+                  console.error(444, obj[key].children, k, idx, insertObj)
+                  target[key] = utils.deepInsert(obj[key].children, k, idx, insertObj);
                 }
             } else {
+              if (k === key) {
+                target[key] = {...obj[key], children: insertObj}
+              } else {
                 target[key] = obj[key];
+              }
+            }
+        }
+        return target;
+    },*/
+    deepInsert: (obj, k, insertObj) => {
+        let target = {};
+        for (let key in obj) {
+            if (key === k) {
+                if (obj[key].hasOwnProperty('children')) {
+                    let { children } = obj[key];
+                    target[key] = { ...obj[key], children: { ...children, ...insertObj } };
+                } else {
+                    target[key] = { ...obj[key], children: insertObj };
+                }
+            } else {
+                if (obj[key].hasOwnProperty('children')) {
+                    return utils.deepInsert(obj[key].children, k, insertObj);
+                } else {
+                    target[key] = obj[key];
+                }
             }
         }
         return target;
@@ -143,18 +175,39 @@ const utils = {
         if (utils.has(urlArr, attr)) return `url(${text})`;
         return text;
     },
+    // 属性自动过滤
+    autoFilter: () => {},
     // 弹层
     toast: msg => ({ ...Toast(msg) }),
     // 过滤元素定位
     positionFilter(css) {
         let obj = {};
         for (let k in css) {
-            if (!utils.has(['position', 'top', 'right', 'bottom', 'left', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'], k)){
-                obj[k] = css[k]
+            if (
+                !utils.has(
+                    [
+                        'position',
+                        'top',
+                        'right',
+                        'bottom',
+                        'left',
+                        'marginTop',
+                        'marginRight',
+                        'marginBottom',
+                        'marginLeft',
+                        'paddingTop',
+                        'paddingRight',
+                        'paddingBottom',
+                        'paddingLeft',
+                    ],
+                    k,
+                )
+            ) {
+                obj[k] = css[k];
             }
         }
-        return obj
-    }
+        return obj;
+    },
 };
 
 export default utils;

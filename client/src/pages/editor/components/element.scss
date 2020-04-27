@@ -4,7 +4,6 @@
     min-width: 10px;
     min-height: 10px;
 
-
     &.active {
         .ctrl-point {
             position: absolute;
@@ -28,7 +27,7 @@
             }
         }
 
-        .border {
+        >.border {
             position: absolute;
             left: 0;
             top: 0;

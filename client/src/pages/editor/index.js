@@ -158,7 +158,6 @@ class Editor extends Component {
     setSucc(ele) {
         console.error('set success!!!');
         const { elements, index, activeKey, activeEle } = this.props.editorInfo;
-        console.error(111, activeKey, 222, activeEle)
         const id = this.uniqueKey(index);
         const defaultEle = {
             element: ele,
@@ -166,10 +165,16 @@ class Editor extends Component {
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
         };
-        const newElements = {
+        let newElements;
+        if (activeKey) {
+          newElements = utils.deepInsert(elements,activeKey, {[id]: defaultEle})
+          console.error(newElements)
+        } else {
+          newElements = {
             ...elements,
             [id]: defaultEle,
-        };
+          };
+        }
         this.props.dispatch(indexIncrement());
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(elementSelect(id, defaultEle.element, elements));
