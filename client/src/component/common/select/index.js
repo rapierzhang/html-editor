@@ -12,9 +12,9 @@ class Select extends Component {
 
     componentDidMount() {
         // 默认值
-        const { defaultVal } = this.props;
-        if (defaultVal) {
-            this.setState({ activeVal: defaultVal });
+        const { value } = this.props;
+        if (value) {
+            this.setState({ activeVal: value });
         }
     }
 
@@ -61,7 +61,7 @@ class Select extends Component {
 
 Select.defaultProps = {
     list: [],
-    defaultVal: '',
+    value: '',
     onChange: () => {},
 };
 

@@ -3,72 +3,12 @@ import { connect } from 'react-redux';
 import utils from '../../../common/utils';
 import classNames from 'classnames';
 import { Select, Switch } from '../../../component';
+import { AttrList } from './index';
 import './attr-form.scss';
 import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
 
 const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sticky', 'inherit'];
 const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
-const inputTypeList = ['text', 'number', 'password', 'tel'];
-
-const renderAttr = (that, item) => {
-    if (item.element == 'Video') {
-       return [
-            {
-                text: '路径',
-                element: 'input',
-                type: 'text',
-                value: 'src',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'src')
-                }
-            },
-            {
-                text: '封面图',
-                element: 'input',
-                type: 'text',
-                value: 'poster',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'poster')
-                }
-            },
-            {
-                text: '控制条',
-                element: 'switch',
-                value: 'controls',
-                func: {
-                    onChange: that.onAttrChange.bind(that, 'controls')
-                }
-            },
-            {
-                text: '循环播放',
-                element: 'switch',
-                value: 'loop',
-                func: {
-                    onChange: that.onAttrChange.bind(that, 'loop')
-                }
-            },
-            {
-                text: '自动播放',
-                element: 'switch',
-                value: 'autoPlay',
-                func: {
-                    onChange: that.onAttrChange.bind(that, 'autoPlay')
-                }
-            },
-            {
-                text: '静音',
-                element: 'switch',
-                value: 'muted',
-                func: {
-                    onChange: that.onAttrChange.bind(that, 'muted')
-                }
-            },
-        ]
-    } else {
-        return []
-    }
-}
-
 
 class ArrtForm extends Component {
     constructor() {
@@ -94,21 +34,6 @@ class ArrtForm extends Component {
     // 切换导航
     switchNav(navIndex) {
         this.setState({ navIndex });
-    }
-
-    // 属性更改
-    onAttrChange(attrName, e) {
-        // 判断是event传入的值还是组件传入的值
-        const value = !!e.target ? e.target.value : e;
-        const { elements, activeKey, activeEle } = this.props.editorInfo;
-        const thisNode = utils.deepSearch(elements, activeKey);
-        const newNode = {
-            ...thisNode,
-            [attrName]: value,
-        };
-        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
-        this.props.dispatch(elementsUpdate(newElements));
-        this.props.dispatch(attributeUpdate(newNode));
     }
 
     // 样式更改
@@ -304,201 +229,8 @@ class ArrtForm extends Component {
                             <div className='attr-box'>
                                 <div className='attr-card'>
                                     <div className='card-content'>
-                                        {activeEle.element == 'Text' && (
-                                            <div className='row'>
-                                                <span>文字 </span>
-                                                <textarea
-                                                    onChange={this.onAttrChange.bind(this, 'text')}
-                                                    value={activeEle.text}
-                                                />
-                                            </div>
-                                        )}
-                                        {activeEle.element == 'Image' && (
-                                            <div>
-                                                <div className='row'>
-                                                    <span>路径</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'src')}
-                                                        value={activeEle.src}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-                                        {/*{activeEle.element == 'Video' && (
-                                            <div>
-                                                <div className='row'>
-                                                    <span>路径</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'src')}
-                                                        value={activeEle.src}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>封面图</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'poster')}
-                                                        value={activeEle.poster}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>控制条</span>
-                                                    <Switch
-                                                        value={activeEle.controls}
-                                                        onChange={this.onAttrChange.bind(this, 'controls')}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>循环播放</span>
-                                                    <Switch
-                                                        value={activeEle.loop}
-                                                        onChange={this.onAttrChange.bind(this, 'loop')}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>自动播放</span>
-                                                    <Switch
-                                                        value={activeEle.autoPlay}
-                                                        onChange={this.onAttrChange.bind(this, 'autoPlay')}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>静音</span>
-                                                    <Switch
-                                                        value={activeEle.muted}
-                                                        onChange={this.onAttrChange.bind(this, 'muted')}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}*/}
-                                        {activeEle.element == 'Audio' && (
-                                            <div>
-                                                <div className='row'>
-                                                    <span>路径</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'src')}
-                                                        value={activeEle.src}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>控制条</span>
-                                                    <Switch
-                                                        value={activeEle.controls}
-                                                        onChange={this.onAttrChange.bind(this, 'controls')}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>循环播放</span>
-                                                    <Switch
-                                                        value={activeEle.loop}
-                                                        onChange={this.onAttrChange.bind(this, 'loop')}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>自动播放</span>
-                                                    <Switch
-                                                        value={activeEle.autoPlay}
-                                                        onChange={this.onAttrChange.bind(this, 'autoPlay')}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>静音</span>
-                                                    <Switch
-                                                        value={activeEle.muted}
-                                                        onChange={this.onAttrChange.bind(this, 'muted')}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {activeEle.element == 'Input' && (
-                                            <div>
-                                                <div className='row'>
-                                                    <span>name</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'name')}
-                                                        value={activeEle.name}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>type</span>
-                                                    <Select
-                                                        list={inputTypeList}
-                                                        defaultVal={activeEle.type || 'text'}
-                                                        onChange={this.onAttrChange.bind(this, 'type')}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>placeholder</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'placeholder')}
-                                                        value={activeEle.placeholder}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>maxLength</span>
-                                                    <input
-                                                        type='number'
-                                                        onBlur={this.onAttrChange.bind(this, 'maxLength')}
-                                                        value={activeEle.maxLength}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-                                        {activeEle.element == 'Textarea' && (
-                                            <div>
-                                                <div className='row'>
-                                                    <span>name</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'name')}
-                                                        value={activeEle.name}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>placeholder</span>
-                                                    <input
-                                                        type='text'
-                                                        onBlur={this.onAttrChange.bind(this, 'placeholder')}
-                                                        value={activeEle.placeholder}
-                                                    />
-                                                </div>
-                                                <div className='row'>
-                                                    <span>maxLength</span>
-                                                    <input
-                                                        type='number'
-                                                        onBlur={this.onAttrChange.bind(this, 'maxLength')}
-                                                        value={activeEle.maxLength}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-                                        {
-                                            renderAttr(this, activeEle).map((item, idx) => (
-                                                <div key={`row-${idx}`} className='row'>
-                                                    <span>{item.text}</span>
-                                                    {item.element == 'input' &&(
-                                                        <input
-                                                            type={item.type}
-                                                            value={activeEle[item.value]}
-                                                            {...item.func}
-                                                        />
-                                                    )}
-                                                    {item.element == 'switch' && (
-                                                        <Switch
-                                                            value={activeEle[item.value]}
-                                                            onChange={this.onAttrChange.bind(this, item.value)}
-                                                            {...item.func}
-                                                        />
-                                                    )}
-                                                </div>
-                                            ))
-                                        }
+                                        {/*------ 属性列表 ------*/}
+                                        <AttrList />
                                         {/*------ 删除 ------*/}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
@@ -520,7 +252,7 @@ class ArrtForm extends Component {
                                             <span>定位: </span>
                                             <Select
                                                 list={positionList}
-                                                defaultVal={position || 'inherit'}
+                                                value={position || 'inherit'}
                                                 onChange={this.onStyleBlur.bind(this, 'position')}
                                             />
                                         </div>

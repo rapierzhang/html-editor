@@ -1,7 +1,12 @@
 import { Toast } from '../component/';
 
 const utils = {
-    // 节点查询
+    /*
+    * 节点查询
+    * @param    obj         object  需要查询的树
+    * @param    key         string  需要查询的key
+    * return                object  查到的子树
+    * */
     deepSearch: (obj, key) => {
         if (obj.hasOwnProperty(key)) {
             return obj[key];
@@ -13,7 +18,12 @@ const utils = {
             }
         }
     },
-    // 节点更改
+    /*
+    * 节点更改
+    * @param    obj1         object  需要更改的树
+    * @param    obj2         object  需要更改的子树
+    * return                 object  更新后的树
+    * */
     deepUpdate: (obj1, obj2) => {
         const k = Object.keys(obj2)[0];
         let target = {};
@@ -30,45 +40,13 @@ const utils = {
         }
         return target;
     },
-    // 节点插入
-    /*deepInsert: (obj, k, idx, insertObj) => {
-      console.error(333,obj, k, idx, insertObj)
-
-      let target = {};
-        for (let key in obj) {
-            if (obj[key].children) {
-                // 查询子元素是否有该key
-                if (obj[key].children.hasOwnProperty(k)) {
-                    const row1 = obj;
-                    const row2 = { ...obj[key].children };
-                    const row3 = obj[key].children[k].children;
-                    const insertObjVal = Object.values(insertObj)[0];
-                    let newObj = {};
-                    let row3Vals = Object.values(row3);
-                    if (idx) {
-                      row3Vals.splice(idx, 0, insertObjVal);
-                    } else {
-                      row3Vals.push(insertObjVal)
-                    }
-                    row3Vals.forEach(item => {
-                        newObj[item.text] = item;
-                    });
-                    row2[k].children = newObj;
-                    target[key] = { ...obj[key], children: row2 };
-                } else {
-                  console.error(444, obj[key].children, k, idx, insertObj)
-                  target[key] = utils.deepInsert(obj[key].children, k, idx, insertObj);
-                }
-            } else {
-              if (k === key) {
-                target[key] = {...obj[key], children: insertObj}
-              } else {
-                target[key] = obj[key];
-              }
-            }
-        }
-        return target;
-    },*/
+    /*
+    * 节点插入
+    * @param    obj         object  需要插入的树
+    * @param    k           string  插入在哪个节点中
+    * @oaram    insertObj   object  插入的对象
+    * return                object  插入后的树
+    * */
     deepInsert: (obj, k, insertObj) => {
         let target = {};
         for (let key in obj) {
@@ -89,7 +67,14 @@ const utils = {
         }
         return target;
     },
-    // 插入到某个元素的前后
+    /*
+    * 插入到某个元素的前后
+    * @param    obj         object  需要插入的树
+    * @param    k           string  插入在哪个节点前后
+    * @param    before      bool    插入在节点的前后
+    * @oaram    insertObj   object  插入的对象
+    * return                object  插入后的树
+    * */
     deepInsertSameFloor: (obj, k, before, insertObj) => {
         let target = {};
         if (obj.hasOwnProperty(k)) {
@@ -119,7 +104,12 @@ const utils = {
         }
         return target;
     },
-    // 节点删除
+    /*
+    * 节点删除
+    * @param    obj     object  需要删除节点的树
+    * @param    k       string  需要删除节点的key
+    * return            object  删除后的树
+    * */
     deepRemove: (obj, k) => {
         let target = {};
         if (!!obj[k]) {
@@ -142,7 +132,11 @@ const utils = {
         }
         return target;
     },
-    // 深度优先对象扁平化
+    /*
+    * 深度优先对象扁平化
+    * @param    initObj object  需要遍历的树
+    * return            array   结构话后的数组
+    * */
     objDepthFirstTraversal: initObj => {
         let list = [];
         const render = obj => {
@@ -158,9 +152,7 @@ const utils = {
         render(initObj);
         return list;
     },
-    has: (strOrArr, text) => {
-        return strOrArr.indexOf(text) > -1;
-    },
+    has: (strOrArr, text) => strOrArr.indexOf(text) > -1,
     // 属性自动补全
     autoComplete: (attr, text) => {
         const pxArr = [
