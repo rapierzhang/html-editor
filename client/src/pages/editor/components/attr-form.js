@@ -385,13 +385,42 @@ class ArrtForm extends Component {
                                                 <div className='row'>
                                                     <span>maxLength</span>
                                                     <input
-                                                        type='text'
+                                                        type='number'
                                                         onBlur={this.onAttrChange.bind(this, 'maxLength')}
                                                         value={activeEle.maxLength}
                                                     />
                                                 </div>
                                             </div>
                                         )}
+                                        {activeEle.element == 'Textarea' && (
+                                            <div>
+                                                <div className='row'>
+                                                    <span>name</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'name')}
+                                                        value={activeEle.name}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>placeholder</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'placeholder')}
+                                                        value={activeEle.placeholder}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>maxLength</span>
+                                                    <input
+                                                        type='number'
+                                                        onBlur={this.onAttrChange.bind(this, 'maxLength')}
+                                                        value={activeEle.maxLength}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {/*------ 删除 ------*/}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
                                                 删除节点

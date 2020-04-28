@@ -23,13 +23,6 @@ import {
     isEditSet,
 } from './actions';
 
-/*const eleList = [
-    ...['View', 'ScrollView', 'Swiper'], // View
-    ...['Text', 'Icon'], // 基础
-    ...['Form'], // 表单
-    ...['Audio', 'Video', 'Image'], // 媒体
-];*/
-
 const eleList = [
     {
         label: '视图容器',
@@ -70,11 +63,11 @@ const eleList = [
             },
             {
                 title: '多行文本框',
-                component: 'TextArea',
+                component: 'Textarea',
             },
             {
                 title: '多项选择',
-                component: 'CheckBox',
+                component: 'Checkbox',
             },
             {
                 title: '单项选择',
@@ -276,7 +269,8 @@ class Editor extends Component {
         this.props.dispatch(elementSelect(id, activeKey, elements));
     }
 
-    uncheck(e) {
+    // 取消选中
+    unSelect(e) {
         e.stopPropagation();
         this.props.dispatch(activeKeySet(false));
         this.props.dispatch(isEditSet(false));
@@ -401,7 +395,7 @@ class Editor extends Component {
                         ))}
                     </div>
                     {/*------ 画布 ------*/}
-                    <div className='table' onClick={this.uncheck.bind(this)}>
+                    <div className='table' onClick={this.unSelect.bind(this)}>
                         <div className='context' ref='ctx'>
                             {this.renderElements(elements)}
                         </div>

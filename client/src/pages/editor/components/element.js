@@ -88,7 +88,7 @@ class Element extends Component {
                         {...attr}
                     />
                 );
-            case 'TextArea':
+            case 'Textarea':
                 return (
                     <textarea
                         id={id}
