@@ -81,10 +81,11 @@ class Element extends Component {
             case 'Input':
                 return (
                     <input
-                        type='text'
                         id={id}
                         className={classNames('element', 'input', id)}
                         style={utils.positionFilter(css)}
+                        type='text'
+                        {...attr}
                     />
                 );
             case 'TextArea':
@@ -93,6 +94,7 @@ class Element extends Component {
                         id={id}
                         className={classNames('element', 'textarea', id)}
                         style={utils.positionFilter(css)}
+                        {...attr}
                     ></textarea>
                 );
             case 'CheckBox':

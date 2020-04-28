@@ -23,11 +23,90 @@ import {
     isEditSet,
 } from './actions';
 
-const eleList = [
+/*const eleList = [
     ...['View', 'ScrollView', 'Swiper'], // View
     ...['Text', 'Icon'], // 基础
     ...['Form'], // 表单
     ...['Audio', 'Video', 'Image'], // 媒体
+];*/
+
+const eleList = [
+    {
+        label: '视图容器',
+        list: [
+            {
+                title: '容器',
+                component: 'View',
+            },
+            {
+                title: '滚动容器',
+                component: 'ScrollView',
+            },
+            {
+                title: '滑动框',
+                component: 'Swiper',
+            },
+        ],
+    },
+    {
+        label: '基础内容',
+        list: [
+            {
+                title: '文字',
+                component: 'Text',
+            },
+            {
+                title: '图标',
+                component: 'Icon',
+            },
+        ],
+    },
+    {
+        label: '表单组件',
+        list: [
+            {
+                title: '单行文本框',
+                component: 'Input',
+            },
+            {
+                title: '多行文本框',
+                component: 'TextArea',
+            },
+            {
+                title: '多项选择',
+                component: 'CheckBox',
+            },
+            {
+                title: '单项选择',
+                component: 'Radio',
+            },
+            {
+                title: '下拉框',
+                component: 'Select',
+            },
+            {
+                title: '文件上传',
+                component: 'UploadFile',
+            },
+        ],
+    },
+    {
+        label: '媒体组件',
+        list: [
+            {
+                title: '图片',
+                component: 'Image',
+            },
+            {
+                title: '视频',
+                component: 'Video',
+            },
+            {
+                title: '音频',
+                component: 'Audio',
+            },
+        ],
+    },
 ];
 
 const containerElement = ['View', 'ScrollView'];
@@ -172,8 +251,8 @@ class Editor extends Component {
             if (utils.has(containerElement, activeEle.element)) {
                 newElements = utils.deepInsert(elements, activeKey, { [id]: defaultEle });
             } else {
-                utils.toast('只有容器元素可以容纳其他元素')
-                return
+                utils.toast('只有容器元素可以容纳其他元素');
+                return;
             }
         } else {
             newElements = {
@@ -183,7 +262,7 @@ class Editor extends Component {
         }
         this.props.dispatch(indexIncrement()); // 索引自增
         this.props.dispatch(elementsUpdate(newElements)); // 元素更新
-        this.props.dispatch(elementSelect(id, activeKey, elements));// 默认选中元素
+        this.props.dispatch(elementSelect(id, activeKey, elements)); // 默认选中元素
     }
 
     // 设置元素失败
@@ -209,11 +288,7 @@ class Editor extends Component {
         const list = Object.values(elements);
         return list.map((item, idx) => {
             return (
-                <Element
-                    key={`item-${idx}`}
-                    item={item}
-                    active={activeKey == item.id}
-                >
+                <Element key={`item-${idx}`} item={item} active={activeKey == item.id}>
                     {item.children && this.renderElements(item.children)}
                 </Element>
             );
@@ -269,7 +344,6 @@ class Editor extends Component {
             editorInfo: { title, desc, elements, activeEle },
         } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
-        console.error('000', activeEle)
 
         return (
             <div className='editor'>
@@ -311,8 +385,18 @@ class Editor extends Component {
                     {/*------ 元素列表 ------*/}
                     <div className='ele-list'>
                         {eleList.map((item, idx) => (
-                            <div key={`item-${idx}`} className='ele-item' onMouseDown={this.msDown.bind(this, item)}>
-                                {item}
+                            <div key={`item-${idx}`} className='list-card'>
+                                <div className='list-label'>{item.label}</div>
+                                {item.list.map((row, i) => (
+                                    <div
+                                        key={`row-${i}`}
+                                        className='ele-item'
+                                        title={row.title}
+                                        onMouseDown={this.msDown.bind(this, row.component)}
+                                    >
+                                        {row.component}
+                                    </div>
+                                ))}
                             </div>
                         ))}
                     </div>

@@ -245,11 +245,6 @@ class ArrtForm extends Component {
                             <div className='attr-box'>
                                 <div className='attr-card'>
                                     <div className='card-content'>
-                                        <div className='row'>
-                                            <button className='del-ele' onClick={this.removeEle.bind(this)}>
-                                                删除节点
-                                            </button>
-                                        </div>
                                         {activeEle.element == 'Text' && (
                                             <div className='row'>
                                                 <span>文字 </span>
@@ -257,6 +252,18 @@ class ArrtForm extends Component {
                                                     onChange={this.onAttrChange.bind(this, 'text')}
                                                     value={activeEle.text}
                                                 />
+                                            </div>
+                                        )}
+                                        {activeEle.element == 'Image' && (
+                                            <div>
+                                                <div className='row'>
+                                                    <span>路径</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'src')}
+                                                        value={activeEle.src}
+                                                    />
+                                                </div>
                                             </div>
                                         )}
                                         {activeEle.element == 'Video' && (
@@ -298,9 +305,16 @@ class ArrtForm extends Component {
                                                         onChange={this.onAttrChange.bind(this, 'autoPlay')}
                                                     />
                                                 </div>
+                                                <div className='row'>
+                                                    <span>静音</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.muted}
+                                                        onChange={this.onAttrChange.bind(this, 'muted')}
+                                                    />
+                                                </div>
                                             </div>
                                         )}
-                                        {activeEle.element == 'Image' && (
+                                        {activeEle.element == 'Audio' && (
                                             <div>
                                                 <div className='row'>
                                                     <span>路径</span>
@@ -310,8 +324,42 @@ class ArrtForm extends Component {
                                                         value={activeEle.src}
                                                     />
                                                 </div>
+                                                <div className='row'>
+                                                    <span>控制条</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.controls}
+                                                        onChange={this.onAttrChange.bind(this, 'controls')}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>循环播放</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.loop}
+                                                        onChange={this.onAttrChange.bind(this, 'loop')}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>自动播放</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.autoPlay}
+                                                        onChange={this.onAttrChange.bind(this, 'autoPlay')}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>静音</span>
+                                                    <Switch
+                                                        defaultValue={activeEle.muted}
+                                                        onChange={this.onAttrChange.bind(this, 'muted')}
+                                                    />
+                                                </div>
                                             </div>
                                         )}
+
+                                        <div className='row'>
+                                            <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
+                                                删除节点
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
