@@ -311,6 +311,64 @@ class ArrtForm extends Component {
                                             ))}
                                     </div>
                                 </div>
+                                {/*------ 大小 ------*/}
+                                <div className='attr-card'>
+                                    <div className='card-title'>大小</div>
+                                    <div className='card-content'>
+                                        <div className='row'>
+                                            <span>宽</span>
+                                            <input
+                                                className='entity-input'
+                                                type='text'
+                                                placeholder='width'
+                                                onBlur={this.onStyleBlur.bind(this, 'width')}
+                                                value={css.width}
+                                            />
+                                        </div>
+                                        <div className='row'>
+                                            <span>高</span>
+                                            <input
+                                                className='entity-input'
+                                                type='text'
+                                                onBlur={this.onStyleBlur.bind(this, 'height')}
+                                                value={css.height}
+                                            />
+                                        </div>
+                                        <div className='row'>
+                                            <span>外边距</span>
+                                        </div>
+                                        <div className="row">
+                                            <span className='size-text'>上</span>
+                                            <input
+                                                className='size-input'
+                                                type='text'
+                                                onBlur={this.onStyleBlur.bind(this, 'marginTop')}
+                                                value={css.marginTop}
+                                            />
+                                            <span className='size-text'>右</span>
+                                            <input
+                                                className='size-input'
+                                                type='text'
+                                                onBlur={this.onStyleBlur.bind(this, 'marginRight')}
+                                                value={css.marginRight}
+                                            />
+                                            <span className='size-text'>下</span>
+                                            <input
+                                                className='size-input'
+                                                type='text'
+                                                onBlur={this.onStyleBlur.bind(this, 'marginBottom')}
+                                                value={css.marginBottom}
+                                            />
+                                            <span className='size-text'>左</span>
+                                            <input
+                                                className='size-input'
+                                                type='text'
+                                                onBlur={this.onStyleBlur.bind(this, 'marginLeft')}
+                                                value={css.marginLeft}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                                 {/*------ 排列 ------*/}
                                 {utils.has(['View', 'ScrollView'], activeEle.element) && (
                                     <div className='attr-card'>
@@ -318,8 +376,12 @@ class ArrtForm extends Component {
                                         <div className='card-content'>
                                             <div className='row'>
                                                 <span>启用</span>
-                                                <Switch onChange={this.onFlexSwitch.bind(this)} />
+                                                <Switch
+                                                    onChange={this.onFlexSwitch.bind(this)}
+                                                    value={activeEle.css.display == 'flex'}
+                                                />
                                             </div>
+                                            {console.error(activeEle.css.display)}
                                             {activeEle.css.display == 'flex' && (
                                                 <div>
                                                     <div className='row'>

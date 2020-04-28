@@ -87,15 +87,11 @@
 
             .row {
                 min-height: 30px;
-                margin-top: 20px;
+                margin-bottom: 20px;
                 display: flex;
                 flex-direction: row;
                 justify-content: flex-start;
                 align-items: center;
-
-                &:first-child {
-                    margin: 0;
-                }
 
                 span {
                     display: inline-block;
@@ -114,6 +110,16 @@
                     height: 80px;
                 }
 
+                .size-text {
+                    width: 20px;
+                    margin-right: 10px;
+                }
+
+                .size-input {
+                    padding: 0;
+                    width: 40px;
+                    margin-right: 10px;
+                }
             }
 
             .del-ele {
