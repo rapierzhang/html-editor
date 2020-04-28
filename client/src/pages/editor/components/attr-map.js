@@ -190,3 +190,24 @@ export const attrList = (that, item) => {
     return attrMap[item.element] || []
 };
 
+export const cssList = (that, item) => {
+    const cssMap  ={
+        View: [
+            {
+                title: '定位',
+                rows: [
+                    {
+                        text: 'name',
+                        element: 'input',
+                        type: 'text',
+                        value: 'name',
+                        func: {
+                            onBlur: that.onAttrChange.bind(that, 'name'),
+                        },
+                    },
+                ]
+            }
+        ]
+    }
+}
+

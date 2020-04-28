@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import './select.scss';
 
+/*
+* @params   list                [string] || [{title: '', value: ''}]    传入的list
+* @params   value               string                                  展示的value
+* @params   onChange(value)     func                                    更改传递value
+*
+* */
+
 class Select extends Component {
     constructor() {
         super(...arguments);
@@ -43,15 +50,26 @@ class Select extends Component {
                 </div>
                 {listOpen && (
                     <div className='select-list'>
-                        {list.map((row, idx) => (
-                            <div
-                                key={`opt-${idx}`}
-                                className='select-option'
-                                onClick={this.optionSelect.bind(this, row)}
-                            >
-                                {row}
-                            </div>
-                        ))}
+                        {list.map((row, idx) => {
+                            return typeof row === 'string' ? (
+                                <div
+                                    key={`opt-${idx}`}
+                                    className='select-option'
+                                    onClick={this.optionSelect.bind(this, row)}
+                                >
+                                    {row}
+                                </div>
+                            ) : (
+                                <div
+                                    key={`opt-${idx}`}
+                                    className='select-option'
+                                    title={row.title}
+                                    onClick={this.optionSelect.bind(this, row.value)}
+                                >
+                                    {row.value}
+                                </div>
+                            )
+                        })}
                     </div>
                 )}
             </div>

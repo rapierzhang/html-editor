@@ -9,6 +9,68 @@ import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUp
 
 const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sticky', 'inherit'];
 const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
+const flexDirectionList = [
+    {
+        value: 'row',
+        title: '横向',
+    },
+    {
+        value: 'row-reverse',
+        title: '横向反向',
+    },
+    {
+        value: 'column',
+        title: '纵向',
+    },
+    {
+        value: 'column-reverse',
+        title: '纵向反向',
+    },
+];
+const justifyContentList = [
+    {
+        title: '头部对齐',
+        value: 'flex-start'
+    },
+    {
+        title: '末尾对齐',
+        value: 'flex-end'
+    },
+    {
+        title: '居中对齐',
+        value: 'center'
+    },
+    {
+        title: '两边对齐',
+        value: 'space-between'
+    },
+    {
+        title: '平均分布',
+        value: 'space-around'
+    },
+];
+const alignItemsList = [
+    {
+        title: '头部对齐',
+        value: 'flex-start',
+    },
+    {
+        title: '尾部对齐',
+        value: 'flex-end',
+    },
+    {
+        title: '居中对齐',
+        value: 'center',
+    },
+    {
+        title: '文字基线对齐',
+        value: 'baseline',
+    },
+    {
+        title: '占满高度',
+        value: 'stretch',
+    },
+]
 
 class ArrtForm extends Component {
     constructor() {
@@ -163,39 +225,19 @@ class ArrtForm extends Component {
         };
     }
 
+    // 切换flex
+    onFlexSwitch(status) {
+        if (status) {
+            this.onStyleBlur('display', 'flex');
+        } else {
+            this.onStyleBlur('display', 'block');
+        }
+    }
+
     render() {
         const { elements, isEdit, activeKey, activeEle = {} } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
-        const {
-            css: {
-                position,
-
-                backgroundImage,
-                backgroundColor,
-
-                fontSize,
-                color,
-                fontFamily,
-
-                marginTop,
-                marginRight,
-                marginBottom,
-                marginLeft,
-
-                borderTop,
-                borderRight,
-                borderBottom,
-                borderLeft,
-
-                paddingTop,
-                paddingRight,
-                paddingBottom,
-                paddingLeft,
-
-                width,
-                height,
-            } = {},
-        } = activeEle;
+        const { css = {} } = activeEle;
 
         return (
             <div className='attribute'>
@@ -252,11 +294,11 @@ class ArrtForm extends Component {
                                             <span>定位: </span>
                                             <Select
                                                 list={positionList}
-                                                value={position || 'inherit'}
+                                                value={css.position || 'inherit'}
                                                 onChange={this.onStyleBlur.bind(this, 'position')}
                                             />
                                         </div>
-                                        {utils.has(['absolute', 'fixed', 'relative'], position) &&
+                                        {utils.has(['absolute', 'fixed', 'relative'], css.position) &&
                                             directionList.map((row, idx) => (
                                                 <div key={`row-${idx}`} className='row'>
                                                     <span>{row}: </span>
@@ -269,60 +311,104 @@ class ArrtForm extends Component {
                                             ))}
                                     </div>
                                 </div>
+                                {/*------ 排列 ------*/}
+                                {utils.has(['View', 'ScrollView'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>flax布局</div>
+                                        <div className='card-content'>
+                                            <div className='row'>
+                                                <span>启用</span>
+                                                <Switch onChange={this.onFlexSwitch.bind(this)} />
+                                            </div>
+                                            {activeEle.css.display == 'flex' && (
+                                                <div>
+                                                    <div className='row'>
+                                                        <span>主轴</span>
+                                                        <Select
+                                                            list={flexDirectionList}
+                                                            value={css.flexDirection || 'row'}
+                                                            onChange={this.onStyleBlur.bind(this, 'flexDirection')}
+                                                        />
+                                                    </div>
+                                                    <div className='row'>
+                                                        <span>主轴对齐方式</span>
+                                                        <Select
+                                                            list={justifyContentList}
+                                                            value={css.justifyContent || 'flex-start'}
+                                                            onChange={this.onStyleBlur.bind(this, 'justifyContent')}
+                                                        />
+                                                    </div>
+                                                    <div className='row'>
+                                                        <span>交叉轴对齐方式</span>
+                                                        <Select
+                                                            list={alignItemsList}
+                                                            value={css.alignItems || 'stretch'}
+                                                            onChange={this.onStyleBlur.bind(this, 'alignItems')}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                                 {/*------ 背景 ------*/}
-                                <div className='attr-card'>
-                                    <div className='card-title'>背景</div>
-                                    <div className='card-content'>
-                                        <div className='row'>
-                                            <span>背景图: </span>
-                                            <input
-                                                type='text'
-                                                onBlur={this.onStyleBlur.bind(this, 'backgroundImage')}
-                                                value={backgroundImage}
-                                            />
-                                        </div>
-                                        <div className='row'>
-                                            <span>背景颜色: </span>
-                                            <input
-                                                type='text'
-                                                onBlur={this.onStyleBlur.bind(this, 'backgroundColor')}
-                                                value={backgroundColor}
-                                            />
+                                {utils.has(['View', 'ScrollView'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>背景</div>
+                                        <div className='card-content'>
+                                            <div className='row'>
+                                                <span>背景图: </span>
+                                                <input
+                                                    type='text'
+                                                    onBlur={this.onStyleBlur.bind(this, 'backgroundImage')}
+                                                    value={css.backgroundImage}
+                                                />
+                                            </div>
+                                            <div className='row'>
+                                                <span>背景颜色: </span>
+                                                <input
+                                                    type='text'
+                                                    onBlur={this.onStyleBlur.bind(this, 'backgroundColor')}
+                                                    value={css.backgroundColor}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
                                 {/*------ 字体 ------*/}
-                                <div className='attr-card'>
-                                    <div className='card-title'>字体</div>
-                                    <div className='card-content'>
-                                        <div className='row'>
-                                            <span>字号: </span>
-                                            <input
-                                                type='text'
-                                                onBlur={this.onStyleBlur.bind(this, 'fontSize')}
-                                                value={fontSize}
-                                            />
-                                        </div>
-                                        <div className='row'>
-                                            <span>颜色: </span>
-                                            <input
-                                                type='text'
-                                                onBlur={this.onStyleBlur.bind(this, 'color')}
-                                                value={color}
-                                            />
-                                        </div>
-                                        <div className='row'>
-                                            <span>字体: </span>
-                                            <input
-                                                type='text'
-                                                onBlur={this.onStyleBlur.bind(this, 'fontFamily')}
-                                                value={fontFamily}
-                                            />
+                                {utils.has(['Input', 'Textarea'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>字体</div>
+                                        <div className='card-content'>
+                                            <div className='row'>
+                                                <span>字号: </span>
+                                                <input
+                                                    type='text'
+                                                    onBlur={this.onStyleBlur.bind(this, 'fontSize')}
+                                                    value={css.fontSize}
+                                                />
+                                            </div>
+                                            <div className='row'>
+                                                <span>颜色: </span>
+                                                <input
+                                                    type='text'
+                                                    onBlur={this.onStyleBlur.bind(this, 'color')}
+                                                    value={css.color}
+                                                />
+                                            </div>
+                                            <div className='row'>
+                                                <span>字体: </span>
+                                                <input
+                                                    type='text'
+                                                    onBlur={this.onStyleBlur.bind(this, 'fontFamily')}
+                                                    value={css.fontFamily}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
                                 {/*------ 盒子模型 ------*/}
-                                <div className='attr-card'>
+                                {/*<div className='attr-card'>
                                     <div className='card-title'>盒子</div>
                                     <div className='card-content'>
                                         <div className='box-model'>
@@ -446,7 +532,7 @@ class ArrtForm extends Component {
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                </div>*/}
                                 {/*------ 扩展 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>扩展</div>
