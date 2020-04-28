@@ -88,6 +88,10 @@
             .row {
                 min-height: 30px;
                 margin-top: 20px;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
 
                 &:first-child {
                     margin: 0;
@@ -95,7 +99,13 @@
 
                 span {
                     display: inline-block;
-                    width: 80px;
+                    width: 100px;
+                }
+
+                input {
+                    padding-left: 10px;
+                    width: 198px;
+                    height: 30px;
                 }
             }
 

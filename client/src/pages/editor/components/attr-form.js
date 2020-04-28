@@ -8,6 +8,7 @@ import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUp
 
 const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sticky', 'inherit'];
 const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
+const inputTypeList = ['text', 'number', 'password', 'tel'];
 
 class ArrtForm extends Component {
     constructor() {
@@ -355,6 +356,42 @@ class ArrtForm extends Component {
                                             </div>
                                         )}
 
+                                        {activeEle.element == 'Input' && (
+                                            <div>
+                                                <div className='row'>
+                                                    <span>name</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'name')}
+                                                        value={activeEle.name}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>type</span>
+                                                    <Select
+                                                        list={inputTypeList}
+                                                        defaultVal={activeEle.type || 'text'}
+                                                        onChange={this.onAttrChange.bind(this, 'type')}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>placeholder</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'placeholder')}
+                                                        value={activeEle.placeholder}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <span>maxLength</span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onAttrChange.bind(this, 'maxLength')}
+                                                        value={activeEle.maxLength}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
                                                 删除节点
@@ -379,19 +416,19 @@ class ArrtForm extends Component {
                                                 onChange={this.onStyleBlur.bind(this, 'position')}
                                             />
                                         </div>
+                                        {utils.has(['absolute', 'fixed', 'relative'], position) &&
+                                            directionList.map((row, idx) => (
+                                                <div key={`row-${idx}`} className='row'>
+                                                    <span>{row}: </span>
+                                                    <input
+                                                        type='text'
+                                                        onBlur={this.onStyleBlur.bind(this, row)}
+                                                        value={activeEle.css[row]}
+                                                    />
+                                                </div>
+                                            ))}
                                     </div>
                                 </div>
-                                {utils.has(['absolute', 'fixed', 'relative'], position) &&
-                                    directionList.map((row, idx) => (
-                                        <div key={`row-${idx}`} className='row'>
-                                            <span>{row}: </span>
-                                            <input
-                                                type='text'
-                                                onBlur={this.onStyleBlur.bind(this, row)}
-                                                value={activeEle.css[row]}
-                                            />
-                                        </div>
-                                    ))}
                                 {/*------ 背景 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>背景</div>
