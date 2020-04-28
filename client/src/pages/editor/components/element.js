@@ -26,7 +26,7 @@ class Element extends Component {
         const { activeKey, elements } = this.props.editorInfo;
 
         e.stopPropagation();
-        this.props.dispatch(elementSelect(id, activeKey, elements))
+        this.props.dispatch(elementSelect(id, activeKey, elements));
     }
 
     renderElement(item) {
@@ -149,6 +149,7 @@ class Element extends Component {
         }
     }
 
+    // 拖拽更改大小
     changeSize(evt) {
         this.setState({ isDown: true });
         const startX = evt.clientX;
@@ -182,6 +183,7 @@ class Element extends Component {
         };
     }
 
+    // 拖拽更改位置
     changePosition(evt) {
         this.setState({ isDown: true });
         const {
@@ -227,15 +229,14 @@ class Element extends Component {
         };
     }
 
+    // 样式更改
     onStyleChange(data) {
         const { elements, activeKey } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeKey);
         const thisCss = thisNode.css || {};
         const newNode = {
             ...thisNode,
-            css: {
-                ...thisCss,
-            },
+            css: { ...thisCss },
         };
         for (let k in data) {
             newNode.css[k] = utils.autoComplete('width', data[k]);
@@ -260,13 +261,16 @@ class Element extends Component {
                 onClick={this.selectNode.bind(this, id)}
                 style={css}
             >
+                {/*------ 缩放控制点 ------*/}
                 <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
+                {/*------ 位置控制点 ------*/}
                 {utils.has(canMoveList, css.position) && (
                     <div className='ctrl-point center' onMouseDown={this.changePosition.bind(this)} />
                 )}
+                {/*------ 宽高数字显示 ------*/}
                 {active && <div className='width-num'>{css.width}</div>}
                 {active && <div className='height-num'>{css.height}</div>}
-
+                {/*------ 选中展示边框 ------*/}
                 <div className='border' />
                 {this.renderElement(item)}
             </div>
@@ -274,9 +278,7 @@ class Element extends Component {
     }
 }
 
-Element.defaultProps = {
-
-}
+Element.defaultProps = {};
 
 export default connect(
     ({ editorInfo }) => ({ editorInfo }),
