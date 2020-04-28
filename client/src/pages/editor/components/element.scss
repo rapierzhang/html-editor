@@ -3,8 +3,12 @@
     background: #fff;
     min-width: 10px;
     min-height: 10px;
+    z-index: 1;
 
     &.active {
+      z-index: 9999;
+      outline: 1px dashed #ea413c;
+
         > .ctrl-point {
             position: absolute;
             width: 6px;
@@ -25,17 +29,6 @@
                 top: calc(50% - 3px);
                 cursor: move;
             }
-        }
-
-        > .border {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            border: 1px dashed #ea413c;
-            background: transparent;
-            z-index: 9995;
         }
 
         > .width-num {

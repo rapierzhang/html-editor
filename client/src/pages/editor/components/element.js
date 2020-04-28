@@ -273,7 +273,6 @@ class Element extends Component {
                 {active && <div className='width-num'>{css.width}</div>}
                 {active && <div className='height-num'>{css.height}</div>}
                 {/*------ 选中展示边框 ------*/}
-                <div className='border' />
                 {this.renderElement(item)}
             </div>
         );
