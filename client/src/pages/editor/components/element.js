@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import './element.scss';
 import utils from '../../../common/utils';
-import { attributeUpdate, elementsUpdate } from '../actions';
+import { attributeUpdate, elementSelect, elementsUpdate } from '../actions';
 
 const canMoveList = ['absolute', 'fixed', 'relative'];
 
@@ -22,9 +22,11 @@ class Element extends Component {
         };
     }
 
-    selectNode(key, e) {
+    selectNode(id, e) {
+        const { activeKey, elements } = this.props.editorInfo;
+
         e.stopPropagation();
-        this.props.onNodeSelect(key);
+        this.props.dispatch(elementSelect(id, activeKey, elements))
     }
 
     renderElement(item) {
@@ -273,7 +275,6 @@ class Element extends Component {
 }
 
 Element.defaultProps = {
-    onNodeSelect: () => {},
 
 }
 

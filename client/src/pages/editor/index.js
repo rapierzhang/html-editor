@@ -30,6 +30,8 @@ const eleList = [
     ...['Audio', 'Video', 'Image'], // 媒体
 ];
 
+const containerElement = ['View', 'ScrollView'];
+
 class Editor extends Component {
     constructor(props) {
         super(props);
@@ -156,27 +158,32 @@ class Editor extends Component {
     // 设置元素成功
     setSucc(element) {
         console.error('set success!!!');
-        const { elements, index, activeKey } = this.props.editorInfo;
+        const { elements, index, activeKey, activeEle } = this.props.editorInfo;
         const id = this.uniqueKey(index);
+        let newElements;
         const defaultEle = {
             element,
             id,
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
         };
-        let newElements;
         // 嵌套
         if (activeKey) {
-            newElements = utils.deepInsert(elements, activeKey, { [id]: defaultEle });
+            if (utils.has(containerElement, activeEle.element)) {
+                newElements = utils.deepInsert(elements, activeKey, { [id]: defaultEle });
+            } else {
+                utils.toast('只有容器元素可以容纳其他元素')
+                return
+            }
         } else {
             newElements = {
                 ...elements,
                 [id]: defaultEle,
             };
         }
-        this.props.dispatch(indexIncrement());
-        this.props.dispatch(elementsUpdate(newElements));
-        this.props.dispatch(elementSelect(id, defaultEle.element, elements));
+        this.props.dispatch(indexIncrement()); // 索引自增
+        this.props.dispatch(elementsUpdate(newElements)); // 元素更新
+        this.props.dispatch(elementSelect(id, activeKey, elements));// 默认选中元素
     }
 
     // 设置元素失败
@@ -184,7 +191,7 @@ class Editor extends Component {
         console.error('fail');
     }
 
-    // 选中元素
+    // 选中元素 ^^^^^^
     onNodeSelect(id) {
         const { activeKey, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(id, activeKey, elements));
@@ -206,7 +213,6 @@ class Editor extends Component {
                     key={`item-${idx}`}
                     item={item}
                     active={activeKey == item.id}
-                    onNodeSelect={this.onNodeSelect.bind(this)}
                 >
                     {item.children && this.renderElements(item.children)}
                 </Element>
@@ -260,9 +266,10 @@ class Editor extends Component {
 
     render() {
         const {
-            editorInfo: { title, desc, elements },
+            editorInfo: { title, desc, elements, activeEle },
         } = this.props;
         const { isDown, dragName, movingX, movingY } = this.state;
+        console.error('000', activeEle)
 
         return (
             <div className='editor'>

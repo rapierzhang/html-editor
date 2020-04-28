@@ -91,7 +91,7 @@ class ArrtForm extends Component {
                     key={key}
                     className={classNames('tree-item', { active: ele.id === activeKey })}
                     style={{ paddingLeft: `${floor * 10}px` }}
-                    // onClick={this.selectEle.bind(this, ele.key)}
+                    // onClick={this.selectEle.bind(this, ele.key)} ^^^^^^
                     onMouseDown={this.onDragTree.bind(this, ele)}
                 >
                     |- {ele.element}
