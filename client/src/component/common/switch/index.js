@@ -12,10 +12,10 @@ class Switch extends Component {
     }
 
     componentDidMount() {
-        const { defaultValue } = this.props;
-        if (defaultValue) {
+        const { value } = this.props;
+        if (value) {
             this.setState({
-                status: defaultValue ? 'open' : 'close',
+                status: value ? 'open' : 'close',
             });
         }
     }
@@ -45,7 +45,7 @@ class Switch extends Component {
 }
 
 Switch.defaultProps = {
-    defaultValue: false,
+    value: false,
     onChange: () => {},
 };
 

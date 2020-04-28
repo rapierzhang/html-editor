@@ -10,6 +10,66 @@ const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sti
 const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
 const inputTypeList = ['text', 'number', 'password', 'tel'];
 
+const renderAttr = (that, item) => {
+    if (item.element == 'Video') {
+       return [
+            {
+                text: '路径',
+                element: 'input',
+                type: 'text',
+                value: 'src',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'src')
+                }
+            },
+            {
+                text: '封面图',
+                element: 'input',
+                type: 'text',
+                value: 'poster',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'poster')
+                }
+            },
+            {
+                text: '控制条',
+                element: 'switch',
+                value: 'controls',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'controls')
+                }
+            },
+            {
+                text: '循环播放',
+                element: 'switch',
+                value: 'loop',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'loop')
+                }
+            },
+            {
+                text: '自动播放',
+                element: 'switch',
+                value: 'autoPlay',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'autoPlay')
+                }
+            },
+            {
+                text: '静音',
+                element: 'switch',
+                value: 'muted',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'muted')
+                }
+            },
+        ]
+    } else {
+        return []
+    }
+}
+
+
 class ArrtForm extends Component {
     constructor() {
         super(...arguments);
@@ -47,8 +107,6 @@ class ArrtForm extends Component {
             [attrName]: value,
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
-        console.error(222, newElements);
-
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
     }
@@ -267,7 +325,7 @@ class ArrtForm extends Component {
                                                 </div>
                                             </div>
                                         )}
-                                        {activeEle.element == 'Video' && (
+                                        {/*{activeEle.element == 'Video' && (
                                             <div>
                                                 <div className='row'>
                                                     <span>路径</span>
@@ -288,33 +346,33 @@ class ArrtForm extends Component {
                                                 <div className='row'>
                                                     <span>控制条</span>
                                                     <Switch
-                                                        defaultValue={activeEle.controls}
+                                                        value={activeEle.controls}
                                                         onChange={this.onAttrChange.bind(this, 'controls')}
                                                     />
                                                 </div>
                                                 <div className='row'>
                                                     <span>循环播放</span>
                                                     <Switch
-                                                        defaultValue={activeEle.loop}
+                                                        value={activeEle.loop}
                                                         onChange={this.onAttrChange.bind(this, 'loop')}
                                                     />
                                                 </div>
                                                 <div className='row'>
                                                     <span>自动播放</span>
                                                     <Switch
-                                                        defaultValue={activeEle.autoPlay}
+                                                        value={activeEle.autoPlay}
                                                         onChange={this.onAttrChange.bind(this, 'autoPlay')}
                                                     />
                                                 </div>
                                                 <div className='row'>
                                                     <span>静音</span>
                                                     <Switch
-                                                        defaultValue={activeEle.muted}
+                                                        value={activeEle.muted}
                                                         onChange={this.onAttrChange.bind(this, 'muted')}
                                                     />
                                                 </div>
                                             </div>
-                                        )}
+                                        )}*/}
                                         {activeEle.element == 'Audio' && (
                                             <div>
                                                 <div className='row'>
@@ -328,28 +386,28 @@ class ArrtForm extends Component {
                                                 <div className='row'>
                                                     <span>控制条</span>
                                                     <Switch
-                                                        defaultValue={activeEle.controls}
+                                                        value={activeEle.controls}
                                                         onChange={this.onAttrChange.bind(this, 'controls')}
                                                     />
                                                 </div>
                                                 <div className='row'>
                                                     <span>循环播放</span>
                                                     <Switch
-                                                        defaultValue={activeEle.loop}
+                                                        value={activeEle.loop}
                                                         onChange={this.onAttrChange.bind(this, 'loop')}
                                                     />
                                                 </div>
                                                 <div className='row'>
                                                     <span>自动播放</span>
                                                     <Switch
-                                                        defaultValue={activeEle.autoPlay}
+                                                        value={activeEle.autoPlay}
                                                         onChange={this.onAttrChange.bind(this, 'autoPlay')}
                                                     />
                                                 </div>
                                                 <div className='row'>
                                                     <span>静音</span>
                                                     <Switch
-                                                        defaultValue={activeEle.muted}
+                                                        value={activeEle.muted}
                                                         onChange={this.onAttrChange.bind(this, 'muted')}
                                                     />
                                                 </div>
@@ -420,6 +478,27 @@ class ArrtForm extends Component {
                                                 </div>
                                             </div>
                                         )}
+                                        {
+                                            renderAttr(this, activeEle).map((item, idx) => (
+                                                <div key={`row-${idx}`} className='row'>
+                                                    <span>{item.text}</span>
+                                                    {item.element == 'input' &&(
+                                                        <input
+                                                            type={item.type}
+                                                            value={activeEle[item.value]}
+                                                            {...item.func}
+                                                        />
+                                                    )}
+                                                    {item.element == 'switch' && (
+                                                        <Switch
+                                                            value={activeEle[item.value]}
+                                                            onChange={this.onAttrChange.bind(this, item.value)}
+                                                            {...item.func}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))
+                                        }
                                         {/*------ 删除 ------*/}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
