@@ -5,6 +5,7 @@ const PageModule = require('../module/page');
 const ListModule = require('../module/list');
 const process = require('child_process');
 
+// 页面信息获取
 exports.pageGet = async (ctx, next) => {
     let { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid });
@@ -15,7 +16,7 @@ exports.pageGet = async (ctx, next) => {
         ctx.body = utils.res(200, 'ok', { pid });
     }
 };
-
+// 页面信息保存
 exports.pageSave = async (ctx, next) => {
     let { pid, index, title, desc, htmlTree, preview } = ctx.request.body;
     const time = utils.dateFormat(new Date().getTime());
@@ -24,7 +25,7 @@ exports.pageSave = async (ctx, next) => {
     let msg = '';
     const result = await PageModule.findOne({ pid });
     if (result) {
-        console.error('有数据');
+        console.error('有数据 修改');
         try {
             pageResult = await PageModule.update(
                 { pid },
@@ -52,7 +53,7 @@ exports.pageSave = async (ctx, next) => {
             msg = e;
         }
     } else {
-        console.error('无数据');
+        console.error('无数据 新建');
         const _page = new PageModule({
             pid,
             index,
@@ -84,7 +85,7 @@ exports.pageSave = async (ctx, next) => {
         ctx.body = utils.res(500, msg, {});
     }
 };
-
+// 页面构建
 exports.pageBuild = async (ctx, next) => {
     const { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid });
@@ -110,7 +111,7 @@ exports.pageBuild = async (ctx, next) => {
         result: true,
     });
 };
-
+// 打开构建好的页面
 exports.pageOpen = async (ctx, next) => {
     const { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid });
@@ -122,9 +123,9 @@ exports.pageOpen = async (ctx, next) => {
         ctx.body = utils.res(500, '无此页面', {});
     }
 };
-
+// 页面删除
 exports.pageDelete = async (ctx, next) => {};
-
+// 页面发布
 exports.pageRelease = async (ctx, next) => {};
 
 const dataIsExist = async (mod, data) => !!(await mod.findOne(data));
@@ -291,11 +292,7 @@ const writeCss = (dirPath, htmlTree) => {
                     cssContent += ``;
                 }
             }
-            const cssItem = `
-                .${item.id} { 
-                    ${cssContent} 
-                }
-            `;
+            const cssItem = `.${item.id} {${cssContent}}`;
             cssContext += cssItem;
         }
     });
