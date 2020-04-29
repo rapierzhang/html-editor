@@ -41,6 +41,8 @@ router.post('/test', async (ctx, next) => {
     console.log('ctx.message: ', ctx.message);
     console.log('ctx.headerSent: ', ctx.headerSent);
     console.log('ctx.request.body:', ctx.request.body);
+    console.log('ctx.request.files:', ctx.request.files);
+
     console.log('-------------');
 
     ctx.body = {

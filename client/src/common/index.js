@@ -1,4 +1,5 @@
 import utils from './utils';
 import fetch from './fetch';
+import uploadFile from './upload'
 
-export { utils, fetch };
+export { utils, fetch, uploadFile };

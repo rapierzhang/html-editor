@@ -6,6 +6,7 @@ import { Select, Switch } from '../../../component';
 import { AttrList } from './index';
 import './attr-form.scss';
 import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
+import Upload from '../../../component/common/upload';
 
 const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sticky', 'inherit'];
 const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
@@ -235,7 +236,7 @@ class ArrtForm extends Component {
     }
 
     render() {
-        const { elements, isEdit, activeKey, activeEle = {} } = this.props.editorInfo;
+        const { pid, elements, isEdit, activeKey, activeEle = {} } = this.props.editorInfo;
         const { navIndex, isDown, movingX, movingY } = this.state;
         const { css = {} } = activeEle;
 
@@ -273,6 +274,11 @@ class ArrtForm extends Component {
                                     <div className='card-content'>
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
+                                        <div className='row'>
+                                            <Upload url={'http://localhost:3000/api/file/upload'} fileName='file' data={{ pid }}>
+                                                <div>上传</div>
+                                            </Upload>
+                                        </div>
                                         {/*------ 删除 ------*/}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
@@ -312,7 +318,7 @@ class ArrtForm extends Component {
                                     </div>
                                 </div>
                                 {/*------ 大小 ------*/}
-                                <div className='attr-card'>
+                                {/*<div className='attr-card'>
                                     <div className='card-title'>大小</div>
                                     <div className='card-content'>
                                         <div className='row'>
@@ -368,7 +374,7 @@ class ArrtForm extends Component {
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                </div>*/}
                                 {/*------ 排列 ------*/}
                                 {utils.has(['View', 'ScrollView'], activeEle.element) && (
                                     <div className='attr-card'>

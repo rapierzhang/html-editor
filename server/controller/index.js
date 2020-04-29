@@ -102,6 +102,7 @@ exports.pageBuild = async (ctx, next) => {
     writeHtml(dirPath, result);
     writeCss(dirPath, htmlTree);
     writeJs(dirPath, htmlTree);
+    mkdirImage(dirPath);
 
     ctx.body = utils.res(200, 'ok', {
         result: true,
@@ -125,6 +126,13 @@ exports.pageDelete = async (ctx, next) => {};
 exports.pageRelease = async (ctx, next) => {};
 
 const dataIsExist = async (mod, data) => !!(await mod.findOne(data));
+
+// 图片目录
+const mkdirImage = (dirPath) => {
+    const imgDirPath = `${dirPath}/image`;
+    const jsDirExists = fs.existsSync(imgDirPath);
+    if (!jsDirExists) fs.mkdirSync(imgDirPath);
+}
 
 // 写入js
 const writeJs = (dirPath, htmlTree) => {

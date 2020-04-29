@@ -11,7 +11,8 @@ import {
     TITLE_SET,
     DESC_SET,
 } from './action-types';
-import { utils, fetch } from '../../common';
+import { fetch } from '../../common';
+import utils from '../../common/utils'
 
 // 设置pid
 export const pidSet = pid => dispatch => {

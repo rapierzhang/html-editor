@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, useParams } from 'react-router-dom';
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
 import { utils } from '../../common';

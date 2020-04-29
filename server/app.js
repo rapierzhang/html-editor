@@ -1,9 +1,8 @@
 const Koa = require('koa');
 const app = new Koa();
-const views = require('koa-views');
 const json = require('koa-json');
 const onerror = require('koa-onerror');
-const bodyparser = require('koa-bodyparser');
+const koaBody = require('koa-body');
 const logger = require('koa-logger');
 const staticFiles = require('koa-static');
 const cors = require('koa2-cors'); //跨域处理
@@ -12,16 +11,38 @@ const path = require('path');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
+const file = require('./routes/file');
 
 // error handler
 onerror(app);
 
 // middlewares
-app.use(
+/*app.use(
     bodyparser({
         enableTypes: ['json', 'form', 'text'],
     }),
+);*/
+
+app.use(
+    koaBody({
+        patchKoa: true,
+        json: true,
+        text: true,
+        urlencoded: true,
+        multipart: true, // 支持文件上传
+        formidable: {
+            uploadDir: path.join(__dirname, 'public/upload/'), // 设置文件上传目录
+            keepExtensions: true, // 保持文件的后缀
+            maxFieldsSize: 10 * 1024 * 1024, // 文件上传大小 10M
+            /*onFileBegin: (name, file) => {
+                // 文件上传前的设置
+                console.log(`name: ${name}`);
+                console.log(file);
+            },*/
+        },
+    }),
 );
+
 app.use(json());
 app.use(logger());
 app.use(staticFiles(__dirname + '/public'));
@@ -52,6 +73,7 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
+app.use(file.routes(), file.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
