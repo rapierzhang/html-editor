@@ -5,7 +5,8 @@ const utils = require('../utils/index');
 exports.fileUpload = async (ctx, next) => {
     const { files, body } = ctx.request;
     const { pid } = body;
-    const { path: sourceFile, name } = files['file'];
+    const { path: sourceFile } = files['file'];
+    const imageName = path.basename(sourceFile).replace(/upload_/g, '');
     const dirPath = `${path.resolve('./')}/public/html/${pid}`;
     const dirExists = fs.existsSync(dirPath);
     // 判断之前是否生成过代码目录
@@ -14,14 +15,14 @@ exports.fileUpload = async (ctx, next) => {
         return;
     }
     const imageDirPath = `${dirPath}/image`;
-    const destFile = `${imageDirPath}/${name}`;
+    const destFile = `${imageDirPath}/${imageName}`;
     // 移动文件
-    const ok = await fs.renameSync(sourceFile, destFile);
-    if (!ok) {
+    const err = await fs.renameSync(sourceFile, destFile);
+    if (err) {
         ctx.body = utils.res(403, 'move fail');
     } else {
         ctx.body = utils.res(200, 'ok', {
-            url: `http://localhost:3000/html/${pid}/image/${name}`,
+            url: `http://localhost:3000/html/${pid}/image/${imageName}`,
         });
     }
 };

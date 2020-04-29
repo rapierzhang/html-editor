@@ -16,7 +16,6 @@ class Upload extends Component {
     uploadFile(e) {
         const { url, fileName, data } = this.props;
         let { files: targetFiles, value } = e.target;
-        console.error(targetFiles)
         if (value) {
             const formData = new FormData();
             [...targetFiles].map(item => {
@@ -33,7 +32,7 @@ class Upload extends Component {
         return (
             <div onClick={this.chooseFile.bind(this)}>
                 {this.props.children}
-                <input type='file' ref='refFile' style={{ display: 'none' }} onChange={this.uploadFile.bind(this)} />
+                <input type='file' ref='refFile' multiple style={{ display: 'none' }} onChange={this.uploadFile.bind(this)} />
             </div>
         );
     }
