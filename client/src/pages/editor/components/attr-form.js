@@ -274,11 +274,12 @@ class ArrtForm extends Component {
                                     <div className='card-content'>
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
+                                        {/*^^^^^^
                                         <div className='row'>
                                             <Upload url={'http://localhost:3000/api/file/upload'} fileName='file' data={{ pid }}>
                                                 <div>上传</div>
                                             </Upload>
-                                        </div>
+                                        </div>*/}
                                         {/*------ 删除 ------*/}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
