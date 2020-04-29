@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Element, ArrtForm } from './components';
-import { utils } from '../../common';
+import utils  from '../../common/utils';
 import query from 'query-string';
 import './editor.scss';
 import {

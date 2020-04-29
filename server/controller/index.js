@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const utils = require('../utils/index');
-const db = require('../module/database');
 const PageModule = require('../module/page');
 const ListModule = require('../module/list');
+const process = require('child_process');
 
 exports.pageGet = async (ctx, next) => {
     let { pid } = ctx.request.body;
@@ -103,6 +103,8 @@ exports.pageBuild = async (ctx, next) => {
     writeCss(dirPath, htmlTree);
     writeJs(dirPath, htmlTree);
     mkdirImage(dirPath);
+    // 执行格式化命令
+    process.execFileSync(`${path.resolve('./')}/shell/format.sh`, [pid]);
 
     ctx.body = utils.res(200, 'ok', {
         result: true,
@@ -128,11 +130,11 @@ exports.pageRelease = async (ctx, next) => {};
 const dataIsExist = async (mod, data) => !!(await mod.findOne(data));
 
 // 图片目录
-const mkdirImage = (dirPath) => {
+const mkdirImage = dirPath => {
     const imgDirPath = `${dirPath}/image`;
     const jsDirExists = fs.existsSync(imgDirPath);
     if (!jsDirExists) fs.mkdirSync(imgDirPath);
-}
+};
 
 // 写入js
 const writeJs = (dirPath, htmlTree) => {
@@ -148,9 +150,10 @@ const writeJs = (dirPath, htmlTree) => {
             jsContext += `const ele${utils.delLine(id)} = $('#${id}');`;
             bindJs.map(row => {
                 jsContext += `
-ele${utils.delLine(id)}.on('${row.type}', () => {
-    ${row.func}
-});`;
+                    ele${utils.delLine(id)}.on('${row.type}', () => {
+                        ${row.func}
+                    });
+                `;
             });
         }
         // 默认组件js
@@ -179,38 +182,80 @@ const writeHtml = (dirPath, data) => {
 };
 
 // 渲染html
-const renderHtml = (data, floor = 0) => {
+
+const renderHtml = htmlTree => {
     let html = ``;
-    let idx = 0;
-    for (let eleKey in data) {
-        const item = data[eleKey];
-        const { id, element, text, children } = item;
-        const labelType = utils.labelJudge(element);
-        if (idx > 0) {
-            html += `
-            ${renderTab(floor)}`;
-        }
-        if (labelType === 1) {
-            html += `<${element} id='${id}' class='${id}' ${renderAttribute(item)}/>`;
-        } else if (labelType === 2) {
-            html += `<${element} id='${id}' class='${id}' ${renderAttribute(item)}>
-                ${renderTab(floor)}${children ? renderHtml(children, floor + 1) : text}
-            ${renderTab(floor)}</${element}>`;
-        } else {
-            console.log('------ 无此标签 ------');
-        }
-        idx++;
+    for (let key in htmlTree) {
+        html += renderElement(htmlTree[key]);
     }
     return html;
 };
 
-// 渲染缩进
-const renderTab = num => {
-    let str = '';
-    for (let i = num; i > 0; i--) {
-        str += '    ';
+const renderElement = data => {
+    const { id, element, children } = data;
+    switch (element) {
+        case 'View':
+            return `
+                <div id='${id}' class='view ${id}' ${renderAttribute(data)}>
+                    ${children && renderHtml(children)}
+                </div>
+                `;
+        case 'ScrollView':
+            return `
+                <div id='${id}' class='scroll-view ${id}' ${renderAttribute(data)}>
+                    ${children && renderHtml(children)}
+                </div>
+                `;
+        case 'Swiper':
+            return `
+                <div id='${id}' class='swiper ${id}' ${renderAttribute(data)}>
+                    ${children && renderHtml(children)}
+                </div>
+                `;
+        case 'Text':
+            const textList = data.text.split('\n');
+            return textList.length > 0
+                ? `<span id='${id}' class='text ${id}'>
+                    ${textList.map((row, idx) => `<span class='text-row'>${row}</span>`).join('')}
+                </span>`
+                : `<span id='${id}' class='text ${id}'>
+                    ${data.text}
+                </span>`;
+        case 'Icon':
+            return `
+                <i id='${id}' class='icon ${id}'>${data.text}</i>
+                `;
+        case 'Input':
+            return `
+                <input id='${id}' class='input ${id}' ${renderAttribute(data)} />
+                `;
+        case 'Textarea':
+            return `
+                <textarea id='${id}' class='textarea ${id}' ${renderAttribute(data)} ></textarea>
+                `;
+        case 'CheckBox':
+            return ``;
+        case 'Radio':
+            return ``;
+        case 'Select':
+            return ``;
+        case 'UploadFile':
+            return ``;
+        case 'Audio':
+            return `
+                <audio id='${id}' class='audio ${id}' ${renderAttribute(data)} ></audio>
+                `;
+        case 'Video':
+            return `
+                <video id='${id}' class='video ${id}' ${renderAttribute(data)} ></video>
+                `;
+        case 'Image':
+            return `
+                <img id='${id}' class='image ${id}' ${renderAttribute(data)} />
+                `;
+        default:
+            return '';
     }
-    return str;
 };
 
 // 渲染属性
@@ -243,15 +288,14 @@ const writeCss = (dirPath, htmlTree) => {
                 cssContent += `${utils.toLine(key)}: ${pxToRem(css[key])};`;
                 cssRowIdx++;
                 if (cssRowIdx < cssLen) {
-                    cssContent += `
-    `;
+                    cssContent += ``;
                 }
             }
             const cssItem = `
-.${item.id} { 
-    ${cssContent} 
-}
-`;
+                .${item.id} { 
+                    ${cssContent} 
+                }
+            `;
             cssContext += cssItem;
         }
     });
@@ -268,7 +312,8 @@ const pxToRem = text => {
 
 // 默认html
 const defaultHtml = (pid, title = '', text = '') => {
-    return `<!DOCTYPE html>
+    return `
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -339,6 +384,18 @@ body {
         min-height: 1px;
         position: relative;
     }
+}
+
+.text {
+    display: inline-block;
+}
+
+.text-row {
+    display: block;
+}
+
+.icon {
+    display: inline-block;
 }
 `;
 };
