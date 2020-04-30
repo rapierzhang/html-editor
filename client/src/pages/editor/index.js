@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { Dialog } from '../../component'
 import { Element, ArrtForm } from './components';
 import utils  from '../../common/utils';
 import query from 'query-string';
@@ -340,7 +341,6 @@ class Editor extends Component {
 
         return (
             <div className='editor'>
-                {/*------ 拖拽虚拟元素 ------*/}
                 <div className='header'>
                     {/*------ 标题 ------*/}
                     <div>
@@ -365,7 +365,7 @@ class Editor extends Component {
                         <div className='button primary' onClick={this.save.bind(this)}>
                             保存
                         </div>
-                        <div className='button warring' onClick={this.build.bind(this)}>
+                        <div className='button warrning' onClick={this.build.bind(this)}>
                             生成
                         </div>
                         <div className='button success' onClick={this.open.bind(this)}>
@@ -404,12 +404,25 @@ class Editor extends Component {
                         <ArrtForm />
                     </div>
                 </div>
+                {/*------ 拖拽虚拟元素 ------*/}
                 <div
                     className={classNames('shadow-ele', { show: isDown })}
                     style={{ left: `${movingX}px`, top: `${movingY}px` }}
                 >
                     {dragName}
                 </div>
+                <Dialog
+                    title='测试头部'
+                    renderFooter={
+                    [
+                        <div className="button cancel">取消</div>,
+                        <div className="button confirm">确认</div>
+                    ]
+                }>
+                    <div className=''>
+                        测试
+                    </div>
+                </Dialog>
             </div>
         );
     }

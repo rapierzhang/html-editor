@@ -1,3 +1,3 @@
-import { Select, Toast, Switch, Upload } from './common';
+import { Select, Toast, Switch, Upload, Dialog } from './common';
 
-export { Select, Toast, Switch, Upload };
+export { Select, Toast, Switch, Upload, Dialog };
