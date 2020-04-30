@@ -105,7 +105,7 @@ exports.pageBuild = async (ctx, next) => {
     writeJs(dirPath, htmlTree);
     mkdirImage(dirPath);
     // 执行格式化命令
-    process.execFileSync(`${path.resolve('./')}/shell/format.sh`, [pid]);
+    process.execFileSync(`${path.resolve('./')}/shell/format.sh`, [dirPath]);
 
     ctx.body = utils.res(200, 'ok', {
         result: true,
@@ -264,6 +264,10 @@ const renderAttribute = data => {
     let str = '';
     for (let k in data) {
         if (['key', 'element', 'children', 'css', 'style', 'text', 'bindJs', 'defaultJs', 'extraJs'].indexOf(k) > -1) {
+            continue;
+        } else if (data[k] === true) {
+            str += k;
+        } else if (data[k] === false) {
             continue;
         } else {
             str += `${k}='${data[k]}'`;

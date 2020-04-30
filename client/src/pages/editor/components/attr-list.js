@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { utils } from '../../../common';
+import utils from '../../../common/utils';
 import { connect } from 'react-redux';
 import { attrList } from './attr-map';
 import { Select, Switch } from '../../../component/common';
