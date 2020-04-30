@@ -10,4 +10,6 @@
 # misc
 .DS_Store
 npm-debug.log*
+
 /client/package-lock.json
+/server/package-lock.json
