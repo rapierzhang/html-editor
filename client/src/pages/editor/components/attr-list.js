@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { attrList } from './attr-map';
 import { Select, Switch, Upload } from '../../../component/common';
 import { attributeUpdate, elementsUpdate } from '../actions';
-import './attr-list.scss'
+import './attr-list.scss';
 
 class AttrList extends Component {
     constructor() {
@@ -29,7 +29,7 @@ class AttrList extends Component {
     // 上传成功
     onUploadSucc(data) {
         const { url } = data;
-        this.onAttrChange('src', url)
+        this.onAttrChange('src', url);
     }
 
     render() {
@@ -47,9 +47,10 @@ class AttrList extends Component {
                 {item.element === 'image' && (
                     <div className='upload-image'>
                         <input type='text' value={activeEle[item.value]} {...item.func} />
+                        {/*^^^^^^*/}
                         <Upload
                             className='upload-btn'
-                            url={'http://localhost:3000/api/file/upload'}{/*^^^^^^*/}
+                            url={'http://localhost:3000/api/file/upload'}
                             fileName='file'
                             data={{ pid }}
                             onUploadSucc={this.onUploadSucc.bind(this)}
