@@ -1,44 +1,41 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './dialog.scss';
+/*
+* @params   show            bool        展示
+* @params   title           string      标题
+* @params   hasClose        bool        是否有关闭按钮
+* @params   renderFooter    jsx         底部
+* @params   children        jsx,string  子元素
+* @params   onClose         func        关闭触发
+* */
 
-class Dialog extends Component {
-    constructor() {
-        super(...arguments);
-        this.state = {
-            show: true,
-        };
+const Dialog = props =>{
+    const { title, hasClose, renderFooter } = props;
+    const [show, setShow] = useState(false);
+
+    useEffect(() => setShow(props.show), [props.show])
+
+    const close = () => {
+        setShow(false);
+        props.onClose();
     }
 
-    static getDerivedStateFromProps(props, state) {
-        // console.error(props.editorInfo.activeEle)
-        const { show } = props;
-        return null;
-    }
-
-    close() {
-        this.setState({ show: false });
-        this.props.onClose();
-    }
-
-    render() {
-        const { show } = this.state;
-        const { title, children, renderFooter, hasClose } = this.props;
-        console.error(renderFooter);
-        return show ? (
-            <div className='dialog'>
+    return show ? (
+        <div className='dialog'>
+            {title && (
                 <div className='title'>
                     {title}
-                    {hasClose && (
-                        <i className='icon close' onClick={this.close.bind(this)}>
-                            x
-                        </i>
-                    )}
                 </div>
-                <div className='ctx'>{this.props.children}</div>
-                {renderFooter && <div className='footer'>{renderFooter}</div>}
-            </div>
-        ) : null;
-    }
+            )}
+            {hasClose && (
+                <i className='icon close' onClick={close}>
+                    x
+                </i>
+            )}
+            <div className='ctx'>{props.children}</div>
+            {renderFooter && <div className='footer'>{renderFooter}</div>}
+        </div>
+    ) : null;
 }
 
 Dialog.defaultProps = {

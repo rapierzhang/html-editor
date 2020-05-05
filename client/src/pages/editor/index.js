@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { Dialog } from '../../component'
+import { Dialog } from '../../component';
 import { Element, ArrtForm } from './components';
-import utils  from '../../common/utils';
+import utils from '../../common/utils';
 import query from 'query-string';
 import './editor.scss';
 import {
@@ -113,6 +113,8 @@ class Editor extends Component {
             // 移动中位置
             movingX: 0,
             movingY: 0,
+
+            deleteShow: false,
         };
     }
 
@@ -120,7 +122,7 @@ class Editor extends Component {
         setTimeout(() => this.ctxPosition(), 500);
         this.init();
         // ^^^^^^ 鼠标右击
-        document.onmousedown = function(e) {
+        document.onmousedown = function (e) {
             const event = e || window.event;
             if (event.button == '2') {
             }
@@ -178,7 +180,7 @@ class Editor extends Component {
 
     // 获取画布位置
     ctxPosition() {
-        const { offsetTop, offsetHeight, offsetLeft, offsetWidth } = this.refs.ctx;
+        const { offsetTop, offsetHeight, offsetLeft, offsetWidth } = this.refs.ctx || {};
         const canvasPosition = {
             ctxTop: offsetTop,
             ctxBottom: offsetTop + offsetHeight,
@@ -333,11 +335,22 @@ class Editor extends Component {
             });
     }
 
+    // 删除弹窗控制
+    deleteDialogHandle(deleteShow) {
+        this.setState({ deleteShow });
+    }
+
+    // 确认删除
+    delConfirm() {
+        this.deleteDialogHandle(false);
+    }
+
     render() {
         const {
             editorInfo: { title, desc, elements, activeEle },
         } = this.props;
-        const { isDown, dragName, movingX, movingY } = this.state;
+        const { isDown, dragName, movingX, movingY, deleteShow } = this.state;
+        console.error(deleteShow);
 
         return (
             <div className='editor'>
@@ -371,7 +384,9 @@ class Editor extends Component {
                         <div className='button success' onClick={this.open.bind(this)}>
                             打开
                         </div>
-                        <div className='button danger'>删除</div>
+                        <div className='button danger' onClick={this.deleteDialogHandle.bind(this, true)}>
+                            删除
+                        </div>
                     </div>
                 </div>
                 <div className='content'>
@@ -411,17 +426,20 @@ class Editor extends Component {
                 >
                     {dragName}
                 </div>
+                {/*------ 删除弹窗 ------*/}
                 <Dialog
-                    title='测试头部'
-                    renderFooter={
-                    [
-                        <div className="button cancel">取消</div>,
-                        <div className="button confirm">确认</div>
-                    ]
-                }>
-                    <div className=''>
-                        测试
-                    </div>
+                    title='删除确认'
+                    show={deleteShow}
+                    renderFooter={[
+                        <div className='button cancel' onClick={this.deleteDialogHandle.bind(this, false)}>
+                            取消
+                        </div>,
+                        <div className='button confirm' onClick={this.delConfirm.bind(this)}>
+                            确认
+                        </div>,
+                    ]}
+                >
+                    <div className=''>测试</div>
                 </Dialog>
             </div>
         );

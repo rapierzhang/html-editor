@@ -15,7 +15,6 @@
     align-items: center;
 
     .title {
-        position: relative;
         height: 50px;
         width: 100%;
         display: flex;
@@ -25,18 +24,24 @@
         border-bottom: 1px solid #d9d9d9;
         font-size: 20px;
 
-        .close {
-            cursor: pointer;
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            width: 20px;
-            height: 20px;
-        }
+    }
+
+    .close {
+        cursor: pointer;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 20px;
+        height: 20px;
     }
 
     .ctx {
+        flex: 1;
         padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .footer {
