@@ -33,19 +33,8 @@ class AttrList extends Component {
                 <span>{item.text}</span>
                 {item.element == 'input' && <input type={item.type} value={activeEle[item.value]} {...item.func} />}
                 {item.element == 'textarea' && <textarea value={activeEle[item.value]} {...item.func} />}
-                {item.element == 'switch' && (
-                    <Switch
-                        value={activeEle[item.value]}
-                        {...item.func}
-                    />
-                )}
-                {item.element == 'select' && (
-                    <Select
-                        list={item.list}
-                        value={item.value || 'inherit'}
-                        {...item.func}
-                    />
-                )}
+                {item.element == 'switch' && <Switch value={activeEle[item.value]} {...item.func} />}
+                {item.element == 'select' && <Select list={item.list} value={item.value || 'inherit'} {...item.func} />}
             </div>
         ));
     }

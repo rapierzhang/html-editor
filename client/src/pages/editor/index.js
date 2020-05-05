@@ -58,6 +58,10 @@ const eleList = [
         label: '表单组件',
         list: [
             {
+                title: '表单',
+                component: 'Form',
+            },
+            {
                 title: '单行文本框',
                 component: 'Input',
             },
@@ -102,7 +106,7 @@ const eleList = [
     },
 ];
 
-const containerElement = ['View', 'ScrollView'];
+const containerElement = ['View', 'ScrollView', 'Form'];
 
 class Editor extends Component {
     constructor(props) {
@@ -350,7 +354,6 @@ class Editor extends Component {
             editorInfo: { title, desc, elements, activeEle },
         } = this.props;
         const { isDown, dragName, movingX, movingY, deleteShow } = this.state;
-        console.error(deleteShow);
 
         return (
             <div className='editor'>

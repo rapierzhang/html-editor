@@ -7,16 +7,21 @@ const utils = {
     * @param    key         string  需要查询的key
     * return                object  查到的子树
     * */
-    deepSearch: (obj, key) => {
-        if (obj.hasOwnProperty(key)) {
-            return obj[key];
-        } else {
-            for (let item in obj) {
-                if (!!obj[item].children) {
-                    return utils.deepSearch(obj[item].children, key);
+    deepSearch: (obj1, key1) => {
+        let target = {};
+        const recursion = (obj, key) => {
+            if (obj.hasOwnProperty(key)) {
+                target = obj[key];
+            } else {
+                for (let item in obj) {
+                    if (obj[item].children) {
+                        recursion(obj[item].children, key);
+                    }
                 }
             }
         }
+        recursion(obj1, key1)
+        return target;
     },
     /*
     * 节点更改

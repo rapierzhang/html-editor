@@ -1,7 +1,12 @@
+// 输入类型
 const inputTypeList = ['text', 'number', 'password', 'tel'];
+// 请求类型
+const fetchTypeList = ['post', 'get'];
+// 请求头部
+const fetchHeaderList = ['application/json']; // ^^^^^^
 
 export const attrList = (that, item) => {
-    const attrMap =  {
+    const attrMap = {
         Text: [
             {
                 text: '文字',
@@ -12,6 +17,107 @@ export const attrList = (that, item) => {
                 },
             },
         ],
+
+        Form: [
+            {
+                text: '接口路径',
+                element: 'input',
+                type: 'text',
+                value: 'url',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'url'),
+                },
+            },
+            {
+                text: '请求类型',
+                element: 'select',
+                list: fetchTypeList,
+                type: 'text',
+                value: 'post',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'fetchType'),
+                },
+            },
+            {
+                text: '头部',
+                element: 'select',
+                list: fetchHeaderList,
+                type: 'text',
+                value: 'application/json',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'fetchHeader'),
+                },
+            },
+        ],
+        Input: [
+            {
+                text: 'name',
+                element: 'input',
+                type: 'text',
+                value: 'name',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'name'),
+                },
+            },
+            {
+                text: 'type',
+                element: 'select',
+                list: inputTypeList,
+                type: 'text',
+                value: 'type',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'type'),
+                },
+            },
+            {
+                text: 'placeholder',
+                element: 'input',
+                type: 'text',
+                value: 'placeholder',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'placeholder'),
+                },
+            },
+            {
+                text: 'maxLength',
+                element: 'input',
+                type: 'number',
+                value: 'maxLength',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'maxLength'),
+                },
+            },
+        ],
+        Textarea: [
+            {
+                text: 'name',
+                element: 'input',
+                type: 'text',
+                value: 'name',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'name'),
+                },
+            },
+            {
+                text: 'placeholder',
+                element: 'input',
+                type: 'text',
+                value: 'placeholder',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'placeholder'),
+                },
+            },
+            {
+                text: 'maxLength',
+                element: 'input',
+                type: 'number',
+                value: 'maxLength',
+                func: {
+                    onBlur: that.onAttrChange.bind(that, 'maxLength'),
+                },
+            },
+        ],
+
         Image: [
             {
                 text: '路径',
@@ -118,80 +224,12 @@ export const attrList = (that, item) => {
                 },
             },
         ],
-        Input: [
-            {
-                text: 'name',
-                element: 'input',
-                type: 'text',
-                value: 'name',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'name'),
-                },
-            },
-            {
-                text: 'type',
-                element: 'select',
-                list: inputTypeList,
-                type: 'text',
-                value: 'type',
-                func: {
-                    onChange: that.onAttrChange.bind(that, 'type'),
-                },
-            },
-            {
-                text: 'placeholder',
-                element: 'input',
-                type: 'text',
-                value: 'placeholder',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'placeholder'),
-                },
-            },
-            {
-                text: 'maxLength',
-                element: 'input',
-                type: 'number',
-                value: 'maxLength',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'maxLength'),
-                },
-            },
-        ],
-        Textarea: [
-            {
-                text: 'name',
-                element: 'input',
-                type: 'text',
-                value: 'name',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'name'),
-                },
-            },
-            {
-                text: 'placeholder',
-                element: 'input',
-                type: 'text',
-                value: 'placeholder',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'placeholder'),
-                },
-            },
-            {
-                text: 'maxLength',
-                element: 'input',
-                type: 'number',
-                value: 'maxLength',
-                func: {
-                    onBlur: that.onAttrChange.bind(that, 'maxLength'),
-                },
-            },
-        ],
-    }
-    return attrMap[item.element] || []
+    };
+    return attrMap[item.element] || [];
 };
 
 export const cssList = (that, item) => {
-    const cssMap  ={
+    const cssMap = {
         View: [
             {
                 title: '定位',
@@ -205,9 +243,8 @@ export const cssList = (that, item) => {
                             onBlur: that.onAttrChange.bind(that, 'name'),
                         },
                     },
-                ]
-            }
-        ]
-    }
-}
-
+                ],
+            },
+        ],
+    };
+};
