@@ -107,7 +107,7 @@ class ArrtForm extends Component {
         const thisStyle = thisNode.css || {};
         const newNode = {
             ...thisNode,
-            css: { ...thisStyle, [attrName]: utils.autoComplete(attrName, value) },
+            css: { ...thisStyle, [attrName]: value },
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));

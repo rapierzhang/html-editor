@@ -11,7 +11,7 @@ const uploadFile = opts => {
         axios
             .post(url, formData, config)
             .then(res => {
-                resolve(res);
+                resolve(res.data);
             })
             .catch(err => {
                 reject(err);

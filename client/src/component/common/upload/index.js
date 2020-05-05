@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import { uploadFile } from '../../../common';
 
+/*
+ * @params   className      str | obj   class
+ * @params   url            string      地址
+ * @params   fileName       string      上传的key
+ * @params   data           object      上传的参数
+ * @params   children       jsx         子元素
+ * @params   onUploadSucc   func        上传成功回调
+ * @params   onUploadErr    func        上传失败回调
+ * */
+
 class Upload extends Component {
     constructor() {
         super(...arguments);
@@ -24,13 +34,16 @@ class Upload extends Component {
             for (let k in data) {
                 formData.append(k, data[k]);
             }
-            uploadFile({ url, formData });
+            uploadFile({ url, formData })
+                .then(res => this.props.onUploadSucc(res.data))
+                .catch(err => this.props.onUploadErr(err));
         }
     }
 
     render() {
+        const { className } = this.props;
         return (
-            <div onClick={this.chooseFile.bind(this)}>
+            <div className={className} onClick={this.chooseFile.bind(this)}>
                 {this.props.children}
                 <input
                     type='file'
@@ -43,5 +56,14 @@ class Upload extends Component {
         );
     }
 }
+
+Upload.defaultProps = {
+    className: {},
+    url: '',
+    fileName: '',
+    data: {},
+    onUploadSucc: () => {},
+    onUploadErr: () => {},
+};
 
 export default Upload;

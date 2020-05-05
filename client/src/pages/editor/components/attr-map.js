@@ -131,8 +131,7 @@ export const attrList = (that, item) => {
         Image: [
             {
                 text: '路径',
-                element: 'input',
-                type: 'text',
+                element: 'image',
                 value: 'src',
                 func: {
                     onBlur: that.onAttrChange.bind(that, 'src'),

@@ -212,7 +212,7 @@ class Element extends Component {
             css: { ...thisCss },
         };
         for (let k in data) {
-            newNode.css[k] = utils.autoComplete('width', data[k]);
+            newNode.css[k] = data[k];
         }
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
