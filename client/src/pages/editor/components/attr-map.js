@@ -3,7 +3,7 @@ const inputTypeList = ['text', 'number', 'password', 'tel'];
 // 请求类型
 const fetchTypeList = ['post', 'get'];
 // 请求头部
-const fetchHeaderList = ['application/json']; // ^^^^^^
+const fetchHeaderList = ['application/json', 'application/x-www-form-urlencoded']; // ^^^^^^
 
 export const attrList = (that, item) => {
     const attrMap = {
@@ -114,6 +114,16 @@ export const attrList = (that, item) => {
                 value: 'maxLength',
                 func: {
                     onBlur: that.onAttrChange.bind(that, 'maxLength'),
+                },
+            },
+        ],
+        Submit: [
+            {
+                text: '按钮文案',
+                element: 'input',
+                value: 'text',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'text'),
                 },
             },
         ],

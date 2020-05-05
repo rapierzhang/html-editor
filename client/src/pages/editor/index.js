@@ -85,6 +85,10 @@ const eleList = [
                 title: '文件上传',
                 component: 'UploadFile',
             },
+            {
+                title: '提交',
+                component: 'Submit',
+            }
         ],
     },
     {

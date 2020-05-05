@@ -35,30 +35,31 @@ class Element extends Component {
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text']);
         attr = utils.objValFilter(attr, ['false']);
+        const style = utils.positionFilter(css);
         switch (item.element) {
             // 容器
             case 'View':
                 return (
-                    <div id={id} className={classNames('element', 'view', id)} style={css}>
+                    <div id={id} className={classNames('element', 'view', id)} style={style}>
                         {this.props.children}
                     </div>
                 );
             case 'ScrollView':
                 return (
-                    <div id={id} className={classNames('element', 'scroll-view', id)} style={utils.positionFilter(css)}>
+                    <div id={id} className={classNames('element', 'scroll-view', id)} style={style}>
                         {this.props.children}
                     </div>
                 );
             case 'Swiper':
                 return (
-                    <div id={id} className={classNames('element', 'swiper', id)} style={css}>
+                    <div id={id} className={classNames('element', 'swiper', id)} style={style}>
                         swiper
                     </div>
                 );
             // 基础
             case 'Text':
                 return (
-                    <span id={id} className={classNames('element', 'text', id)} style={css}>
+                    <span id={id} className={classNames('element', 'text', id)} style={style}>
                         {textList.map((row, idx) => (
                             <span key={`row-${idx}`} className='text-row'>
                                 {row}
@@ -67,84 +68,54 @@ class Element extends Component {
                     </span>
                 );
             case 'Icon':
-                return <i id={id} className={classNames('element', 'text', id)} style={css}></i>;
+                return <i id={id} className={classNames('element', 'text', id)} style={style}></i>;
             // 表单
             case 'Form':
                 return (
-                    <div id={id} className={classNames('element', 'form', id)} style={utils.positionFilter(css)}>
+                    <div id={id} className={classNames('element', 'form', id)} style={style}>
                         {this.props.children}
-                        {textList.map((row, idx) => (
-                            <div key={`row-${idx}`}>{row}</div>
-                        ))}
                     </div>
                 );
             case 'Input':
                 return (
-                    <input
-                        id={id}
-                        className={classNames('element', 'input', id)}
-                        style={utils.positionFilter(css)}
-                        type='text'
-                        {...attr}
-                    />
+                    <input id={id} className={classNames('element', 'input', id)} style={style} type='text' {...attr} />
                 );
             case 'Textarea':
                 return (
                     <textarea
                         id={id}
                         className={classNames('element', 'textarea', id)}
-                        style={utils.positionFilter(css)}
+                        style={style}
                         {...attr}
                     ></textarea>
                 );
             case 'CheckBox':
                 return (
-                    <div id={id} className={classNames('element', 'checkbox', id)} style={utils.positionFilter(css)}>
+                    <div id={id} className={classNames('element', 'checkbox', id)} style={style}>
                         checkbox
                     </div>
                 );
             case 'Radio':
                 return (
-                    <div id={id} className={classNames('element', 'radio', id)} style={utils.positionFilter(css)}>
+                    <div id={id} className={classNames('element', 'radio', id)} style={style}>
                         radio
                     </div>
                 );
             case 'Select':
+                return <div id={id} className={classNames('element', 'select', id)} style={style}></div>;
+            case 'Submit':
                 return (
-                    <div
-                        id={id}
-                        className={classNames('element', 'select', id)}
-                        style={utils.positionFilter(css)}
-                    ></div>
+                    <div id={id} className={classNames('element', 'submit', id)} style={style}>
+                        {text}
+                    </div>
                 );
             // 媒体
             case 'Audio':
-                return (
-                    <audio
-                        id={id}
-                        className={classNames('element', 'audio', id)}
-                        style={utils.positionFilter(css)}
-                        {...attr}
-                    ></audio>
-                );
+                return <audio id={id} className={classNames('element', 'audio', id)} style={style} {...attr}></audio>;
             case 'Video':
-                return (
-                    <video
-                        id={id}
-                        className={classNames('element', 'video', id)}
-                        style={utils.positionFilter(css)}
-                        {...attr}
-                    ></video>
-                );
+                return <video id={id} className={classNames('element', 'video', id)} style={style} {...attr}></video>;
             case 'Image':
-                return (
-                    <img
-                        id={id}
-                        className={classNames('element', 'image', id)}
-                        style={utils.positionFilter(css)}
-                        {...attr}
-                    />
-                );
+                return <img id={id} className={classNames('element', 'image', id)} style={style} {...attr} />;
 
             default:
                 return <div>default</div>;

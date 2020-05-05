@@ -377,7 +377,7 @@ class ArrtForm extends Component {
                                     </div>
                                 </div>*/}
                                 {/*------ 排列 ------*/}
-                                {utils.has(['View', 'ScrollView'], activeEle.element) && (
+                                {utils.has(['View', 'ScrollView', 'Form'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>flax布局</div>
                                         <div className='card-content'>
@@ -388,7 +388,6 @@ class ArrtForm extends Component {
                                                     value={activeEle.css.display == 'flex'}
                                                 />
                                             </div>
-                                            {console.error(activeEle.css.display)}
                                             {activeEle.css.display == 'flex' && (
                                                 <div>
                                                     <div className='row'>
@@ -421,7 +420,7 @@ class ArrtForm extends Component {
                                     </div>
                                 )}
                                 {/*------ 背景 ------*/}
-                                {utils.has(['View', 'ScrollView'], activeEle.element) && (
+                                {utils.has(['View', 'ScrollView', 'Form', 'Submit'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>背景</div>
                                         <div className='card-content'>
@@ -445,7 +444,7 @@ class ArrtForm extends Component {
                                     </div>
                                 )}
                                 {/*------ 字体 ------*/}
-                                {utils.has(['Input', 'Textarea'], activeEle.element) && (
+                                {utils.has(['Text', 'Input', 'Textarea', 'Submit'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>字体</div>
                                         <div className='card-content'>
