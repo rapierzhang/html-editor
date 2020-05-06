@@ -230,7 +230,7 @@ const utils = {
     // 默认方法
     defaultJs(element, id, data) {
         let js = '';
-        switch(element) {
+        switch (element) {
             case 'Submit':
                 const { formId } = data;
                 js = `
@@ -262,12 +262,12 @@ const utils = {
                         });
                     });
                 `;
-                break
+                break;
             default:
-                js = '11';
+                js = '';
         }
-        return { defaultJs: js }
-    }
+        return js ? { defaultJs: js } : {};
+    },
 };
 
 export default utils;
