@@ -24,7 +24,6 @@ class Element extends Component {
 
     selectNode(id, e) {
         const { activeKey, elements } = this.props.editorInfo;
-
         e.stopPropagation();
         this.props.dispatch(elementSelect(id, activeKey, elements));
     }

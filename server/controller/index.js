@@ -247,6 +247,13 @@ const renderElement = data => {
             return ``;
         case 'UploadFile':
             return ``;
+        case 'Submit':
+            return `
+                <div id='${id}' class='element submit ${id}'>
+                    ${data.text}
+                </div>
+            `;
+
         case 'Audio':
             return `
                 <audio id='${id}' class='element audio ${id}' ${renderAttribute(data)} ></audio>
@@ -412,6 +419,14 @@ body {
 
 .textarea {
     resize: none;
+}
+
+.submit {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 `;
 };

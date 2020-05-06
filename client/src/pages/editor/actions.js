@@ -84,6 +84,8 @@ export const elementSelect = (id, activeKey, elements, confirm) => dispatch => {
     dispatch(attributeLoad(elements, id));
     if (id == activeKey || confirm) {
         dispatch(isEditSet(true));
+    } else {
+        dispatch(isEditSet(false));
     }
 };
 
