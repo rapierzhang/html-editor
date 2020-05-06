@@ -25,6 +25,12 @@ class AttrList extends Component {
         this.props.dispatch(attributeUpdate(newNode));
     }
 
+    // 上传成功
+    onUploadSucc(data) {
+        const { url } = data;
+        this.onAttrChange('src', url);
+    }
+
     // 添加空行
     onListAdd() {
         const { activeEle: thisNode, activeKey, elements } = this.props.editorInfo;
@@ -39,7 +45,7 @@ class AttrList extends Component {
 
     // 更改swiper列表
     onListChange(idx, e) {
-        const { value } = e.target;
+        const value = !!e.target ? e.target.value : e;
         const { elements, activeKey, activeEle: thisNode } = this.props.editorInfo;
         const { list } = thisNode;
         list[idx] = value;
@@ -52,10 +58,9 @@ class AttrList extends Component {
         this.props.dispatch(attributeUpdate(newNode));
     }
 
-    // 上传成功
-    onUploadSucc(data) {
-        const { url } = data;
-        this.onAttrChange('src', url);
+    // swiper上传成功
+    onListUploadSucc(idx, data) {
+        this.onListChange(idx, data.url);
     }
 
     render() {
@@ -91,6 +96,16 @@ class AttrList extends Component {
                         {activeEle.list.map((row, idx) => (
                             <div key={`item-${idx}`} className='image-item'>
                                 <input type='text' value={row} onChange={this.onListChange.bind(this, idx)} />
+                                {/*^^^^^^*/}
+                                <Upload
+                                    className='upload-btn'
+                                    url={'http://localhost:3000/api/file/upload'}
+                                    fileName='file'
+                                    data={{ pid }}
+                                    onUploadSucc={this.onListUploadSucc.bind(this, idx)}
+                                >
+                                    <span>上传</span>
+                                </Upload>
                             </div>
                         ))}
                         <div className='add' onClick={this.onListAdd.bind(this)}>

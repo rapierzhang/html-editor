@@ -62,11 +62,11 @@ class Element extends Component {
                 );
             case 'Swiper':
                 return (
-                    <div id={id} className={classNames('element', 'swiper-container', id)} style={style}>
+                    <div id={id} className={classNames('element', 'swiper swiper-container', id)} style={style}>
                         <div className='swiper-wrapper'>
-                            {list.map((item, idx) => (
+                            {list.map((url, idx) => (
                                 <div key={`item-${idx}`} className='swiper-slide'>
-                                    {item}
+                                    <img className='swiper-image' src={url} alt=""/>
                                 </div>
                             ))}
                         </div>
