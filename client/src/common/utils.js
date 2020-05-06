@@ -2,11 +2,11 @@ import { Toast } from '../component/';
 
 const utils = {
     /*
-    * 节点查询
-    * @param    obj         object  需要查询的树
-    * @param    key         string  需要查询的key
-    * return                object  查到的子树
-    * */
+     * 节点查询
+     * @param    obj         object  需要查询的树
+     * @param    key         string  需要查询的key
+     * return                object  查到的子树
+     * */
     deepSearch: (obj1, key1) => {
         let target = {};
         const recursion = (obj, key) => {
@@ -19,16 +19,16 @@ const utils = {
                     }
                 }
             }
-        }
-        recursion(obj1, key1)
+        };
+        recursion(obj1, key1);
         return target;
     },
     /*
-    * 节点更改
-    * @param    obj1         object  需要更改的树
-    * @param    obj2         object  需要更改的子树
-    * return                 object  更新后的树
-    * */
+     * 节点更改
+     * @param    obj1         object  需要更改的树
+     * @param    obj2         object  需要更改的子树
+     * return                 object  更新后的树
+     * */
     deepUpdate: (obj1, obj2) => {
         const k = Object.keys(obj2)[0];
         let target = {};
@@ -46,16 +46,16 @@ const utils = {
         return target;
     },
     /*
-    * 节点插入
-    * @param    obj         object  需要插入的树
-    * @param    k           string  插入在哪个节点中
-    * @oaram    insertObj   object  插入的对象
-    * return                object  插入后的树
-    * */
+     * 节点插入
+     * @param    obj         object  需要插入的树
+     * @param    k           string  插入在哪个节点中
+     * @oaram    insertObj   object  插入的对象
+     * return                object  插入后的树
+     * */
     deepInsert: (obj, k, insertObj) => {
         let target = {};
         for (let key in obj) {
-            const item = obj[key]
+            const item = obj[key];
             if (key === k) {
                 if (item.hasOwnProperty('children')) {
                     target[key] = { ...item, children: { ...item.children, ...insertObj } };
@@ -64,7 +64,7 @@ const utils = {
                 }
             } else {
                 if (item.hasOwnProperty('children')) {
-                    target[key] = { ...item, children: utils.deepInsert(item.children, k, insertObj)};
+                    target[key] = { ...item, children: utils.deepInsert(item.children, k, insertObj) };
                 } else {
                     target[key] = item;
                 }
@@ -73,13 +73,13 @@ const utils = {
         return target;
     },
     /*
-    * 插入到某个元素的前后
-    * @param    obj         object  需要插入的树
-    * @param    k           string  插入在哪个节点前后
-    * @param    before      bool    插入在节点的前后
-    * @oaram    insertObj   object  插入的对象
-    * return                object  插入后的树
-    * */
+     * 插入到某个元素的前后
+     * @param    obj         object  需要插入的树
+     * @param    k           string  插入在哪个节点前后
+     * @param    before      bool    插入在节点的前后
+     * @oaram    insertObj   object  插入的对象
+     * return                object  插入后的树
+     * */
     deepInsertSameFloor: (obj, k, before, insertObj) => {
         let target = {};
         if (obj.hasOwnProperty(k)) {
@@ -110,11 +110,11 @@ const utils = {
         return target;
     },
     /*
-    * 节点删除
-    * @param    obj     object  需要删除节点的树
-    * @param    k       string  需要删除节点的key
-    * return            object  删除后的树
-    * */
+     * 节点删除
+     * @param    obj     object  需要删除节点的树
+     * @param    k       string  需要删除节点的key
+     * return            object  删除后的树
+     * */
     deepRemove: (obj, k) => {
         let target = {};
         if (!!obj[k]) {
@@ -138,10 +138,10 @@ const utils = {
         return target;
     },
     /*
-    * 深度优先对象扁平化
-    * @param    initObj object  需要遍历的树
-    * return            array   结构话后的数组
-    * */
+     * 深度优先对象扁平化
+     * @param    initObj object  需要遍历的树
+     * return            array   结构话后的数组
+     * */
     objDepthFirstTraversal: initObj => {
         let list = [];
         const render = obj => {
@@ -186,26 +186,23 @@ const utils = {
     },
     // 弹层
     toast: msg => ({ ...Toast(msg) }),
-    // 过滤元素定位 定位，外边距
-    positionFilter(css) {
+    // 区分用途为 外部定位,内部样式
+    cssFilter(css, out) {
         let obj = {};
+        const distinguishArr = [
+            'position',
+            'top',
+            'right',
+            'bottom',
+            'left',
+            'marginTop',
+            'marginRight',
+            'marginBottom',
+            'marginLeft',
+        ];
         for (let k in css) {
-            if (
-                !utils.has(
-                    [
-                        'position',
-                        'top',
-                        'right',
-                        'bottom',
-                        'left',
-                        'marginTop',
-                        'marginRight',
-                        'marginBottom',
-                        'marginLeft',
-                    ],
-                    k,
-                )
-            ) {
+            const match = utils.has(distinguishArr, k);
+            if ((out && match) || (!out && !match)) {
                 obj[k] = css[k];
             }
         }

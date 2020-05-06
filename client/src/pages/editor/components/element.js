@@ -35,7 +35,7 @@ class Element extends Component {
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text']);
         attr = utils.objValFilter(attr, ['false']);
-        const style = utils.positionFilter(css);
+        const style = utils.cssFilter(css, false);
         switch (item.element) {
             // 容器
             case 'View':
@@ -232,7 +232,7 @@ class Element extends Component {
                 className={classNames('ele-box', { active })}
                 ref='box'
                 onClick={this.selectNode.bind(this, id)}
-                style={css}
+                style={utils.cssFilter(css, true)}
             >
                 {/*------ 缩放控制点 ------*/}
                 <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />

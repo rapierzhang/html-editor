@@ -485,7 +485,7 @@ class ArrtForm extends Component {
                                                 className='box-input'
                                                 type='text'
                                                 placeholder='-'
-                                                onBlur={this.onStyleBlur.bind(this, 'marginLeft')}
+                                                onChange={this.onStyleBlur.bind(this, 'marginLeft')}
                                                 value={css.marginLeft}
                                             />
                                             <div className='margin-inner'>
