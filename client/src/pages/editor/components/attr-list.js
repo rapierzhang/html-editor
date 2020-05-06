@@ -11,7 +11,7 @@ class AttrList extends Component {
         super(...arguments);
     }
 
-    // 属性更改 ^^^^^^
+    // 属性更改 {...item.func}中调用 ^^^^^^
     onAttrChange(attrName, e) {
         // 判断是event传入的值还是组件传入的值
         const value = !!e.target ? e.target.value : e;
