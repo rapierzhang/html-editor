@@ -303,12 +303,12 @@ class Editor extends Component {
 
     // 保存
     save() {
-        const { elements, pid, index } = this.props.editorInfo;
+        const { elements, pid, index, title, desc } = this.props.editorInfo;
         htmlSave({
             pid,
             index,
-            title: '题目题目',
-            desc: '测试简介',
+            title,
+            desc,
             htmlTree: elements,
             // preview
         })

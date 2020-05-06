@@ -202,7 +202,7 @@ const utils = {
         ];
         for (let k in css) {
             const match = utils.has(distinguishArr, k);
-            if ((out && match) || (!out && !match)) {
+            if ((out && match) || (!out && !match)|| k == 'width' || k == 'height') {
                 obj[k] = css[k];
             }
         }
