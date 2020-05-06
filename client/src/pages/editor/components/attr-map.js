@@ -56,7 +56,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'name',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'name'),
+                    onChange: that.onAttrChange.bind(that, 'name'),
                 },
             },
             {
@@ -75,7 +75,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'placeholder',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'placeholder'),
+                    onChange: that.onAttrChange.bind(that, 'placeholder'),
                 },
             },
             {
@@ -84,7 +84,7 @@ export const attrList = (that, item) => {
                 type: 'number',
                 value: 'maxLength',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'maxLength'),
+                    onChange: that.onAttrChange.bind(that, 'maxLength'),
                 },
             },
         ],
@@ -95,7 +95,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'name',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'name'),
+                    onChange: that.onAttrChange.bind(that, 'name'),
                 },
             },
             {
@@ -104,7 +104,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'placeholder',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'placeholder'),
+                    onChange: that.onAttrChange.bind(that, 'placeholder'),
                 },
             },
             {
@@ -113,7 +113,7 @@ export const attrList = (that, item) => {
                 type: 'number',
                 value: 'maxLength',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'maxLength'),
+                    onChange: that.onAttrChange.bind(that, 'maxLength'),
                 },
             },
         ],
@@ -134,7 +134,7 @@ export const attrList = (that, item) => {
                 element: 'image',
                 value: 'src',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'src'),
+                    onChange: that.onAttrChange.bind(that, 'src'),
                 },
             },
         ],
@@ -145,7 +145,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'src',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'src'),
+                    onChange: that.onAttrChange.bind(that, 'src'),
                 },
             },
             {
@@ -154,7 +154,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'poster',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'poster'),
+                    onChange: that.onAttrChange.bind(that, 'poster'),
                 },
             },
             {
@@ -197,7 +197,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'src',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'src'),
+                    onChange: that.onAttrChange.bind(that, 'src'),
                 },
             },
             {
@@ -249,7 +249,7 @@ export const cssList = (that, item) => {
                         type: 'text',
                         value: 'name',
                         func: {
-                            onBlur: that.onAttrChange.bind(that, 'name'),
+                            onChange: that.onAttrChange.bind(that, 'name'),
                         },
                     },
                 ],
