@@ -46,6 +46,7 @@ exports.pageSave = async (ctx, next) => {
                         title,
                         desc,
                         preview,
+                        updateTime: time,
                     },
                 },
             );
@@ -68,6 +69,8 @@ exports.pageSave = async (ctx, next) => {
             title,
             desc,
             preview,
+            createTime: time,
+            updateTime: time,
         });
 
         try {
@@ -185,7 +188,7 @@ const writeHtml = (dirPath, data) => {
 // 渲染html
 
 const renderHtml = htmlTree => {
-    let html = ``;
+    let html = '';
     for (let key in htmlTree) {
         html += renderElement(htmlTree[key]);
     }
@@ -197,42 +200,44 @@ const renderElement = data => {
     switch (element) {
         case 'View':
             return `
-                <div id='${id}' class='view ${id}' ${renderAttribute(data)}>
+                <div id='${id}' class='element view ${id}' ${renderAttribute(data)}>
                     ${children && renderHtml(children)}
                 </div>
                 `;
         case 'ScrollView':
             return `
-                <div id='${id}' class='scroll-view ${id}' ${renderAttribute(data)}>
+                <div id='${id}' class='element scroll-view ${id}' ${renderAttribute(data)}>
                     ${children && renderHtml(children)}
                 </div>
                 `;
         case 'Swiper':
             return `
-                <div id='${id}' class='swiper ${id}' ${renderAttribute(data)}>
+                <div id='${id}' class='element swiper ${id}' ${renderAttribute(data)}>
                     ${children && renderHtml(children)}
                 </div>
                 `;
         case 'Text':
             const textList = data.text.split('\n');
             return textList.length > 0
-                ? `<span id='${id}' class='text ${id}'>
+                ? `<span id='${id}' class='element text ${id}'>
                     ${textList.map((row, idx) => `<span class='text-row'>${row}</span>`).join('')}
                 </span>`
-                : `<span id='${id}' class='text ${id}'>
+                : `<span id='${id}' class='element text ${id}'>
                     ${data.text}
                 </span>`;
         case 'Icon':
+            return `<i id='${id}' class='element icon ${id}'>${data.text}</i>`;
+        case 'Form':
             return `
-                <i id='${id}' class='icon ${id}'>${data.text}</i>
-                `;
+                <div id='${id}' class='element form ${id}' ${renderAttribute(data)}>
+                    ${children && renderHtml(children)}
+                </div>
+            `;
         case 'Input':
-            return `
-                <input id='${id}' class='input ${id}' ${renderAttribute(data)} />
-                `;
+            return `<input id='${id}' class='element input ${id}' ${renderAttribute(data)} />`;
         case 'Textarea':
             return `
-                <textarea id='${id}' class='textarea ${id}' ${renderAttribute(data)} ></textarea>
+                <textarea id='${id}' class='element textarea ${id}' ${renderAttribute(data)} ></textarea>
                 `;
         case 'CheckBox':
             return ``;
@@ -244,18 +249,18 @@ const renderElement = data => {
             return ``;
         case 'Audio':
             return `
-                <audio id='${id}' class='audio ${id}' ${renderAttribute(data)} ></audio>
+                <audio id='${id}' class='element audio ${id}' ${renderAttribute(data)} ></audio>
                 `;
         case 'Video':
             return `
-                <video id='${id}' class='video ${id}' ${renderAttribute(data)} ></video>
+                <video id='${id}' class='element video ${id}' ${renderAttribute(data)} ></video>
                 `;
         case 'Image':
             return `
-                <img id='${id}' class='image ${id}' ${renderAttribute(data)} />
+                <img id='${id}' class='element image ${id}' ${renderAttribute(data)} />
                 `;
         default:
-            return '';
+            return '无此元素';
     }
 };
 
@@ -385,6 +390,12 @@ body {
         min-height: 1px;
         position: relative;
     }
+}
+
+.element {
+    width: 100%;
+    height: 50px;
+    vertical-align: middle;
 }
 
 .text {

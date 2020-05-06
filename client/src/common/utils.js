@@ -168,15 +168,25 @@ const utils = {
         const colorArr = ['color', 'backgroundColor'];
         const urlArr = ['backgroundImage'];
         if (utils.has(pxArr, attr)) return `${text}px`;
-        if (utils.has(colorArr, attr)) return `#${text}`;
+        // if (utils.has(colorArr, attr)) return `#${text}`;
         if (utils.has(urlArr, attr)) return `url(${text})`;
         return text;
     },
     // 属性自动过滤
-    autoFilter: () => {},
+    autoFilter: (attr, text) => {
+        const pxArr = [
+            ...['fontSize', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
+            ...['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'width', 'height'],
+            ...['top', 'right', 'bottom', 'left'],
+        ];
+        const urlArr = ['backgroundImage'];
+        if (utils.has(pxArr, attr)) return text.replace(/px/g, '');
+        if (utils.has(urlArr, attr)) return text.match(/url(\S*)/);
+        return text;
+    },
     // 弹层
     toast: msg => ({ ...Toast(msg) }),
-    // 过滤元素定位
+    // 过滤元素定位 定位，外边距
     positionFilter(css) {
         let obj = {};
         for (let k in css) {
@@ -192,10 +202,6 @@ const utils = {
                         'marginRight',
                         'marginBottom',
                         'marginLeft',
-                        'paddingTop',
-                        'paddingRight',
-                        'paddingBottom',
-                        'paddingLeft',
                     ],
                     k,
                 )

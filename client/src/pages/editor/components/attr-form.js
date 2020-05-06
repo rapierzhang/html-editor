@@ -476,7 +476,7 @@ class ArrtForm extends Component {
                                     </div>
                                 )}
                                 {/*------ 盒子模型 ------*/}
-                                {/*<div className='attr-card'>
+                                <div className='attr-card'>
                                     <div className='card-title'>盒子</div>
                                     <div className='card-content'>
                                         <div className='box-model'>
@@ -486,7 +486,7 @@ class ArrtForm extends Component {
                                                 type='text'
                                                 placeholder='-'
                                                 onBlur={this.onStyleBlur.bind(this, 'marginLeft')}
-                                                value={marginLeft}
+                                                value={css.marginLeft}
                                             />
                                             <div className='margin-inner'>
                                                 <input
@@ -494,7 +494,7 @@ class ArrtForm extends Component {
                                                     type='text'
                                                     placeholder='-'
                                                     onBlur={this.onStyleBlur.bind(this, 'marginTop')}
-                                                    value={marginTop}
+                                                    value={css.marginTop}
                                                 />
                                                 <div className='border'>
                                                     <span className='tag'>border</span>
@@ -503,7 +503,7 @@ class ArrtForm extends Component {
                                                         type='text'
                                                         placeholder='-'
                                                         onBlur={this.onStyleBlur.bind(this, 'borderLeft')}
-                                                        value={borderLeft}
+                                                        value={css.borderLeft}
                                                     />
                                                     <div className='border-inner'>
                                                         <input
@@ -511,7 +511,7 @@ class ArrtForm extends Component {
                                                             type='text'
                                                             placeholder='-'
                                                             onBlur={this.onStyleBlur.bind(this, 'borderTop')}
-                                                            value={borderTop}
+                                                            value={css.borderTop}
                                                         />
                                                         <div className='padding'>
                                                             <span className='tag'>padding</span>
@@ -521,7 +521,7 @@ class ArrtForm extends Component {
                                                                 type='text'
                                                                 placeholder='-'
                                                                 onBlur={this.onStyleBlur.bind(this, 'paddingLeft')}
-                                                                value={paddingLeft}
+                                                                value={css.paddingLeft}
                                                             />
                                                             <div className='padding-inner'>
                                                                 <input
@@ -529,7 +529,7 @@ class ArrtForm extends Component {
                                                                     type='text'
                                                                     placeholder='-'
                                                                     onBlur={this.onStyleBlur.bind(this, 'paddingTop')}
-                                                                    value={paddingTop}
+                                                                    value={css.paddingTop}
                                                                 />
                                                                 <div className='entity'>
                                                                     <input
@@ -537,7 +537,7 @@ class ArrtForm extends Component {
                                                                         type='text'
                                                                         placeholder='width'
                                                                         onBlur={this.onStyleBlur.bind(this, 'width')}
-                                                                        value={width}
+                                                                        value={css.width}
                                                                     />
                                                                     x
                                                                     <input
@@ -545,7 +545,7 @@ class ArrtForm extends Component {
                                                                         type='text'
                                                                         placeholder='height'
                                                                         onBlur={this.onStyleBlur.bind(this, 'height')}
-                                                                        value={height}
+                                                                        value={css.height}
                                                                     />
                                                                 </div>
                                                                 <input
@@ -556,7 +556,7 @@ class ArrtForm extends Component {
                                                                         this,
                                                                         'paddingBottom',
                                                                     )}
-                                                                    value={paddingBottom}
+                                                                    value={css.paddingBottom}
                                                                 />
                                                             </div>
                                                             <input
@@ -564,7 +564,7 @@ class ArrtForm extends Component {
                                                                 type='text'
                                                                 placeholder='-'
                                                                 onBlur={this.onStyleBlur.bind(this, 'paddingRight')}
-                                                                value={paddingRight}
+                                                                value={css.paddingRight}
                                                             />
                                                         </div>
                                                         <input
@@ -572,7 +572,7 @@ class ArrtForm extends Component {
                                                             type='text'
                                                             placeholder='-'
                                                             onBlur={this.onStyleBlur.bind(this, 'borderBottom')}
-                                                            value={borderBottom}
+                                                            value={css.borderBottom}
                                                         />
                                                     </div>
                                                     <input
@@ -580,7 +580,7 @@ class ArrtForm extends Component {
                                                         type='text'
                                                         placeholder='-'
                                                         onBlur={this.onStyleBlur.bind(this, 'borderRight')}
-                                                        value={borderRight}
+                                                        value={css.borderRight}
                                                     />
                                                 </div>
                                                 <input
@@ -588,7 +588,7 @@ class ArrtForm extends Component {
                                                     type='text'
                                                     placeholder='-'
                                                     onBlur={this.onStyleBlur.bind(this, 'marginBottom')}
-                                                    value={marginBottom}
+                                                    value={css.marginBottom}
                                                 />
                                             </div>
                                             <input
@@ -596,11 +596,11 @@ class ArrtForm extends Component {
                                                 type='text'
                                                 placeholder='-'
                                                 onBlur={this.onStyleBlur.bind(this, 'marginRight')}
-                                                value={marginRight}
+                                                value={css.marginRight}
                                             />
                                         </div>
                                     </div>
-                                </div>*/}
+                                </div>
                                 {/*------ 扩展 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>扩展</div>

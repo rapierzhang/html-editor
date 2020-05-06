@@ -143,9 +143,9 @@ class Element extends Component {
 
             // 超出最大宽度
             if (width >= 375) {
-                this.onStyleChange({ width: 375, height });
+                this.onStyleChange({ width: '375px', height: `${height}px` });
             } else {
-                this.onStyleChange({ width, height });
+                this.onStyleChange({ width: `${width}px`, height: `${height}px` });
             }
         };
 
