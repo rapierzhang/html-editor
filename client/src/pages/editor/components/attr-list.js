@@ -36,7 +36,7 @@ class AttrList extends Component {
         const { activeEle: thisNode, activeKey, elements } = this.props.editorInfo;
         const newNode = {
             ...thisNode,
-            list: [...thisNode.list, ''],
+            list: [...(thisNode.list || []), ''],
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -65,7 +65,7 @@ class AttrList extends Component {
 
     render() {
         const { pid, activeEle = {} } = this.props.editorInfo;
-        console.error(activeEle);
+        const { list = [] } = activeEle;
 
         return attrList(this, activeEle).map((item, idx) => (
             <div key={`row-${idx}`} className='row'>
@@ -93,7 +93,7 @@ class AttrList extends Component {
                 )}
                 {item.element === 'imageList' && (
                     <div className='image-list'>
-                        {activeEle.list.map((row, idx) => (
+                        {list.map((row, idx) => (
                             <div key={`item-${idx}`} className='image-item'>
                                 <input type='text' value={row} onChange={this.onListChange.bind(this, idx)} />
                                 {/*^^^^^^*/}

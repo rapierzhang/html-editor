@@ -274,20 +274,6 @@ class ArrtForm extends Component {
                                     <div className='card-content'>
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
-                                        {/*{activeEle.element === 'Swiper' && (
-                                            <div className='image-list'>
-                                                {(activeEle.list || [111]).map((item, idx) => (
-                                                    <div key={`item-${idx}`} className='image-item'>
-                                                        <input
-                                                            type='text'
-                                                            value={activeEle[item.value]}
-                                                            {...item.func}
-                                                        />
-                                                    </div>
-                                                ))}
-                                                <div className='add'>+</div>
-                                            </div>
-                                        )}*/}
                                         {/*------ 删除 ------*/}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>

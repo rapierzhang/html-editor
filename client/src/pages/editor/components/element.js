@@ -62,7 +62,7 @@ class Element extends Component {
                 );
             case 'Swiper':
                 return (
-                    <div id={id} className={classNames('element', 'swiper swiper-container', id)} style={style}>
+                    <div id={id} className={classNames('element', 'swiper', 'swiper-container', id)} style={style}>
                         <div className='swiper-wrapper'>
                             {list.map((url, idx) => (
                                 <div key={`item-${idx}`} className='swiper-slide'>

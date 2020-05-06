@@ -231,6 +231,16 @@ const utils = {
     defaultJs(element, id, data) {
         let js = '';
         switch (element) {
+            case 'Swiper':
+                js = `
+                    new Swiper('.swiper-container', {
+                    loop: true,
+                    pagination: {
+                        el: '.swiper-pagination',
+                    },
+                });
+                `;
+                break;
             case 'Submit':
                 const { formId } = data;
                 js = `
