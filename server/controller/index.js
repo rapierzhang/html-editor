@@ -282,7 +282,7 @@ const renderAttribute = data => {
         } else if (data[k] === false) {
             continue;
         } else {
-            str += `${k}='${data[k]}'`;
+            str += `${utils.toLine(k)}='${data[k]}'`;
         }
     }
     return str;

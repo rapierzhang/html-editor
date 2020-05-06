@@ -227,6 +227,47 @@ const utils = {
         }
         return o;
     },
+    // 默认方法
+    defaultJs(element, id, data) {
+        let js = '';
+        switch(element) {
+            case 'Submit':
+                const { formId } = data;
+                js = `
+                    $('#${id}').on('click', () => {
+                        const formEle = $('#${formId}');
+                        const url = formEle.attr('url') || '';
+                        const type = formEle.attr('fetch-type') || 'post';
+                        const contentType = formEle.attr('content-type') || 'application/json';
+                        const child = formEle.find('[name]');
+                        let data = {};
+                        [...child].forEach(item => {
+                            data[item.name] = item.value;
+                        });
+                        if (contentType === 'application/json') {
+                            data = JSON.stringfy(data);
+                        }
+                        $.ajax({
+                            url,
+                            type,
+                            dataType: 'json',
+                            contentType,
+                            data,
+                        })
+                        .then(res => {
+                            console.error('success', res);
+                        })
+                        .catch(err => {
+                            console.error('error', err);
+                        });
+                    });
+                `;
+                break
+            default:
+                js = '11';
+        }
+        return { defaultJs: js }
+    }
 };
 
 export default utils;

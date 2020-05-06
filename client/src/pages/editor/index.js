@@ -248,6 +248,7 @@ class Editor extends Component {
             id,
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
+            ...utils.defaultJs(element, id, { formId: activeKey }),
         };
         // 嵌套
         if (activeKey) {

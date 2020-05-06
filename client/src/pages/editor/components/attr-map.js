@@ -25,7 +25,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'url',
                 func: {
-                    onBlur: that.onAttrChange.bind(that, 'url'),
+                    onChange: that.onAttrChange.bind(that, 'url'),
                 },
             },
             {
@@ -45,7 +45,7 @@ export const attrList = (that, item) => {
                 type: 'text',
                 value: 'application/json',
                 func: {
-                    onChange: that.onAttrChange.bind(that, 'fetchHeader'),
+                    onChange: that.onAttrChange.bind(that, 'contentType'),
                 },
             },
         ],
