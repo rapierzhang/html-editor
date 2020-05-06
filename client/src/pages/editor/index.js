@@ -16,6 +16,7 @@ import {
     htmlSave,
     htmlBuild,
     htmlOpen,
+    htmlRelease,
     indexSet,
     titleSet,
     descSet,
@@ -344,6 +345,18 @@ class Editor extends Component {
             });
     }
 
+    release() {
+        const { pid } = this.props.editorInfo;
+        htmlRelease({ pid })
+            .then(res => {
+                utils.toast('发布成功');
+            })
+            .catch(err => {
+                utils.toast('发布失败');
+                console.error(err);
+            });
+    }
+
     // 删除弹窗控制
     deleteDialogHandle(deleteShow) {
         this.setState({ deleteShow });
@@ -392,6 +405,9 @@ class Editor extends Component {
                         <div className='button success' onClick={this.open.bind(this)}>
                             打开
                         </div>
+                        <div className='button success' onClick={this.release.bind(this)}>
+                            发布
+                        </div>
                         <div className='button danger' onClick={this.deleteDialogHandle.bind(this, true)}>
                             删除
                         </div>
@@ -438,14 +454,16 @@ class Editor extends Component {
                 <Dialog
                     title='删除确认'
                     show={deleteShow}
-                    renderFooter={[
-                        <div className='button cancel' onClick={this.deleteDialogHandle.bind(this, false)}>
-                            取消
-                        </div>,
-                        <div className='button confirm' onClick={this.delConfirm.bind(this)}>
-                            确认
-                        </div>,
-                    ]}
+                    renderFooter={(
+                        <div className='footer'>
+                            <div className='button cancel' onClick={this.deleteDialogHandle.bind(this, false)}>
+                                取消
+                            </div>
+                            <div className='button confirm' onClick={this.delConfirm.bind(this)}>
+                                确认
+                            </div>
+                        </div>
+                    )}
                 >
                     <div className=''>测试</div>
                 </Dialog>

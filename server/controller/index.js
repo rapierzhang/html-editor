@@ -129,7 +129,18 @@ exports.pageOpen = async (ctx, next) => {
 // 页面删除
 exports.pageDelete = async (ctx, next) => {};
 // 页面发布
-exports.pageRelease = async (ctx, next) => {};
+exports.pageRelease = async (ctx, next) => {
+    const { pid } = ctx.request.body;
+    const dirPath = `${path.resolve('./')}/public/html/${pid}`;
+    // 判断目录存在
+    const dirExists = fs.existsSync(dirPath);
+    if (dirExists) {
+        process.execFileSync(`${path.resolve('./')}/shell/release.sh`, [dirPath]);
+        ctx.body = utils.res(200, 'ok', { result: true });
+    } else {
+        ctx.body = utils.res(500, '无此页面，请先生成后再发布', {});
+    }
+};
 
 const dataIsExist = async (mod, data) => !!(await mod.findOne(data));
 

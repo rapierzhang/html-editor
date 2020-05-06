@@ -33,7 +33,7 @@ const Dialog = props =>{
                 </i>
             )}
             <div className='ctx'>{props.children}</div>
-            {renderFooter && <div className='footer'>{renderFooter}</div>}
+            {renderFooter}
         </div>
     ) : null;
 }

@@ -146,3 +146,12 @@ export const htmlOpen = params => {
         params,
     }).then(res => res.data);
 };
+
+// 发布页面
+export const htmlRelease = params => {
+    return fetch({
+        url: '/api/page/release',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
+}
