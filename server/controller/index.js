@@ -409,5 +409,9 @@ body {
 .icon {
     display: inline-block;
 }
+
+.textarea {
+    resize: none;
+}
 `;
 };
