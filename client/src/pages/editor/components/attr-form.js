@@ -31,23 +31,23 @@ const flexDirectionList = [
 const justifyContentList = [
     {
         title: '头部对齐',
-        value: 'flex-start'
+        value: 'flex-start',
     },
     {
         title: '末尾对齐',
-        value: 'flex-end'
+        value: 'flex-end',
     },
     {
         title: '居中对齐',
-        value: 'center'
+        value: 'center',
     },
     {
         title: '两边对齐',
-        value: 'space-between'
+        value: 'space-between',
     },
     {
         title: '平均分布',
-        value: 'space-around'
+        value: 'space-around',
     },
 ];
 const alignItemsList = [
@@ -71,7 +71,7 @@ const alignItemsList = [
         title: '占满高度',
         value: 'stretch',
     },
-]
+];
 
 class ArrtForm extends Component {
     constructor() {
@@ -274,12 +274,20 @@ class ArrtForm extends Component {
                                     <div className='card-content'>
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
-                                        {/*^^^^^^
-                                        <div className='row'>
-                                            <Upload url={'http://localhost:3000/api/file/upload'} fileName='file' data={{ pid }}>
-                                                <div>上传</div>
-                                            </Upload>
-                                        </div>*/}
+                                        {/*{activeEle.element === 'Swiper' && (
+                                            <div className='image-list'>
+                                                {(activeEle.list || [111]).map((item, idx) => (
+                                                    <div key={`item-${idx}`} className='image-item'>
+                                                        <input
+                                                            type='text'
+                                                            value={activeEle[item.value]}
+                                                            {...item.func}
+                                                        />
+                                                    </div>
+                                                ))}
+                                                <div className='add'>+</div>
+                                            </div>
+                                        )}*/}
                                         {/*------ 删除 ------*/}
                                         <div className='row'>
                                             <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
@@ -528,7 +536,10 @@ class ArrtForm extends Component {
                                                                     className='padding-input'
                                                                     type='text'
                                                                     placeholder='-'
-                                                                    onChange={this.onStyleChange.bind(this, 'paddingTop')}
+                                                                    onChange={this.onStyleChange.bind(
+                                                                        this,
+                                                                        'paddingTop',
+                                                                    )}
                                                                     value={css.paddingTop}
                                                                 />
                                                                 <div className='entity'>
@@ -536,7 +547,10 @@ class ArrtForm extends Component {
                                                                         className='entity-input'
                                                                         type='text'
                                                                         placeholder='width'
-                                                                        onChange={this.onStyleChange.bind(this, 'width')}
+                                                                        onChange={this.onStyleChange.bind(
+                                                                            this,
+                                                                            'width',
+                                                                        )}
                                                                         value={css.width}
                                                                     />
                                                                     x
@@ -544,7 +558,10 @@ class ArrtForm extends Component {
                                                                         className='entity-input'
                                                                         type='text'
                                                                         placeholder='height'
-                                                                        onChange={this.onStyleChange.bind(this, 'height')}
+                                                                        onChange={this.onStyleChange.bind(
+                                                                            this,
+                                                                            'height',
+                                                                        )}
                                                                         value={css.height}
                                                                     />
                                                                 </div>

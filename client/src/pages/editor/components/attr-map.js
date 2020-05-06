@@ -7,6 +7,12 @@ const fetchHeaderList = ['application/json', 'application/x-www-form-urlencoded'
 
 export const attrList = (that, item) => {
     const attrMap = {
+        Swiper:[
+            {
+                text: '路径',
+                element: 'imageList',
+            },
+        ],
         Text: [
             {
                 text: '文字',

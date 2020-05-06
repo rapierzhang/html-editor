@@ -15,11 +15,37 @@ class AttrList extends Component {
     onAttrChange(attrName, e) {
         // 判断是event传入的值还是组件传入的值
         const value = !!e.target ? e.target.value : e;
-        const { elements, activeKey } = this.props.editorInfo;
-        const thisNode = utils.deepSearch(elements, activeKey);
+        const { elements, activeKey, activeEle: thisNode } = this.props.editorInfo;
         const newNode = {
             ...thisNode,
             [attrName]: value,
+        };
+        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(newNode));
+    }
+
+    // 添加空行
+    onListAdd() {
+        const { activeEle: thisNode, activeKey, elements } = this.props.editorInfo;
+        const newNode = {
+            ...thisNode,
+            list: [...thisNode.list, ''],
+        };
+        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(newNode));
+    }
+
+    // 更改swiper列表
+    onListChange(idx, e) {
+        const { value } = e.target;
+        const { elements, activeKey, activeEle: thisNode } = this.props.editorInfo;
+        const { list } = thisNode;
+        list[idx] = value;
+        const newNode = {
+            ...thisNode,
+            list,
         };
         const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -34,6 +60,7 @@ class AttrList extends Component {
 
     render() {
         const { pid, activeEle = {} } = this.props.editorInfo;
+        console.error(activeEle);
 
         return attrList(this, activeEle).map((item, idx) => (
             <div key={`row-${idx}`} className='row'>
@@ -57,6 +84,18 @@ class AttrList extends Component {
                         >
                             <span>上传</span>
                         </Upload>
+                    </div>
+                )}
+                {item.element === 'imageList' && (
+                    <div className='image-list'>
+                        {activeEle.list.map((row, idx) => (
+                            <div key={`item-${idx}`} className='image-item'>
+                                <input type='text' value={row} onChange={this.onListChange.bind(this, idx)} />
+                            </div>
+                        ))}
+                        <div className='add' onClick={this.onListAdd.bind(this)}>
+                            +
+                        </div>
                     </div>
                 )}
             </div>

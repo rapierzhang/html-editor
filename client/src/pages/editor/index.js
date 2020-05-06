@@ -405,7 +405,7 @@ class Editor extends Component {
                         <div className='button success' onClick={this.open.bind(this)}>
                             打开
                         </div>
-                        <div className='button success' onClick={this.release.bind(this)}>
+                        <div className='button info' onClick={this.release.bind(this)}>
                             发布
                         </div>
                         <div className='button danger' onClick={this.deleteDialogHandle.bind(this, true)}>

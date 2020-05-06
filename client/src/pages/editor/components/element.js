@@ -22,6 +22,17 @@ class Element extends Component {
         };
     }
 
+    componentDidMount() {
+        new Swiper('.swiper-container', {
+            loop: true, // 循环模式选项
+
+            // 如果需要分页器
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        });
+    }
+
     selectNode(id, e) {
         const { activeKey, elements } = this.props.editorInfo;
         e.stopPropagation();
@@ -29,7 +40,7 @@ class Element extends Component {
     }
 
     renderElement(item) {
-        const { id, css, text } = item;
+        const { id, css, text, list = [] } = item;
         // 折行处理
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text']);
@@ -51,8 +62,15 @@ class Element extends Component {
                 );
             case 'Swiper':
                 return (
-                    <div id={id} className={classNames('element', 'swiper', id)} style={style}>
-                        swiper
+                    <div id={id} className={classNames('element', 'swiper-container', id)} style={style}>
+                        <div className='swiper-wrapper'>
+                            {list.map((item, idx) => (
+                                <div key={`item-${idx}`} className='swiper-slide'>
+                                    {item}
+                                </div>
+                            ))}
+                        </div>
+                        <div className='swiper-pagination'></div>
                     </div>
                 );
             // 基础
