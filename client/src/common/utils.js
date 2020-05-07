@@ -227,7 +227,8 @@ const utils = {
         }
         return o;
     },
-    // 默认方法
+    lineToUnderLine: str => str.replace(/-/g, '_'),
+    // 组件默认方法
     defaultJs(element, id, data) {
         let js = '';
         switch (element) {
@@ -270,6 +271,36 @@ const utils = {
                         .catch(err => {
                             console.error('error', err);
                         });
+                    });
+                `;
+                break;
+            case 'Upload':
+                const underLineId = utils.lineToUnderLine(id);
+                js = `
+                    const ${underLineId}_ele = $('#${id}');
+                    const ${underLineId}_file_ele = $('#${id} input[type="file"]');
+                    ${underLineId}_ele.on('click', () => ${underLineId}_file_ele[0].click());
+                    
+                    ${underLineId}_file_ele.on('change', (e) => {
+                        const url = ${underLineId}_ele.attr('url');
+                        const fileName = ${underLineId}_ele.attr('file-name');
+                        const formData = new FormData();
+                        formData.append(fileName, e.target.files[0]);
+                        $.ajax({
+                            type: 'post',
+                            url,
+                            data: formData,
+                            dataType: 'json',
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                        })
+                            .then(res => {
+                                eval(${underLineId}_ele.attr('on-succ'));
+                            })
+                            .catch(err => {
+                                eval(${underLineId}_ele.attr('on-err'));
+                            });
                     });
                 `;
                 break;

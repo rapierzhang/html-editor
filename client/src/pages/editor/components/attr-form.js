@@ -371,7 +371,7 @@ class ArrtForm extends Component {
                                     </div>
                                 </div>*/}
                                 {/*------ 排列 ------*/}
-                                {utils.has(['View', 'ScrollView', 'Form'], activeEle.element) && (
+                                {utils.has(['View', 'ScrollView', 'Form', 'Upload'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>flax布局</div>
                                         <div className='card-content'>

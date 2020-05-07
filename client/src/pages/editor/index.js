@@ -75,16 +75,12 @@ const eleList = [
                 component: 'Checkbox',
             },
             {
-                title: '单项选择',
-                component: 'Radio',
-            },
-            {
                 title: '下拉框',
                 component: 'Select',
             },
             {
                 title: '文件上传',
-                component: 'UploadFile',
+                component: 'Upload',
             },
             {
                 title: '提交',
@@ -111,7 +107,7 @@ const eleList = [
     },
 ];
 
-const containerElement = ['View', 'ScrollView', 'Form'];
+const containerElement = ['View', 'ScrollView', 'Form', 'Upload'];
 
 class Editor extends Component {
     constructor(props) {

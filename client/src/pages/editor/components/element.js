@@ -66,7 +66,7 @@ class Element extends Component {
                         <div className='swiper-wrapper'>
                             {list.map((url, idx) => (
                                 <div key={`item-${idx}`} className='swiper-slide'>
-                                    <img className='swiper-image' src={url} alt=""/>
+                                    <img className='swiper-image' src={url} alt='' />
                                 </div>
                             ))}
                         </div>
@@ -112,14 +112,14 @@ class Element extends Component {
                         checkbox
                     </div>
                 );
-            case 'Radio':
-                return (
-                    <div id={id} className={classNames('element', 'radio', id)} style={style}>
-                        radio
-                    </div>
-                );
             case 'Select':
                 return <div id={id} className={classNames('element', 'select', id)} style={style}></div>;
+            case 'Upload':
+                return (
+                    <div id={id} className={classNames('element', 'upload', id)} style={style}>
+                        {this.props.children}
+                    </div>
+                );
             case 'Submit':
                 return (
                     <div id={id} className={classNames('element', 'submit', id)} style={style}>

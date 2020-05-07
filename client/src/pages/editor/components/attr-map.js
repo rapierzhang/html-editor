@@ -38,7 +38,6 @@ export const attrList = (that, item) => {
                 text: '请求类型',
                 element: 'select',
                 list: fetchTypeList,
-                type: 'text',
                 value: 'post',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'fetchType'),
@@ -48,7 +47,6 @@ export const attrList = (that, item) => {
                 text: '头部',
                 element: 'select',
                 list: fetchHeaderList,
-                type: 'text',
                 value: 'application/json',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'contentType'),
@@ -69,7 +67,6 @@ export const attrList = (that, item) => {
                 text: 'type',
                 element: 'select',
                 list: inputTypeList,
-                type: 'text',
                 value: 'type',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'type'),
@@ -120,6 +117,42 @@ export const attrList = (that, item) => {
                 value: 'maxLength',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'maxLength'),
+                },
+            },
+        ],
+        Upload: [
+            {
+                text: 'url',
+                element: 'input',
+                type: 'text',
+                value: 'url',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'url'),
+                },
+            },
+            {
+                text: 'fileName',
+                element: 'input',
+                type: 'text',
+                value: 'fileName',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'fileName'),
+                },
+            },
+            {
+                text: 'onSucc',
+                element: 'textarea',
+                value: 'onSucc',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'onSucc'),
+                },
+            },
+            {
+                text: 'onErr',
+                element: 'textarea',
+                value: 'onErr',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'onErr'),
                 },
             },
         ],
