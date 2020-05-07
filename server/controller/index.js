@@ -223,8 +223,15 @@ const renderElement = data => {
                 `;
         case 'Swiper':
             return `
-                <div id='${id}' class='element swiper ${id}' ${renderAttribute(data)}>
-                    ${children && renderHtml(children)}
+                <div id='${id}' class='element swiper swiper-container ${id}' ${renderAttribute(data)}>
+                    <div class='swiper-wrapper'>
+                        ${data.list.map(
+                            url => `<div class='swiper-slide'>
+                                        <img class='swiper-image' src='${url}'/>
+                                    </div>`
+                        )}
+                    </div>
+                    <div class='swiper-pagination'></div>
                 </div>
                 `;
         case 'Text':
@@ -256,8 +263,14 @@ const renderElement = data => {
             return ``;
         case 'Select':
             return ``;
-        case 'UploadFile':
-            return ``;
+        case 'Upload':
+            return `
+                <div id='${id}' class='element upload ${id}' ${renderAttribute(data)}>
+                    ${children && renderHtml(children)}
+                    <input id='${id}-file' type='file'>
+                    <input id='${id}-url' type='text' name='img-url' >
+                </div>
+            `;
         case 'Submit':
             return `
                 <div id='${id}' class='element submit ${id}'>
@@ -286,7 +299,7 @@ const renderElement = data => {
 const renderAttribute = data => {
     let str = '';
     for (let k in data) {
-        if (['key', 'element', 'children', 'css', 'style', 'text', 'bindJs', 'defaultJs', 'extraJs'].indexOf(k) > -1) {
+        if (['key', 'element', 'children', 'css', 'style', 'text', 'list', 'bindJs', 'defaultJs', 'extraJs'].indexOf(k) > -1) {
             continue;
         } else if (data[k] === true) {
             str += k;
@@ -348,6 +361,7 @@ const defaultHtml = (pid, title = '', text = '') => {
         <meta name="apple-mobile-web-app-status-bar-style" content="white" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
+        <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/css/swiper.css">
         <link rel="stylesheet" href="./${pid}/css/index.css" />
         <script>
             !(function(x) {
@@ -382,6 +396,7 @@ const defaultHtml = (pid, title = '', text = '') => {
             ${text}
         </div>
         <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/js/swiper.min.js"></script>
         <script src="./${pid}/js/index.js"></script>
     </body>
 </html>`;
@@ -416,6 +431,11 @@ body {
     vertical-align: middle;
 }
 
+.swiper-image {
+    width: 100%;
+    height: 100%;
+}
+
 .text {
     display: inline-block;
 }
@@ -438,6 +458,10 @@ body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+.upload>input {
+    display: none;
 }
 `;
 };

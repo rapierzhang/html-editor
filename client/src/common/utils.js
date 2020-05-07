@@ -278,7 +278,9 @@ const utils = {
                 const underLineId = utils.lineToUnderLine(id);
                 js = `
                     const ${underLineId}_ele = $('#${id}');
-                    const ${underLineId}_file_ele = $('#${id} input[type="file"]');
+                    const ${underLineId}_file_ele = $('#${id}-file');
+                    const ${underLineId}_url_ele = $('#${id}-url');
+                    
                     ${underLineId}_ele.on('click', () => ${underLineId}_file_ele[0].click());
                     
                     ${underLineId}_file_ele.on('change', (e) => {
@@ -296,6 +298,7 @@ const utils = {
                             processData: false,
                         })
                             .then(res => {
+                                ${underLineId}_url_ele.val(res.data.url);
                                 eval(${underLineId}_ele.attr('on-succ'));
                             })
                             .catch(err => {
