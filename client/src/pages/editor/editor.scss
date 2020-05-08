@@ -120,6 +120,17 @@
             position: relative;
             background: #f5f5f5;
         }
+
+        .root {
+            width: 375px;
+            height: 100%;
+            position: relative;
+
+            &.active {
+                z-index: 9999;
+                outline: 1px dashed #ea413c;
+            }
+        }
     }
 
     .dialog {

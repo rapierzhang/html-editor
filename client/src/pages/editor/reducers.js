@@ -29,7 +29,13 @@ const editorInfo = {
         ctxHeight: 0,
         ctxWidth: 0,
     },
-    elements: {},
+    elements: {
+        'root': {
+            id: 'root',
+            element: 'Root',
+            children:[],
+        }
+    },
 };
 
 export default (state = editorInfo, action) => {

@@ -138,7 +138,6 @@ class ArrtForm extends Component {
                     key={key}
                     className={classNames('tree-item', { active: ele.id === activeKey })}
                     style={{ paddingLeft: `${floor * 10}px` }}
-                    // onClick={this.selectEle.bind(this, ele.key)} ^^^^^^
                     onMouseDown={this.onDragTree.bind(this, ele)}
                 >
                     |- {ele.element}
@@ -251,14 +250,16 @@ class ArrtForm extends Component {
                     <div className='attr-list'>
                         {/*------ nav ------*/}
                         <div className='nav'>
+                            {activeKey !== 'root' && (
+                                <span
+                                    className={classNames('nav-item', { actived: navIndex == 0 })}
+                                    onClick={this.switchNav.bind(this, 0)}
+                                >
+                                    属性
+                                </span>
+                            )}
                             <span
-                                className={classNames('nav-item', { actived: navIndex == 0 })}
-                                onClick={this.switchNav.bind(this, 0)}
-                            >
-                                属性
-                            </span>
-                            <span
-                                className={classNames('nav-item', { actived: navIndex == 1 })}
+                                className={classNames('nav-item', { actived: navIndex == 1 || activeKey == 'root' })}
                                 onClick={this.switchNav.bind(this, 1)}
                             >
                                 样式
@@ -274,12 +275,17 @@ class ArrtForm extends Component {
                                     <div className='card-content'>
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
-                                        {/*------ 删除 ------*/}
-                                        <div className='row'>
-                                            <div className='del-ele button danger' onClick={this.removeEle.bind(this)}>
-                                                删除节点
+                                        {/*------ 删除节点 ------*/}
+                                        {activeKey !== 'root' && (
+                                            <div className='row'>
+                                                <div
+                                                    className='del-ele button danger'
+                                                    onClick={this.removeEle.bind(this)}
+                                                >
+                                                    删除节点
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -414,7 +420,7 @@ class ArrtForm extends Component {
                                     </div>
                                 )}
                                 {/*------ 背景 ------*/}
-                                {utils.has(['View', 'ScrollView', 'Form', 'Submit'], activeEle.element) && (
+                                {utils.has(['Root', 'View', 'ScrollView', 'Form', 'Submit'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>背景</div>
                                         <div className='card-content'>
@@ -438,7 +444,7 @@ class ArrtForm extends Component {
                                     </div>
                                 )}
                                 {/*------ 字体 ------*/}
-                                {utils.has(['Text', 'Input', 'Textarea', 'Submit'], activeEle.element) && (
+                                {utils.has(['Root', 'Text', 'Input', 'Textarea', 'Submit'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>字体</div>
                                         <div className='card-content'>

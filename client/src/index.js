@@ -22,5 +22,5 @@ ReactDOM.render(
     <Provider store={store}>
         <RootRouter />
     </Provider>,
-    document.getElementById('root'),
+    document.getElementById('page-root'),
 );

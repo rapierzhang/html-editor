@@ -40,7 +40,7 @@ class Element extends Component {
     }
 
     renderElement(item) {
-        const { id, css, text, list = [] } = item;
+        const { id, css, text = '', list = [] } = item;
         // 折行处理
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text']);
@@ -76,7 +76,7 @@ class Element extends Component {
             // 基础
             case 'Link':
                 return (
-                    <a id={id} className={classNames('element', 'link', id)} style={style} href=''>
+                    <a id={id} className={classNames('element', 'link', id)} style={style}>
                         {this.props.children}
                     </a>
                 );
@@ -249,6 +249,19 @@ class Element extends Component {
         } = this.props;
         const { id, css = {} } = item;
         const active = item.id == activeKey;
+        // 根节点
+        if (item.element === 'Root') {
+            return (
+                <div
+                    id='root'
+                    className={classNames('root', { active })}
+                    style={css}
+                    onClick={this.selectNode.bind(this, 'root')}
+                >
+                    {this.props.children}
+                </div>
+            );
+        }
 
         return (
             <div

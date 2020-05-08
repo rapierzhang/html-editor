@@ -209,6 +209,12 @@ const renderHtml = htmlTree => {
 const renderElement = data => {
     const { id, element, children } = data;
     switch (element) {
+        case 'Root':
+            return `
+                <div id='${id}' class='root ${id}' ${renderAttribute(data)}>
+                    ${children && renderHtml(children)}
+                </div>
+                `;
         case 'View':
             return `
                 <div id='${id}' class='element view ${id}' ${renderAttribute(data)}>
@@ -422,7 +428,12 @@ const defaultCss = () => {
     max-width: 100%;
 }
 
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     background: #f5f5f5;
 }
 
@@ -435,10 +446,18 @@ body {
     }
 }
 
+.container {
+    height: 100%;
+}
+
 .element {
     width: 100%;
     height: 50px;
     vertical-align: middle;
+}
+
+.root {
+    height: 100%;
 }
 
 .swiper-image {

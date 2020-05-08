@@ -113,7 +113,7 @@ const componentList = [
 ];
 
 // 可嵌套组件
-const containerElement = ['View', 'ScrollView', 'Form', 'Upload', 'Link'];
+const containerElement = ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Link'];
 
 class Editor extends Component {
     constructor(props) {
@@ -167,6 +167,7 @@ class Editor extends Component {
             if (!this.props.editorInfo.title) this.props.dispatch(titleSet('未命名页面'));
         }
     }
+
     // 标题更改
     titleChange(e) {
         const title = e.target.value;
@@ -262,10 +263,7 @@ class Editor extends Component {
                 return;
             }
         } else {
-            newElements = {
-                ...elements,
-                [id]: defaultEle,
-            };
+            newElements = utils.deepInsert(elements, 'root', { [id]: defaultEle });
         }
         this.props.dispatch(indexIncrement()); // 索引自增
         this.props.dispatch(elementsUpdate(newElements)); // 元素更新
@@ -371,7 +369,7 @@ class Editor extends Component {
 
     render() {
         const {
-            editorInfo: { title, desc, elements, activeEle },
+            editorInfo: { title, desc, elements, activeEle, activeKey },
         } = this.props;
         const { isDown, dragName, movingX, movingY, deleteShow } = this.state;
 
