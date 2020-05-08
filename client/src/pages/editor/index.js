@@ -24,7 +24,8 @@ import {
     isEditSet,
 } from './actions';
 
-const eleList = [
+// 模板列表
+const componentList = [
     {
         label: '视图容器',
         list: [
@@ -45,6 +46,10 @@ const eleList = [
     {
         label: '基础内容',
         list: [
+            {
+                title: '跳转',
+                component: 'Link',
+            },
             {
                 title: '文字',
                 component: 'Text',
@@ -107,7 +112,8 @@ const eleList = [
     },
 ];
 
-const containerElement = ['View', 'ScrollView', 'Form', 'Upload'];
+// 可嵌套组件
+const containerElement = ['View', 'ScrollView', 'Form', 'Upload', 'Link'];
 
 class Editor extends Component {
     constructor(props) {
@@ -412,7 +418,7 @@ class Editor extends Component {
                 <div className='content'>
                     {/*------ 元素列表 ------*/}
                     <div className='ele-list'>
-                        {eleList.map((item, idx) => (
+                        {componentList.map((item, idx) => (
                             <div key={`item-${idx}`} className='list-card'>
                                 <div className='list-label'>{item.label}</div>
                                 {item.list.map((row, i) => (

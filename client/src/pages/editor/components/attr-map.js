@@ -13,6 +13,26 @@ export const attrList = (that, item) => {
                 element: 'imageList',
             },
         ],
+
+        Link: [
+            {
+                text: '跳转链接',
+                element: 'input',
+                value: 'href',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'href'),
+                },
+            },
+            {
+                text: '跳转去向',
+                element: 'select',
+                list: ['_self', '_blank'],
+                value: '_self',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'target'),
+                },
+            },
+        ],
         Text: [
             {
                 text: '文字',

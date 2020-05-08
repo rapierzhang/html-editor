@@ -74,6 +74,12 @@ class Element extends Component {
                     </div>
                 );
             // 基础
+            case 'Link':
+                return (
+                    <a id={id} className={classNames('element', 'link', id)} style={style} href=''>
+                        {this.props.children}
+                    </a>
+                );
             case 'Text':
                 return (
                     <span id={id} className={classNames('element', 'text', id)} style={style}>

@@ -228,11 +228,17 @@ const renderElement = data => {
                         ${data.list.map(
                             url => `<div class='swiper-slide'>
                                         <img class='swiper-image' src='${url}'/>
-                                    </div>`
+                                    </div>`,
                         )}
                     </div>
                     <div class='swiper-pagination'></div>
                 </div>
+                `;
+        case 'Link':
+            return `
+                <a id='${id}' class='element link ${id}' ${renderAttribute(data)}>
+                    ${children && renderHtml(children)}
+                </a>
                 `;
         case 'Text':
             const textList = data.text.split('\n');
@@ -299,7 +305,11 @@ const renderElement = data => {
 const renderAttribute = data => {
     let str = '';
     for (let k in data) {
-        if (['key', 'element', 'children', 'css', 'style', 'text', 'list', 'bindJs', 'defaultJs', 'extraJs'].indexOf(k) > -1) {
+        if (
+            ['key', 'element', 'children', 'css', 'style', 'text', 'list', 'bindJs', 'defaultJs', 'extraJs'].indexOf(
+                k,
+            ) > -1
+        ) {
             continue;
         } else if (data[k] === true) {
             str += k;
