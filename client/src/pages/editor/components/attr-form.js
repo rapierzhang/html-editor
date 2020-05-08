@@ -422,7 +422,10 @@ class ArrtForm extends Component {
                                     </div>
                                 )}
                                 {/*------ 背景 ------*/}
-                                {utils.has(['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Submit'], activeEle.element) && (
+                                {utils.has(
+                                    ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Submit'],
+                                    activeEle.element,
+                                ) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>背景</div>
                                         <div className='card-content'>
@@ -464,6 +467,14 @@ class ArrtForm extends Component {
                                                     type='text'
                                                     onChange={this.onStyleChange.bind(this, 'color')}
                                                     value={css.color}
+                                                />
+                                            </div>
+                                            <div className='row'>
+                                                <span>粗细: </span>
+                                                <input
+                                                    type='text'
+                                                    onChange={this.onStyleChange.bind(this, 'fontWeight')}
+                                                    value={css.fontWeight}
                                                 />
                                             </div>
                                             <div className='row'>

@@ -157,6 +157,7 @@ const writeJs = (dirPath, htmlTree) => {
     const jsDirExists = fs.existsSync(jsDirPath);
     if (!jsDirExists) fs.mkdirSync(jsDirPath);
     let jsContext = '';
+    jsContext += defaultJavascript;
     const jsArr = utils.objToArr(htmlTree);
     jsArr.forEach(item => {
         const { id, bindJs, defaultJs, extraJs } = item;
@@ -433,6 +434,7 @@ const defaultHtml = (pid, title = '', text = '') => {
         <div class="container">
             ${text}
         </div>
+        <div id="toast" class="toast"></div>
         <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/js/swiper.min.js"></script>
         <script src="./${pid}/js/index.js"></script>
@@ -470,6 +472,19 @@ body {
 
 .container {
     height: 100%;
+}
+
+.toast {
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: none;
 }
 
 .element {
@@ -546,3 +561,13 @@ body {
 }
 `;
 };
+
+// 默认js
+const defaultJavascript = `
+    window.toast = msg => {
+        const $toast = $('#toast');
+        $toast.text(msg);
+        $toast.show();
+        setTimeout(() => $toast.hide(), 3000);
+    }
+`;
