@@ -207,7 +207,7 @@ const renderHtml = htmlTree => {
 };
 
 const renderElement = data => {
-    const { id, element, children } = data;
+    const { id, element, children, name, label } = data;
     switch (element) {
         case 'Root':
             return `
@@ -269,8 +269,13 @@ const renderElement = data => {
             return `
                 <textarea id='${id}' class='element textarea ${id}' ${renderAttribute(data)} ></textarea>
                 `;
-        case 'CheckBox':
-            return ``;
+        case 'Checkbox':
+            return `
+                <span class='element checkbox ${id}' ${renderAttribute(data)}>
+                    <input id="${id}" type='checkbox' name="${name}" value="${label}" />
+                    <span class='checkbox-label'>${label}</span>
+                </span>
+            `;
         case 'Radio':
             return ``;
         case 'Select':
@@ -483,6 +488,19 @@ body {
 
 .textarea {
     resize: none;
+}
+
+.checkbox {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.checkbox-label {
+    margin-left: 5px; /*^^^^^^*/
 }
 
 .submit {

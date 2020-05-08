@@ -88,6 +88,19 @@
             resize: none;
         }
 
+        &.checkbox {
+            width: auto;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            .checkbox-label {
+                margin-left: 5px;
+            }
+        }
+
         &.submit {
             display: flex;
             flex-direction: row;
