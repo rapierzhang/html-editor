@@ -233,9 +233,10 @@ const renderElement = data => {
                 <div id='${id}' class='element swiper swiper-container ${id}' ${renderAttribute(data)}>
                     <div class='swiper-wrapper'>
                         ${data.list.map(
-                            url => `<div class='swiper-slide'>
-                                        <img class='swiper-image' src='${url}'/>
-                                    </div>`,
+                            url =>
+                                `<div class='swiper-slide'>
+                                     <img class='swiper-image' src='${url}'/>
+                                 </div>`,
                         )}
                     </div>
                     <div class='swiper-pagination'></div>
@@ -274,15 +275,15 @@ const renderElement = data => {
                 `;
         case 'Radio':
             return `
-                <span class='element radio ${id}' ${renderAttribute(data)}>
-                    <input id="${id}" type='radio' name="${name}" value="${label}" />
+                <span class='element radio ${id}'>
+                    <input id="${id}" type='radio' value="${label}" ${renderAttribute(data)} />
                     <span class='radio-label'>${label}</span>
                 </span>
             `;
         case 'Checkbox':
             return `
-                <span class='element checkbox ${id}' ${renderAttribute(data)}>
-                    <input id="${id}" type='checkbox' name="${name}" value="${label}" />
+                <span class='element checkbox ${id}'>
+                    <input id="${id}" type='checkbox' value="${label}" ${renderAttribute(data)} />
                     <span class='checkbox-label'>${label}</span>
                 </span>
             `;
@@ -334,6 +335,7 @@ const renderAttribute = data => {
                 'style',
                 'text',
                 'list',
+                'label',
                 'bindJs',
                 'defaultJs',
                 'extraJs',
@@ -345,7 +347,7 @@ const renderAttribute = data => {
         } else if (data[k] === false) {
             continue;
         } else {
-            str += `${utils.toLine(k)}='${data[k]}'`;
+            str += `${utils.toLine(k)}='${data[k].replace(/'/g, '"')}'`;
         }
     }
     return str;
@@ -358,20 +360,19 @@ const writeCss = (dirPath, htmlTree) => {
     if (!cssDirExists) fs.mkdirSync(cssDirPath);
     let cssContext = defaultCss();
     const cssArr = utils.objToArr(htmlTree);
-    cssArr.forEach(item => {
+    cssArr.forEach(({ css, id }) => {
         let cssContent = '';
-        const { css } = item;
         if (css) {
             const cssLen = Object.keys(css).length;
             let cssRowIdx = 0;
             for (let key in css) {
-                cssContent += `${utils.toLine(key)}: ${pxToRem(css[key])};`;
+                cssContent += `${utils.toLine(key)}: ${css[key]};`;
                 cssRowIdx++;
                 if (cssRowIdx < cssLen) {
                     cssContent += ``;
                 }
             }
-            const cssItem = `.${item.id} {${cssContent}}`;
+            const cssItem = `.${id} {${cssContent}}`;
             cssContext += cssItem;
         }
     });
@@ -491,6 +492,7 @@ body {
     width: 100%;
     height: 50px;
     vertical-align: middle;
+    font-size: 12px;
 }
 
 .root {

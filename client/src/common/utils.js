@@ -253,7 +253,20 @@ const utils = {
                         const child = formEle.find('[name]');
                         let data = {};
                         [...child].forEach(item => {
-                            data[item.name] = item.value;
+                            const { type, name, value, checked } = item;
+                            if (type === 'radio') {
+                                if (checked) data[name] = value;
+                            } else if (type === 'checkbox') {
+                                if (checked) {
+                                    if (data[name]) {
+                                        data[name].push(value);
+                                    } else {
+                                        data[name] = [value];
+                                    }
+                                }
+                            } else {
+                                data[name] = value;
+                            }
                         });
                         if (contentType === 'application/json') {
                             data = JSON.stringify(data);
