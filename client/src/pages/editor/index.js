@@ -430,7 +430,7 @@ class Editor extends Component {
                                         title={row.title}
                                         onMouseDown={this.msDown.bind(this, row.component)}
                                     >
-                                        {row.component}
+                                        {row.component} {row.title}
                                     </div>
                                 ))}
                             </div>

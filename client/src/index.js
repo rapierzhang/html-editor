@@ -5,8 +5,7 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { logger }  from 'redux-logger';
-import './public/css/base.scss';
-import './public/font/iconfont.css';
+import './style/common.scss';
 
 import RootRouter from './router/index';
 import reducers from './reducers/index';

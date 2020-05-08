@@ -258,7 +258,7 @@ const renderElement = data => {
                 </span>`;
         case 'Icon':
             return `<i id='${id}' class='element icon ${id}'>${data.text}</i>`;
-            
+
         case 'Form':
             return `
                 <div id='${id}' class='element form ${id}' ${renderAttribute(data)}>
