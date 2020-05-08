@@ -240,6 +240,7 @@ const renderElement = data => {
                     <div class='swiper-pagination'></div>
                 </div>
                 `;
+
         case 'Link':
             return `
                 <a id='${id}' class='element link ${id}' ${renderAttribute(data)}>
@@ -257,6 +258,7 @@ const renderElement = data => {
                 </span>`;
         case 'Icon':
             return `<i id='${id}' class='element icon ${id}'>${data.text}</i>`;
+            
         case 'Form':
             return `
                 <div id='${id}' class='element form ${id}' ${renderAttribute(data)}>
@@ -269,6 +271,13 @@ const renderElement = data => {
             return `
                 <textarea id='${id}' class='element textarea ${id}' ${renderAttribute(data)} ></textarea>
                 `;
+        case 'Radio':
+            return `
+                <span class='element radio ${id}' ${renderAttribute(data)}>
+                    <input id="${id}" type='radio' name="${name}" value="${label}" />
+                    <span class='radio-label'>${label}</span>
+                </span>
+            `;
         case 'Checkbox':
             return `
                 <span class='element checkbox ${id}' ${renderAttribute(data)}>
@@ -276,8 +285,6 @@ const renderElement = data => {
                     <span class='checkbox-label'>${label}</span>
                 </span>
             `;
-        case 'Radio':
-            return ``;
         case 'Select':
             return ``;
         case 'Upload':
@@ -285,7 +292,7 @@ const renderElement = data => {
                 <div id='${id}' class='element upload ${id}' ${renderAttribute(data)}>
                     ${children && renderHtml(children)}
                     <input id='${id}-file' type='file'>
-                    <input id='${id}-url' type='text' name='img-url' >
+                    <input id='${id}-url' type='text' name='${name}' >
                 </div>
             `;
         case 'Submit':
@@ -317,9 +324,19 @@ const renderAttribute = data => {
     let str = '';
     for (let k in data) {
         if (
-            ['key', 'element', 'children', 'css', 'style', 'text', 'list', 'bindJs', 'defaultJs', 'extraJs'].indexOf(
-                k,
-            ) > -1
+            [
+                'id',
+                'key',
+                'element',
+                'children',
+                'css',
+                'style',
+                'text',
+                'list',
+                'bindJs',
+                'defaultJs',
+                'extraJs',
+            ].indexOf(k) > -1
         ) {
             continue;
         } else if (data[k] === true) {
@@ -500,6 +517,19 @@ body {
 }
 
 .checkbox-label {
+    margin-left: 5px; /*^^^^^^*/
+}
+
+.radio {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.radio-label {
     margin-left: 5px; /*^^^^^^*/
 }
 

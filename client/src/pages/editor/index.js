@@ -76,6 +76,10 @@ const componentList = [
                 component: 'Textarea',
             },
             {
+                title: '单项选择',
+                component: 'Radio',
+            },
+            {
                 title: '多项选择',
                 component: 'Checkbox',
             },

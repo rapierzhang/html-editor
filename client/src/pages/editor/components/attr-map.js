@@ -7,7 +7,7 @@ const fetchHeaderList = ['application/json', 'application/x-www-form-urlencoded'
 
 export const attrList = (that, item) => {
     const attrMap = {
-        Swiper:[
+        Swiper: [
             {
                 text: '路径',
                 element: 'imageList',
@@ -158,11 +158,31 @@ export const attrList = (that, item) => {
                 func: {
                     onChange: that.onAttrChange.bind(that, 'label'),
                 },
-            }
+            },
+        ],
+        Radio: [
+            {
+                text: 'name',
+                element: 'input',
+                inputType: 'text',
+                value: 'name',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'name'),
+                },
+            },
+            {
+                text: 'label',
+                element: 'input',
+                inputType: 'text',
+                value: 'label',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'label'),
+                },
+            },
         ],
         Upload: [
             {
-                text: 'url',
+                text: '上传路径',
                 element: 'input',
                 inputType: 'text',
                 value: 'url',
@@ -171,12 +191,21 @@ export const attrList = (that, item) => {
                 },
             },
             {
-                text: 'fileName',
+                text: '上传字段名',
                 element: 'input',
                 inputType: 'text',
                 value: 'fileName',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'fileName'),
+                },
+            },
+            {
+                text: 'name',
+                element: 'input',
+                inputType: 'text',
+                value: 'name',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'name'),
                 },
             },
             {

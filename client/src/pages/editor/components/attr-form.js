@@ -422,7 +422,7 @@ class ArrtForm extends Component {
                                     </div>
                                 )}
                                 {/*------ 背景 ------*/}
-                                {utils.has(['Root', 'View', 'ScrollView', 'Form', 'Submit'], activeEle.element) && (
+                                {utils.has(['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Submit'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>背景</div>
                                         <div className='card-content'>

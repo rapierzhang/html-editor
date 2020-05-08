@@ -256,7 +256,7 @@ const utils = {
                             data[item.name] = item.value;
                         });
                         if (contentType === 'application/json') {
-                            data = JSON.stringfy(data);
+                            data = JSON.stringify(data);
                         }
                         $.ajax({
                             url,

@@ -101,6 +101,19 @@
             }
         }
 
+        &.radio {
+            width: auto;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            .radio-label {
+                margin-left: 5px;
+            }
+        }
+
         &.submit {
             display: flex;
             flex-direction: row;

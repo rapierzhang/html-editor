@@ -119,6 +119,13 @@ class Element extends Component {
                         <span className='checkbox-label'>{label}</span>
                     </span>
                 );
+            case 'Radio':
+                return (
+                    <span className={classNames('element', 'radio', id)} style={style}>
+                        <input id={id} type='radio' name={name} value={label} />
+                        <span className='radio-label'>{label}</span>
+                    </span>
+                );
             case 'Select':
                 return <div id={id} className={classNames('element', 'select', id)} style={style}></div>;
             case 'Upload':
