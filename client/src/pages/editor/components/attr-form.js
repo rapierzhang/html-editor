@@ -609,10 +609,11 @@ class ArrtForm extends Component {
                                     <div className='card-title'>扩展</div>
                                     <div className='card-content'>
                                         <textarea
+                                            className='extra'
                                             name=''
                                             id=''
-                                            cols='30'
-                                            rows='10'
+                                            cols='50'
+                                            rows='30'
                                             onChange={this.onStyleChange.bind(this, 'extend')}
                                         />
                                     </div>

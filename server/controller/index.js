@@ -446,6 +446,10 @@ body {
     height: 100%;
 }
 
+.link {
+    color: #000;
+}
+
 .text {
     display: inline-block;
 }

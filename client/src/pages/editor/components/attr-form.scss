@@ -111,6 +111,7 @@
                     width: 198px;
                     height: 80px;
                     border: 1px solid #d9d9d9;
+                    resize: none;
                 }
 
                 .size-text {
@@ -123,6 +124,14 @@
                     width: 40px;
                     margin-right: 10px;
                 }
+            }
+
+            .extra {
+                width: 360px;
+                height: 200px;
+                resize: none;
+                border: 1px solid#d9d9d9;
+                padding: 10px;
             }
 
             .del-ele {
