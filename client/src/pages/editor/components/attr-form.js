@@ -87,6 +87,7 @@ class ArrtForm extends Component {
             treeLeft: 0,
             treeRight: 0,
         };
+        this.timer = {};
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -173,7 +174,7 @@ class ArrtForm extends Component {
     onDragTree(ele, evt) {
         const firstTime = new Date().getTime();
         this.treePosition();
-        this.setState({ isDown: true });
+        this.timer = setTimeout(() => this.setState({ isDown: true }), 300);
 
         // 拖拽中
         window.onmousemove = e => {
@@ -189,6 +190,7 @@ class ArrtForm extends Component {
             const lastTime = new Date().getTime();
             // 解决onMousedown和onClick冲突
             if (lastTime - firstTime < 300) {
+                clearTimeout(this.timer);
                 this.selectNode(ele);
                 this.setState({ isDown: false });
             } else {
