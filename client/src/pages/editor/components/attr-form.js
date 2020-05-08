@@ -314,7 +314,7 @@ class ArrtForm extends Component {
                                                     <input
                                                         type='text'
                                                         onChange={this.onStyleChange.bind(this, row)}
-                                                        value={activeEle.css[row]}
+                                                        value={css[row]}
                                                     />
                                                 </div>
                                             ))}
@@ -387,10 +387,10 @@ class ArrtForm extends Component {
                                                 <span>启用</span>
                                                 <Switch
                                                     onChange={this.onFlexSwitch.bind(this)}
-                                                    value={activeEle.css.display == 'flex'}
+                                                    value={css.display == 'flex'}
                                                 />
                                             </div>
-                                            {activeEle.css.display == 'flex' && (
+                                            {css.display == 'flex' && (
                                                 <div>
                                                     <div className='row'>
                                                         <span>主轴</span>
