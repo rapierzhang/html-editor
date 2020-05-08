@@ -248,7 +248,7 @@ const renderElement = data => {
                 `;
         case 'Text':
             const textList = data.text.split('\n');
-            return textList.length > 0
+            return textList.length > 1
                 ? `<span id='${id}' class='element text ${id}'>
                     ${textList.map((row, idx) => `<span class='text-row'>${row}</span>`).join('')}
                 </span>`

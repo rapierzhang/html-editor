@@ -70,7 +70,7 @@ class AttrList extends Component {
         return attrList(this, activeEle).map((item, idx) => (
             <div key={`row-${idx}`} className='row'>
                 <span>{item.text}</span>
-                {item.element === 'input' && <input type={item.type} value={activeEle[item.value]} {...item.func} />}
+                {item.element === 'input' && <input type={item.inputType} value={activeEle[item.value]} {...item.func} />}
                 {item.element === 'textarea' && <textarea value={activeEle[item.value]} {...item.func} />}
                 {item.element === 'switch' && <Switch value={activeEle[item.value]} {...item.func} />}
                 {item.element === 'select' && (

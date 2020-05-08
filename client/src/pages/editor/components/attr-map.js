@@ -48,7 +48,7 @@ export const attrList = (that, item) => {
             {
                 text: '接口路径',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'url',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'url'),
@@ -77,7 +77,7 @@ export const attrList = (that, item) => {
             {
                 text: 'name',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'name',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'name'),
@@ -95,7 +95,7 @@ export const attrList = (that, item) => {
             {
                 text: 'placeholder',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'placeholder',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'placeholder'),
@@ -104,7 +104,7 @@ export const attrList = (that, item) => {
             {
                 text: 'maxLength',
                 element: 'input',
-                type: 'number',
+                inputType: 'number',
                 value: 'maxLength',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'maxLength'),
@@ -115,7 +115,7 @@ export const attrList = (that, item) => {
             {
                 text: 'name',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'name',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'name'),
@@ -124,7 +124,7 @@ export const attrList = (that, item) => {
             {
                 text: 'placeholder',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'placeholder',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'placeholder'),
@@ -133,18 +133,38 @@ export const attrList = (that, item) => {
             {
                 text: 'maxLength',
                 element: 'input',
-                type: 'number',
+                inputType: 'number',
                 value: 'maxLength',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'maxLength'),
                 },
             },
         ],
+        Checkbox: [
+            {
+                text: 'name',
+                element: 'input',
+                inputType: 'text',
+                value: 'name',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'name'),
+                },
+            },
+            {
+                text: 'label',
+                element: 'input',
+                inputType: 'text',
+                value: 'label',
+                func: {
+                    onChange: that.onAttrChange.bind(that, 'label'),
+                },
+            }
+        ],
         Upload: [
             {
                 text: 'url',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'url',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'url'),
@@ -153,7 +173,7 @@ export const attrList = (that, item) => {
             {
                 text: 'fileName',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'fileName',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'fileName'),
@@ -201,7 +221,7 @@ export const attrList = (that, item) => {
             {
                 text: '路径',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'src',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'src'),
@@ -210,7 +230,7 @@ export const attrList = (that, item) => {
             {
                 text: '封面图',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'poster',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'poster'),
@@ -253,7 +273,7 @@ export const attrList = (that, item) => {
             {
                 text: '路径',
                 element: 'input',
-                type: 'text',
+                inputType: 'text',
                 value: 'src',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'src'),
@@ -305,7 +325,7 @@ export const cssList = (that, item) => {
                     {
                         text: 'name',
                         element: 'input',
-                        type: 'text',
+                        inputType: 'text',
                         value: 'name',
                         func: {
                             onChange: that.onAttrChange.bind(that, 'name'),

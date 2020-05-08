@@ -40,7 +40,7 @@ class Element extends Component {
     }
 
     renderElement(item) {
-        const { id, css, text = '', list = [] } = item;
+        const { id, css, text = '', list = [], label } = item;
         // 折行处理
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text']);
@@ -112,11 +112,18 @@ class Element extends Component {
                         {...attr}
                     ></textarea>
                 );
-            case 'CheckBox':
+            case 'Checkbox':
                 return (
-                    <div id={id} className={classNames('element', 'checkbox', id)} style={style}>
-                        checkbox
-                    </div>
+                    <span>
+                        <input
+                            id={id}
+                            className={classNames('element', 'checkbox', id)}
+                            style={style}
+                            type='checkbox'
+                            value='label'
+                        />
+                        <span>{label}</span>
+                    </span>
                 );
             case 'Select':
                 return <div id={id} className={classNames('element', 'select', id)} style={style}></div>;
