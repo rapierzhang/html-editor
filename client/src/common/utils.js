@@ -242,6 +242,39 @@ const utils = {
                 });
                 `;
                 break;
+            case 'Upload':
+                const underLineId = utils.lineToUnderLine(id);
+                js = `
+                    const ${underLineId}_ele = $('#${id}');
+                    const ${underLineId}_file_ele = $('#${id}-file');
+                    const ${underLineId}_url_ele = $('#${id}-url');
+                    
+                    ${underLineId}_ele.on('click', () => ${underLineId}_file_ele[0].click());
+                    
+                    ${underLineId}_file_ele.on('change', (e) => {
+                        const url = ${underLineId}_ele.attr('url');
+                        const fileName = ${underLineId}_ele.attr('file-name');
+                        const formData = new FormData();
+                        formData.append(fileName, e.target.files[0]);
+                        $.ajax({
+                            type: 'post',
+                            url,
+                            data: formData,
+                            dataType: 'json',
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                        })
+                            .then(res => {
+                                ${underLineId}_url_ele.val(res.data.url);
+                                eval(${underLineId}_ele.attr('on-succ'));
+                            })
+                            .catch(err => {
+                                eval(${underLineId}_ele.attr('on-err'));
+                            });
+                    });
+                `;
+                break;
             case 'Submit':
                 const { formId } = data;
                 js = `
@@ -284,39 +317,6 @@ const utils = {
                         .catch(err => {
                             console.error('error', err);
                         });
-                    });
-                `;
-                break;
-            case 'Upload':
-                const underLineId = utils.lineToUnderLine(id);
-                js = `
-                    const ${underLineId}_ele = $('#${id}');
-                    const ${underLineId}_file_ele = $('#${id}-file');
-                    const ${underLineId}_url_ele = $('#${id}-url');
-                    
-                    ${underLineId}_ele.on('click', () => ${underLineId}_file_ele[0].click());
-                    
-                    ${underLineId}_file_ele.on('change', (e) => {
-                        const url = ${underLineId}_ele.attr('url');
-                        const fileName = ${underLineId}_ele.attr('file-name');
-                        const formData = new FormData();
-                        formData.append(fileName, e.target.files[0]);
-                        $.ajax({
-                            type: 'post',
-                            url,
-                            data: formData,
-                            dataType: 'json',
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                        })
-                            .then(res => {
-                                ${underLineId}_url_ele.val(res.data.url);
-                                eval(${underLineId}_ele.attr('on-succ'));
-                            })
-                            .catch(err => {
-                                eval(${underLineId}_ele.attr('on-err'));
-                            });
                     });
                 `;
                 break;

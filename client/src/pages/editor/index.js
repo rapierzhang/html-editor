@@ -30,11 +30,11 @@ const componentList = [
         label: '视图容器',
         list: [
             {
-                title: '容器',
+                title: '容器 □',
                 component: 'View',
             },
             {
-                title: '滚动容器',
+                title: '滚动容器 □',
                 component: 'ScrollView',
             },
             {
@@ -47,7 +47,7 @@ const componentList = [
         label: '基础内容',
         list: [
             {
-                title: '跳转',
+                title: '跳转 □',
                 component: 'Link',
             },
             {
@@ -64,7 +64,7 @@ const componentList = [
         label: '表单组件',
         list: [
             {
-                title: '表单',
+                title: '表单 □',
                 component: 'Form',
             },
             {
@@ -88,7 +88,7 @@ const componentList = [
                 component: 'Select',
             },
             {
-                title: '文件上传',
+                title: '文件上传 □',
                 component: 'Upload',
             },
             {

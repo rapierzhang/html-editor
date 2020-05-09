@@ -83,11 +83,13 @@ class Element extends Component {
             case 'Text':
                 return (
                     <span id={id} className={classNames('element', 'text', id)} style={style}>
-                        {textList.map((row, idx) => (
-                            <span key={`row-${idx}`} className='text-row'>
-                                {row}
-                            </span>
-                        ))}
+                        {textList.map((row, idx) =>
+                            textList.length > 1 ? (
+                                <span key={`row-${idx}`} className='text-row'>
+                                    {row}
+                                </span>
+                            ) : row,
+                        )}
                     </span>
                 );
             case 'Icon':
