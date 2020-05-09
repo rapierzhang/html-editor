@@ -88,7 +88,9 @@ class Element extends Component {
                                 <span key={`row-${idx}`} className='text-row'>
                                     {row}
                                 </span>
-                            ) : row,
+                            ) : (
+                                row
+                            ),
                         )}
                     </span>
                 );
@@ -150,6 +152,17 @@ class Element extends Component {
             case 'Image':
                 return <img id={id} className={classNames('element', 'image', id)} style={style} {...attr} />;
 
+            // 其他
+            /*case 'Dialog':
+                return (
+                    <div
+                        id={id}
+                        className={classNames('element', 'h5-dialog', id)}
+                        style={{ width: ctxWidth, height: ctxHeight }}
+                    >
+                        {this.props.children}
+                    </div>
+                );*/
             default:
                 return <div>default</div>;
         }
@@ -255,7 +268,7 @@ class Element extends Component {
     render() {
         const {
             item,
-            editorInfo: { activeKey },
+            editorInfo: { activeKey, canvasPosition: { ctxWidth, ctxHeight }, dialogMap },
         } = this.props;
         const { id, css = {}, element } = item;
         const active = id == activeKey;
@@ -273,6 +286,19 @@ class Element extends Component {
                     {this.props.children}
                 </div>
             );
+        }
+
+        if (element === 'Dialog') {
+            return (
+                <div
+                    id={id}
+                    className={classNames('element', 'h5-dialog', id, { active, none: !dialogMap[id] })}
+                    style={{ width: ctxWidth, height: ctxHeight }}
+                    onClick={this.selectNode.bind(this, id)}
+                >
+                    {this.props.children}
+                </div>
+            )
         }
 
         return (

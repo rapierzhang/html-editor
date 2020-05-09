@@ -127,5 +127,28 @@
             align-items: center;
             cursor: pointer;
         }
+
+    }
+}
+
+.h5-dialog {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9990;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &.active {
+        outline: 1px dashed #ea413c;
+    }
+
+    &.none {
+        display: none;
     }
 }

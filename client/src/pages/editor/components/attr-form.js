@@ -5,7 +5,15 @@ import classNames from 'classnames';
 import { Select, Switch } from '../../../component';
 import { AttrList } from './index';
 import './attr-form.scss';
-import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
+import {
+    activeKeySet,
+    attributeLoad,
+    attributeUpdate,
+    elementSelect,
+    elementsUpdate,
+    isEditSet,
+    dialogHandle,
+} from '../actions';
 import Upload from '../../../component/common/upload';
 
 const positionList = [
@@ -150,6 +158,10 @@ class ArrtForm extends Component {
         this.props.dispatch(isEditSet(false));
     }
 
+    dialogHandle(id, state) {
+        this.props.dispatch(dialogHandle(id, state));
+    }
+
     // 渲染树结构
     renderTree(elements, activeKey, floor = 0) {
         const arr = Object.values(elements);
@@ -162,7 +174,7 @@ class ArrtForm extends Component {
                     style={{ paddingLeft: `${floor * 10}px` }}
                     onMouseDown={this.onDragTree.bind(this, ele)}
                 >
-                    |- {ele.element}
+                    <span>|- {ele.element}</span>
                 </div>
             );
             if (ele.children) {
@@ -277,8 +289,8 @@ class ArrtForm extends Component {
                                 className={classNames('nav-item', { actived: navIndex == 0 })}
                                 onClick={this.switchNav.bind(this, 0)}
                             >
-                                    属性
-                                </span>
+                                属性
+                            </span>
                             <span
                                 className={classNames('nav-item', { actived: navIndex == 1 })}
                                 onClick={this.switchNav.bind(this, 1)}
@@ -294,8 +306,12 @@ class ArrtForm extends Component {
                             <div className='attr-box'>
                                 <div className='attr-card'>
                                     <div className='card-content'>
+                                        <div className='row'>id: {activeEle.id}</div>
                                         <div className='row'>
-                                            id: {activeEle.id}
+                                            <span>展示</span>
+                                            {activeEle.element === 'Dialog' && (
+                                                <Switch onChange={this.dialogHandle.bind(this, activeEle.id)} />
+                                            )}
                                         </div>
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />

@@ -10,9 +10,10 @@ import {
     CANVAS_POSITION_SET,
     TITLE_SET,
     DESC_SET,
+    DIALOG_HANDLE,
 } from './action-types';
 import { fetch } from '../../common';
-import utils from '../../common/utils'
+import utils from '../../common/utils';
 
 // 设置pid
 export const pidSet = pid => dispatch => {
@@ -154,4 +155,13 @@ export const htmlRelease = params => {
         method: 'POST',
         params,
     }).then(res => res.data);
-}
+};
+
+// dialog控制
+export const dialogHandle = (id, state) => dispatch => {
+    dispatch({
+        type: DIALOG_HANDLE,
+        id,
+        state,
+    });
+};

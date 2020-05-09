@@ -7,7 +7,10 @@ import {
     ATTRIBUTE_LOAD,
     CANVAS_POSITION_SET,
     PID_SET,
-    ATTRIBUTE_UPDATE, TITLE_SET, DESC_SET,
+    ATTRIBUTE_UPDATE,
+    TITLE_SET,
+    DESC_SET,
+    DIALOG_HANDLE,
 } from './action-types';
 
 const editorInfo = {
@@ -30,12 +33,13 @@ const editorInfo = {
         ctxWidth: 0,
     },
     elements: {
-        'root': {
+        root: {
             id: 'root',
             element: 'Root',
-            children:[],
-        }
+            children: [],
+        },
     },
+    dialogMap: {},
 };
 
 export default (state = editorInfo, action) => {
@@ -67,9 +71,11 @@ export default (state = editorInfo, action) => {
         case CANVAS_POSITION_SET:
             return { ...state, canvasPosition: action.canvasPosition };
         case TITLE_SET:
-            return { ...state, title: action.title }
+            return { ...state, title: action.title };
         case DESC_SET:
-            return {...state, desc: action.desc}
+            return { ...state, desc: action.desc };
+        case DIALOG_HANDLE:
+            return { ...state, dialogMap: { [action.id]: action.state } };
         default:
             return state;
     }

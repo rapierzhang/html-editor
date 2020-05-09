@@ -20,7 +20,8 @@ class Switch extends Component {
         }
     }
 
-    handleSwitch() {
+    handleSwitch(e) {
+        e.stopPropagation();
         const { status, canClick } = this.state;
         if (!canClick) return;
         if (status === 'open') {

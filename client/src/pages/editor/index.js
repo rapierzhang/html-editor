@@ -114,10 +114,19 @@ const componentList = [
             },
         ],
     },
+    {
+        label: '其他',
+        list: [
+            {
+                title: '弹窗 □',
+                component: 'Dialog',
+            },
+        ],
+    },
 ];
 
 // 可嵌套组件
-const containerElement = ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Link'];
+const containerElement = ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Link', 'Dialog'];
 
 class Editor extends Component {
     constructor(props) {

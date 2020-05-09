@@ -25,6 +25,10 @@
         height: 30px;
         line-height: 30px;
         font-size: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
 
         &.active {
             color: red;
