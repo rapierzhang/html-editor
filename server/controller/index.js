@@ -510,6 +510,8 @@ body {
 
 .text {
     display: inline-block;
+    width: auto;
+    height: auto;
 }
 
 .text-row {

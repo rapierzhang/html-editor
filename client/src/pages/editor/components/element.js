@@ -209,8 +209,8 @@ class Element extends Component {
             const movingY = e.clientY;
             const changeX = movingX - startX;
             const changeY = movingY - startY;
-            const top = boxTop + changeY;
-            const left = boxLeft + changeX;
+            const top = boxTop + changeY + 'px';
+            const left = boxLeft + changeX + 'px';
             if (movingX - halfWidth < ctxLeft) {
                 // 超出左侧
                 this.onStyleChange({ top, left: 0 });
@@ -257,10 +257,12 @@ class Element extends Component {
             item,
             editorInfo: { activeKey },
         } = this.props;
-        const { id, css = {} } = item;
-        const active = item.id == activeKey;
+        const { id, css = {}, element } = item;
+        const active = id == activeKey;
+        // 元素可以更改大小
+        const canResize = !utils.has(['Text', 'Link', 'Radio', 'Checkbox'], element);
         // 根节点
-        if (item.element === 'Root') {
+        if (element === 'Root') {
             return (
                 <div
                     id='root'
@@ -275,13 +277,13 @@ class Element extends Component {
 
         return (
             <div
-                className={classNames('ele-box', { active })}
+                className={classNames('ele-box', { active, 'can-resize': canResize })}
                 ref='box'
                 onClick={this.selectNode.bind(this, id)}
                 style={utils.cssFilter(css, true)}
             >
                 {/*------ 缩放控制点 ------*/}
-                <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
+                {canResize && <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />}
                 {/*------ 位置控制点 ------*/}
                 {utils.has(canMoveList, css.position) && (
                     <div className='ctrl-point center' onMouseDown={this.changePosition.bind(this)} />

@@ -1,8 +1,13 @@
 .ele-box {
     position: relative;
     min-width: 10px;
-    min-height: 10px;
+    min-height: 12px;
     z-index: 1;
+    display: inline-block;
+
+    &.can-resize {
+        display: block;
+    }
 
     &.active {
         z-index: 9999;
@@ -77,6 +82,8 @@
 
         &.text {
             display: inline-block;
+            width: auto;
+            height: auto;
 
             .text-row {
                 display: block;
