@@ -206,6 +206,8 @@ const utils = {
                 obj[k] = css[k];
             }
         }
+        // 解决position: fix定位问题
+        obj.position = obj.position === 'fixed' ? 'absolute' : obj.position;
         return obj;
     },
     // 过滤object

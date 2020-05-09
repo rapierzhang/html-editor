@@ -294,6 +294,9 @@ class ArrtForm extends Component {
                             <div className='attr-box'>
                                 <div className='attr-card'>
                                     <div className='card-content'>
+                                        <div className='row'>
+                                            id: {activeEle.id}
+                                        </div>
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
                                         {/*------ 删除节点 ------*/}

@@ -381,7 +381,7 @@ class Editor extends Component {
             <div className='editor'>
                 <div className='header'>
                     {/*------ 标题 ------*/}
-                    <div>
+                    <div className='title-info'>
                         <input
                             type='text'
                             className='title-input'
