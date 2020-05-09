@@ -160,28 +160,29 @@ const writeJs = (dirPath, htmlTree) => {
     jsContext += defaultJavascript;
     const jsArr = utils.objToArr(htmlTree);
     jsArr.forEach(item => {
-        const { id, bindJs, defaultJs, extraJs } = item;
-        // 绑定事件
-        if (bindJs) {
-            jsContext += `const ele${utils.delLine(id)} = $('#${id}');`;
-            bindJs.map(row => {
-                jsContext += `
-                    ele${utils.delLine(id)}.on('${row.type}', () => {
-                        ${row.func}
-                    });
-                `;
-            });
+        const { id, initJs, bindJs, bindType, defaultJs, extraJs } = item;
+        // 初始化js
+        if (initJs) {
+            jsContext += initJs;
         }
         // 默认组件js
         if (defaultJs) {
             jsContext += defaultJs;
         }
+        // 绑定事件
+        if (bindJs) {
+            jsContext += `const ele${utils.delLine(id)} = $('#${id}');`;
+            jsContext += `
+                ele${utils.delLine(id)}.on('${bindType}', () => {
+                        ${bindJs}
+                    });`;
+        }
         // 扩展js
         if (extraJs) {
-            jsContext += defaultJs;
+            jsContext += extraJs;
         }
         // 空行
-        if (bindJs || defaultJs || extraJs) {
+        if (initJs || bindJs || defaultJs || extraJs) {
             jsContext += `
 `;
         }
@@ -336,7 +337,9 @@ const renderAttribute = data => {
                 'text',
                 'list',
                 'label',
+                'initJs',
                 'bindJs',
+                'bindType',
                 'defaultJs',
                 'extraJs',
             ].indexOf(k) > -1

@@ -79,7 +79,7 @@ class AttrList extends Component {
             case 'switch':
                 return <Switch value={eleVal} {...onChange} />;
             case 'select':
-                return <Select list={selectList} value={eleVal} {...onChange} />;
+                return <Select list={selectList} value={eleVal} titleShow {...onChange} />;
             case 'image':
                 return (
                     <div className='upload-image'>

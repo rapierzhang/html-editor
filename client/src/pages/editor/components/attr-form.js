@@ -273,16 +273,14 @@ class ArrtForm extends Component {
                     <div className='attr-list'>
                         {/*------ nav ------*/}
                         <div className='nav'>
-                            {activeKey !== 'root' && (
-                                <span
-                                    className={classNames('nav-item', { actived: navIndex == 0 })}
-                                    onClick={this.switchNav.bind(this, 0)}
-                                >
+                            <span
+                                className={classNames('nav-item', { actived: navIndex == 0 })}
+                                onClick={this.switchNav.bind(this, 0)}
+                            >
                                     属性
                                 </span>
-                            )}
                             <span
-                                className={classNames('nav-item', { actived: navIndex == 1 || activeKey == 'root' })}
+                                className={classNames('nav-item', { actived: navIndex == 1 })}
                                 onClick={this.switchNav.bind(this, 1)}
                             >
                                 样式

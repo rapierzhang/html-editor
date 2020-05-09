@@ -1,5 +1,35 @@
 export const attrList = (that, item) => {
     const attrMap = {
+        Root: [
+            {
+                text: '初始化执行js',
+                type: 'textarea',
+                value: 'initJs',
+            },
+        ],
+
+        View:  [
+            {
+                text: '事件',
+                type: 'select',
+                list: [
+                    { title: '点击', value: 'click' },
+                    { title: '触摸开始', value: 'touchstart' },
+                ],
+                value: 'bindType',
+            },
+            {
+                text: '方法内容',
+                type: 'textarea',
+                value: 'bindJs',
+            },
+            {
+                text: '扩展方法',
+                type: 'textarea',
+                value: 'extraJs',
+            },
+        ],
+
         Swiper: [
             {
                 text: '图片地址',
