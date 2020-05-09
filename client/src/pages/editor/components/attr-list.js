@@ -70,13 +70,13 @@ class AttrList extends Component {
         return attrList(this, activeEle).map((item, idx) => (
             <div key={`row-${idx}`} className='row'>
                 <span>{item.text}</span>
-                {item.element === 'input' && <input type={item.inputType} value={activeEle[item.value]} {...item.func} />}
-                {item.element === 'textarea' && <textarea value={activeEle[item.value]} {...item.func} />}
-                {item.element === 'switch' && <Switch value={activeEle[item.value]} {...item.func} />}
-                {item.element === 'select' && (
-                    <Select list={item.list} value={item.value || 'inherit'} {...item.func} />
+                {item.type === 'input' && <input type={item.inputType} value={activeEle[item.value]} {...item.func} />}
+                {item.type === 'textarea' && <textarea value={activeEle[item.value]} {...item.func} />}
+                {item.type === 'switch' && <Switch value={activeEle[item.value]} {...item.func} />}
+                {item.type === 'select' && (
+                    <Select list={item.list} value={activeEle[item.value]} {...item.func} />
                 )}
-                {item.element === 'image' && (
+                {item.type === 'image' && (
                     <div className='upload-image'>
                         <input type='text' value={activeEle[item.value]} {...item.func} />
                         {/*^^^^^^*/}
@@ -91,7 +91,7 @@ class AttrList extends Component {
                         </Upload>
                     </div>
                 )}
-                {item.element === 'imageList' && (
+                {item.type === 'imageList' && (
                     <div className='image-list'>
                         {list.map((row, idx) => (
                             <div key={`item-${idx}`} className='image-item'>

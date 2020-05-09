@@ -1,23 +1,16 @@
-// 输入类型
-const inputTypeList = ['text', 'number', 'password', 'tel'];
-// 请求类型
-const fetchTypeList = ['post', 'get'];
-// 请求头部
-const fetchHeaderList = ['application/json', 'application/x-www-form-urlencoded']; // ^^^^^^
-
 export const attrList = (that, item) => {
     const attrMap = {
         Swiper: [
             {
-                text: '路径',
-                element: 'imageList',
+                text: '图片地址',
+                type: 'imageList',
             },
         ],
 
         Link: [
             {
                 text: '跳转链接',
-                element: 'input',
+                type: 'input',
                 value: 'href',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'href'),
@@ -25,9 +18,12 @@ export const attrList = (that, item) => {
             },
             {
                 text: '跳转去向',
-                element: 'select',
-                list: ['_self', '_blank'],
-                value: '_self',
+                type: 'select',
+                list: [
+                    { title: '本页面', value: '_self' },
+                    { title: '新页面', value: '_blank' },
+                ],
+                value: 'target',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'target'),
                 },
@@ -36,7 +32,7 @@ export const attrList = (that, item) => {
         Text: [
             {
                 text: '文字',
-                element: 'textarea',
+                type: 'textarea',
                 value: 'text',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'text'),
@@ -47,7 +43,7 @@ export const attrList = (that, item) => {
         Form: [
             {
                 text: '接口路径',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'url',
                 func: {
@@ -56,18 +52,18 @@ export const attrList = (that, item) => {
             },
             {
                 text: '请求类型',
-                element: 'select',
-                list: fetchTypeList,
-                value: 'post',
+                type: 'select',
+                list: ['post', 'get'],
+                value: 'fetchType',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'fetchType'),
                 },
             },
             {
                 text: '头部',
-                element: 'select',
-                list: fetchHeaderList,
-                value: 'application/json',
+                type: 'select',
+                list: ['application/json', 'application/x-www-form-urlencoded'],
+                value: 'contentType',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'contentType'),
                 },
@@ -76,7 +72,7 @@ export const attrList = (that, item) => {
         Input: [
             {
                 text: 'name',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'name',
                 func: {
@@ -85,8 +81,13 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'type',
-                element: 'select',
-                list: inputTypeList,
+                type: 'select',
+                list: [
+                    { title: '文字', value: 'text' },
+                    { title: '数字', value: 'number' },
+                    { title: '密码', value: 'password' },
+                    { title: '电话', value: 'tel' },
+                ],
                 value: 'type',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'type'),
@@ -94,7 +95,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'placeholder',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'placeholder',
                 func: {
@@ -103,7 +104,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'maxLength',
-                element: 'input',
+                type: 'input',
                 inputType: 'number',
                 value: 'maxLength',
                 func: {
@@ -114,7 +115,7 @@ export const attrList = (that, item) => {
         Textarea: [
             {
                 text: 'name',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'name',
                 func: {
@@ -123,7 +124,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'placeholder',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'placeholder',
                 func: {
@@ -132,7 +133,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'maxLength',
-                element: 'input',
+                type: 'input',
                 inputType: 'number',
                 value: 'maxLength',
                 func: {
@@ -143,7 +144,7 @@ export const attrList = (that, item) => {
         Checkbox: [
             {
                 text: 'name',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'name',
                 func: {
@@ -152,7 +153,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'label',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'label',
                 func: {
@@ -163,7 +164,7 @@ export const attrList = (that, item) => {
         Radio: [
             {
                 text: 'name',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'name',
                 func: {
@@ -172,7 +173,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'label',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'label',
                 func: {
@@ -183,7 +184,7 @@ export const attrList = (that, item) => {
         Upload: [
             {
                 text: '上传路径',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'url',
                 func: {
@@ -192,7 +193,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '上传字段名',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'fileName',
                 func: {
@@ -201,7 +202,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'name',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'name',
                 func: {
@@ -210,7 +211,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'onSucc',
-                element: 'textarea',
+                type: 'textarea',
                 value: 'onSucc',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'onSucc'),
@@ -218,7 +219,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: 'onErr',
-                element: 'textarea',
+                type: 'textarea',
                 value: 'onErr',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'onErr'),
@@ -228,7 +229,7 @@ export const attrList = (that, item) => {
         Submit: [
             {
                 text: '按钮文案',
-                element: 'input',
+                type: 'input',
                 value: 'text',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'text'),
@@ -239,7 +240,7 @@ export const attrList = (that, item) => {
         Image: [
             {
                 text: '路径',
-                element: 'image',
+                type: 'image',
                 value: 'src',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'src'),
@@ -249,7 +250,7 @@ export const attrList = (that, item) => {
         Video: [
             {
                 text: '路径',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'src',
                 func: {
@@ -258,7 +259,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '封面图',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'poster',
                 func: {
@@ -267,7 +268,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '控制条',
-                element: 'switch',
+                type: 'switch',
                 value: 'controls',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'controls'),
@@ -275,7 +276,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '循环播放',
-                element: 'switch',
+                type: 'switch',
                 value: 'loop',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'loop'),
@@ -283,7 +284,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '自动播放',
-                element: 'switch',
+                type: 'switch',
                 value: 'autoPlay',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'autoPlay'),
@@ -291,7 +292,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '静音',
-                element: 'switch',
+                type: 'switch',
                 value: 'muted',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'muted'),
@@ -301,7 +302,7 @@ export const attrList = (that, item) => {
         Audio: [
             {
                 text: '路径',
-                element: 'input',
+                type: 'input',
                 inputType: 'text',
                 value: 'src',
                 func: {
@@ -310,7 +311,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '控制条',
-                element: 'switch',
+                type: 'switch',
                 value: 'controls',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'controls'),
@@ -318,7 +319,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '循环播放',
-                element: 'switch',
+                type: 'switch',
                 value: 'loop',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'loop'),
@@ -326,7 +327,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '自动播放',
-                element: 'switch',
+                type: 'switch',
                 value: 'autoPlay',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'autoPlay'),
@@ -334,7 +335,7 @@ export const attrList = (that, item) => {
             },
             {
                 text: '静音',
-                element: 'switch',
+                type: 'switch',
                 value: 'muted',
                 func: {
                     onChange: that.onAttrChange.bind(that, 'muted'),
@@ -342,7 +343,7 @@ export const attrList = (that, item) => {
             },
         ],
     };
-    return attrMap[item.element] || [];
+    return attrMap[item.type] || [];
 };
 
 export const cssList = (that, item) => {
@@ -353,7 +354,7 @@ export const cssList = (that, item) => {
                 rows: [
                     {
                         text: 'name',
-                        element: 'input',
+                        type: 'input',
                         inputType: 'text',
                         value: 'name',
                         func: {
