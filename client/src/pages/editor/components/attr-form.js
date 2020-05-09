@@ -8,24 +8,45 @@ import './attr-form.scss';
 import { activeKeySet, attributeLoad, attributeUpdate, elementSelect, elementsUpdate, isEditSet } from '../actions';
 import Upload from '../../../component/common/upload';
 
-const positionList = ['initial', 'absolute', 'fixed', 'relative', 'static', 'sticky', 'inherit'];
+const positionList = [
+    {
+        title: '没有定位',
+        value: 'static',
+    },
+    {
+        title: '父元素继承',
+        value: 'initial',
+    },
+    {
+        title: '父元素绝对定位',
+        value: 'absolute',
+    },
+    {
+        title: '窗口绝对定位',
+        value: 'fixed',
+    },
+    {
+        title: '相对定位',
+        value: 'relative',
+    },
+];
 const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
 const flexDirectionList = [
     {
-        value: 'row',
         title: '横向',
+        value: 'row',
     },
     {
-        value: 'row-reverse',
         title: '横向反向',
+        value: 'row-reverse',
     },
     {
-        value: 'column',
         title: '纵向',
+        value: 'column',
     },
     {
-        value: 'column-reverse',
         title: '纵向反向',
+        value: 'column-reverse',
     },
 ];
 const justifyContentList = [
@@ -303,7 +324,8 @@ class ArrtForm extends Component {
                                             <span>定位: </span>
                                             <Select
                                                 list={positionList}
-                                                value={css.position || 'inherit'}
+                                                value={css.position || 'static'}
+                                                titleShow
                                                 onChange={this.onStyleChange.bind(this, 'position')}
                                             />
                                         </div>
@@ -320,64 +342,6 @@ class ArrtForm extends Component {
                                             ))}
                                     </div>
                                 </div>
-                                {/*------ 大小 ------*/}
-                                {/*<div className='attr-card'>
-                                    <div className='card-title'>大小</div>
-                                    <div className='card-content'>
-                                        <div className='row'>
-                                            <span>宽</span>
-                                            <input
-                                                className='entity-input'
-                                                type='text'
-                                                placeholder='width'
-                                                onChange={this.onStyleChange.bind(this, 'width')}
-                                                value={css.width}
-                                            />
-                                        </div>
-                                        <div className='row'>
-                                            <span>高</span>
-                                            <input
-                                                className='entity-input'
-                                                type='text'
-                                                onChange={this.onStyleChange.bind(this, 'height')}
-                                                value={css.height}
-                                            />
-                                        </div>
-                                        <div className='row'>
-                                            <span>外边距</span>
-                                        </div>
-                                        <div className="row">
-                                            <span className='size-text'>上</span>
-                                            <input
-                                                className='size-input'
-                                                type='text'
-                                                onChange={this.onStyleChange.bind(this, 'marginTop')}
-                                                value={css.marginTop}
-                                            />
-                                            <span className='size-text'>右</span>
-                                            <input
-                                                className='size-input'
-                                                type='text'
-                                                onChange={this.onStyleChange.bind(this, 'marginRight')}
-                                                value={css.marginRight}
-                                            />
-                                            <span className='size-text'>下</span>
-                                            <input
-                                                className='size-input'
-                                                type='text'
-                                                onChange={this.onStyleChange.bind(this, 'marginBottom')}
-                                                value={css.marginBottom}
-                                            />
-                                            <span className='size-text'>左</span>
-                                            <input
-                                                className='size-input'
-                                                type='text'
-                                                onChange={this.onStyleChange.bind(this, 'marginLeft')}
-                                                value={css.marginLeft}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>*/}
                                 {/*------ 排列 ------*/}
                                 {utils.has(['View', 'ScrollView', 'Form', 'Upload'], activeEle.element) && (
                                     <div className='attr-card'>
@@ -395,6 +359,7 @@ class ArrtForm extends Component {
                                                     <div className='row'>
                                                         <span>主轴</span>
                                                         <Select
+                                                            titleShow
                                                             list={flexDirectionList}
                                                             value={css.flexDirection || 'row'}
                                                             onChange={this.onStyleChange.bind(this, 'flexDirection')}
@@ -403,6 +368,7 @@ class ArrtForm extends Component {
                                                     <div className='row'>
                                                         <span>主轴对齐方式</span>
                                                         <Select
+                                                            titleShow
                                                             list={justifyContentList}
                                                             value={css.justifyContent || 'flex-start'}
                                                             onChange={this.onStyleChange.bind(this, 'justifyContent')}
@@ -411,6 +377,7 @@ class ArrtForm extends Component {
                                                     <div className='row'>
                                                         <span>交叉轴对齐方式</span>
                                                         <Select
+                                                            titleShow
                                                             list={alignItemsList}
                                                             value={css.alignItems || 'stretch'}
                                                             onChange={this.onStyleChange.bind(this, 'alignItems')}
@@ -488,6 +455,20 @@ class ArrtForm extends Component {
                                         </div>
                                     </div>
                                 )}
+                                {/*------ 其他 ------*/}
+                                <div className='attr-card'>
+                                    <div className='card-title'>其他</div>
+                                    <div className='card-content'>
+                                        <div className='row'>
+                                            <span>圆角</span>
+                                            <input
+                                                type='text'
+                                                onChange={this.onStyleChange.bind(this, 'borderRadius')}
+                                                value={css.borderRadius}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                                 {/*------ 盒子模型 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>盒子</div>

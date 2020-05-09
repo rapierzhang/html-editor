@@ -41,7 +41,7 @@ class Select extends Component {
     }
 
     render() {
-        const { list } = this.props;
+        const { list, titleShow } = this.props;
         const { listOpen, activeVal } = this.state;
 
         return (
@@ -67,7 +67,7 @@ class Select extends Component {
                                     title={row.title}
                                     onClick={this.optionSelect.bind(this, row.value)}
                                 >
-                                    {row.value}
+                                    {`${row.value} ${titleShow ? ` (${row.title})` : ''}`}
                                 </div>
                             )
                         })}

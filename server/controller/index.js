@@ -213,19 +213,19 @@ const renderElement = data => {
         case 'Root':
             return `
                 <div id='${id}' class='root ${id}' ${renderAttribute(data)}>
-                    ${children && renderHtml(children)}
+                    ${children ? renderHtml(children) : ''}
                 </div>
                 `;
         case 'View':
             return `
                 <div id='${id}' class='element view ${id}' ${renderAttribute(data)}>
-                    ${children && renderHtml(children)}
+                    ${children ? renderHtml(children) : ''}
                 </div>
                 `;
         case 'ScrollView':
             return `
                 <div id='${id}' class='element scroll-view ${id}' ${renderAttribute(data)}>
-                    ${children && renderHtml(children)}
+                    ${children ? renderHtml(children) : ''}
                 </div>
                 `;
         case 'Swiper':
