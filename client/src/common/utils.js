@@ -186,8 +186,28 @@ const utils = {
     },
     // 弹层
     toast: msg => ({ ...Toast(msg) }),
+    trim: str => str.replace(/ /g, ''),
+    // 驼峰转-
+    toLine: str => str.replace(/([A-Z])/g, '-$1').toLowerCase(),
+    toHump: str => str.replace(/\-(\w)/g, (all, letter) => letter.toUpperCase()),
+    cssTtrToObj(text = '') {
+        let obj = {};
+        const arr = utils.trim(text).replace('\n', '').split(';');
+        arr.forEach(item => {
+            if (!item) return;
+            const [k, v] = item.split(':');
+            obj[k] = v;
+        })
+
+        return obj;
+    },
     // 区分用途为 外部定位,内部样式
     cssFilter(css, out) {
+        // css扩展
+        const { extra = '' } = css;
+        const extraObj = utils.cssTtrToObj(utils.has(extra, '-') ? utils.toHump(extra): extra);
+        css = {...css, ...extraObj};
+        delete css.extra;
         let obj = {};
         const distinguishArr = [
             'position',
@@ -202,30 +222,36 @@ const utils = {
         ];
         for (let k in css) {
             const match = utils.has(distinguishArr, k);
-            if ((out && match) || (!out && !match)|| k == 'width' || k == 'height') {
+            if ((out && match) || (!out && !match) || k == 'width' || k == 'height') {
                 obj[k] = css[k];
             }
         }
-        // 解决position: fix定位问题
-        obj.position = obj.position === 'fixed' ? 'absolute' : obj.position;
+        // 解决position定位问题 当position为fixed'或static时先放一个假的，等构建时在换成真的
+        if (obj.position === 'fixed') {
+            obj.position = 'absolute';
+        }
+        if (obj.position === 'static') {
+            obj = {
+                ...obj,
+                position: 'relative',
+                top: 0,
+                left: 0,
+            };
+        }
         return obj;
     },
     // 过滤object
     objKeyFilter(obj, arr) {
         let o = { ...obj };
         for (let key in obj) {
-            if (utils.has(arr, key)) {
-                delete o[key];
-            }
+            if (utils.has(arr, key)) delete o[key];
         }
         return o;
     },
     objValFilter(obj, arr) {
         let o = { ...obj };
         for (let key in obj) {
-            if (utils.has(arr, obj[key])) {
-                delete o[key];
-            }
+            if (utils.has(arr, obj[key])) delete o[key];
         }
         return o;
     },

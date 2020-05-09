@@ -33,9 +33,10 @@ class Element extends Component {
         });
     }
 
+    // 选择节点
     selectNode(id, e) {
-        const { activeId, elements } = this.props.editorInfo;
         e.stopPropagation();
+        const { activeId, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(id, activeId, elements));
     }
 
@@ -152,17 +153,6 @@ class Element extends Component {
             case 'Image':
                 return <img id={id} className={classNames('element', 'image', id)} style={style} {...attr} />;
 
-            // 其他
-            /*case 'Dialog':
-                return (
-                    <div
-                        id={id}
-                        className={classNames('element', 'h5-dialog', id)}
-                        style={{ width: ctxWidth, height: ctxHeight }}
-                    >
-                        {this.props.children}
-                    </div>
-                );*/
             default:
                 return <div>default</div>;
         }
@@ -268,59 +258,66 @@ class Element extends Component {
     render() {
         const {
             item,
-            editorInfo: { activeId, canvasPosition: { ctxWidth, ctxHeight }, dialogMap },
+            editorInfo: {
+                activeId,
+                canvasPosition: { ctxWidth, ctxHeight },
+                dialogMap,
+            },
         } = this.props;
         const { id, css = {}, element } = item;
         const active = id == activeId;
         // 元素可以更改大小
         const canResize = !utils.has(['Text', 'Link', 'Radio', 'Checkbox'], element);
-        // 根节点
-        if (element === 'Root') {
-            return (
-                <div
-                    id='root'
-                    className={classNames('root', { active })}
-                    style={css}
-                    onClick={this.selectNode.bind(this, 'root')}
-                >
-                    {this.props.children}
-                </div>
-            );
+        switch (element) {
+            // 根节点
+            case 'Root':
+                return (
+                    <div
+                        id='root'
+                        className={classNames('root', { active })}
+                        style={css}
+                        onClick={this.selectNode.bind(this, 'root')}
+                    >
+                        {this.props.children}
+                    </div>
+                );
+            // 弹层
+            case 'Dialog':
+                return (
+                    <div
+                        id={id}
+                        className={classNames('h5-dialog', id, { active, none: !dialogMap[id] })}
+                        style={{ width: ctxWidth, height: ctxHeight }}
+                        onClick={this.selectNode.bind(this, id)}
+                    >
+                        {this.props.children}
+                    </div>
+                );
+            // 默认
+            default:
+                return (
+                    <div
+                        className={classNames('ele-box', { active, 'can-resize': canResize })}
+                        ref='box'
+                        onClick={this.selectNode.bind(this, id)}
+                        style={utils.cssFilter(css, true)}
+                    >
+                        {/*------ 缩放控制点 ------*/}
+                        {canResize && (
+                            <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />
+                        )}
+                        {/*------ 位置控制点 ------*/}
+                        {utils.has(canMoveList, css.position) && (
+                            <div className='ctrl-point center' onMouseDown={this.changePosition.bind(this)} />
+                        )}
+                        {/*------ 宽高数字显示 ------*/}
+                        {active && <div className='width-num'>{css.width}</div>}
+                        {active && <div className='height-num'>{css.height}</div>}
+                        {/*------ 选中展示边框 ------*/}
+                        {this.renderElement(item)}
+                    </div>
+                );
         }
-
-        if (element === 'Dialog') {
-            return (
-                <div
-                    id={id}
-                    className={classNames('element', 'h5-dialog', id, { active, none: !dialogMap[id] })}
-                    style={{ width: ctxWidth, height: ctxHeight }}
-                    onClick={this.selectNode.bind(this, id)}
-                >
-                    {this.props.children}
-                </div>
-            )
-        }
-
-        return (
-            <div
-                className={classNames('ele-box', { active, 'can-resize': canResize })}
-                ref='box'
-                onClick={this.selectNode.bind(this, id)}
-                style={utils.cssFilter(css, true)}
-            >
-                {/*------ 缩放控制点 ------*/}
-                {canResize && <div className='ctrl-point right-botom' onMouseDown={this.changeSize.bind(this)} />}
-                {/*------ 位置控制点 ------*/}
-                {utils.has(canMoveList, css.position) && (
-                    <div className='ctrl-point center' onMouseDown={this.changePosition.bind(this)} />
-                )}
-                {/*------ 宽高数字显示 ------*/}
-                {active && <div className='width-num'>{css.width}</div>}
-                {active && <div className='height-num'>{css.height}</div>}
-                {/*------ 选中展示边框 ------*/}
-                {this.renderElement(item)}
-            </div>
-        );
     }
 }
 
