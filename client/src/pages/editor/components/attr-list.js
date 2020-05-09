@@ -15,12 +15,12 @@ class AttrList extends Component {
     onAttrChange(attrName, e) {
         // 判断是event传入的值还是组件传入的值
         const value = !!e.target ? e.target.value : e;
-        const { elements, activeKey, activeEle: thisNode } = this.props.editorInfo;
+        const { elements, activeId, activeEle: thisNode } = this.props.editorInfo;
         const newNode = {
             ...thisNode,
             [attrName]: value,
         };
-        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
     }
@@ -33,12 +33,12 @@ class AttrList extends Component {
 
     // 添加空行
     onListAdd() {
-        const { activeEle: thisNode, activeKey, elements } = this.props.editorInfo;
+        const { activeEle: thisNode, activeId, elements } = this.props.editorInfo;
         const newNode = {
             ...thisNode,
             list: [...(thisNode.list || []), ''],
         };
-        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
     }
@@ -46,14 +46,14 @@ class AttrList extends Component {
     // 更改swiper列表
     onListChange(idx, e) {
         const value = !!e.target ? e.target.value : e;
-        const { elements, activeKey, activeEle: thisNode } = this.props.editorInfo;
+        const { elements, activeId, activeEle: thisNode } = this.props.editorInfo;
         const { list } = thisNode;
         list[idx] = value;
         const newNode = {
             ...thisNode,
             list,
         };
-        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
     }

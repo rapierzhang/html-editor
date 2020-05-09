@@ -20,7 +20,7 @@ import {
     indexSet,
     titleSet,
     descSet,
-    activeKeySet,
+    activeIdSet,
     isEditSet,
 } from './actions';
 
@@ -262,7 +262,7 @@ class Editor extends Component {
     // 设置元素成功
     setSucc(element) {
         console.error('set success!!!');
-        const { elements, index, activeKey, activeEle } = this.props.editorInfo;
+        const { elements, index, activeId, activeEle } = this.props.editorInfo;
         const id = this.uniqueKey(index);
         let newElements;
         const defaultEle = {
@@ -270,12 +270,12 @@ class Editor extends Component {
             id,
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
-            ...utils.defaultJs(element, id, { formId: activeKey }),
+            ...utils.defaultJs(element, id, { formId: activeId }),
         };
         // 嵌套
-        if (activeKey) {
+        if (activeId) {
             if (utils.has(containerElement, activeEle.element)) {
-                newElements = utils.deepInsert(elements, activeKey, { [id]: defaultEle });
+                newElements = utils.deepInsert(elements, activeId, { [id]: defaultEle });
             } else {
                 utils.toast('只有容器元素可以容纳其他元素');
                 return;
@@ -285,7 +285,7 @@ class Editor extends Component {
         }
         this.props.dispatch(indexIncrement()); // 索引自增
         this.props.dispatch(elementsUpdate(newElements)); // 元素更新
-        this.props.dispatch(elementSelect(id, activeKey, elements)); // 默认选中元素
+        this.props.dispatch(elementSelect(id, activeId, elements)); // 默认选中元素
     }
 
     // 设置元素失败
@@ -295,24 +295,24 @@ class Editor extends Component {
 
     // 选中元素 ^^^^^^
     onNodeSelect(id) {
-        const { activeKey, elements } = this.props.editorInfo;
-        this.props.dispatch(elementSelect(id, activeKey, elements));
+        const { activeId, elements } = this.props.editorInfo;
+        this.props.dispatch(elementSelect(id, activeId, elements));
     }
 
     // 取消选中
     unSelect(e) {
         e.stopPropagation();
-        this.props.dispatch(activeKeySet(false));
+        this.props.dispatch(activeIdSet(false));
         this.props.dispatch(isEditSet(false));
     }
 
     // 渲染画布中元素
     renderElements(elements) {
-        const { activeKey } = this.props.editorInfo;
+        const { activeId } = this.props.editorInfo;
         const list = Object.values(elements);
         return list.map((item, idx) => {
             return (
-                <Element key={`item-${idx}`} item={item} active={activeKey == item.id}>
+                <Element key={`item-${idx}`} item={item} active={activeId == item.id}>
                     {item.children && this.renderElements(item.children)}
                 </Element>
             );
@@ -387,7 +387,7 @@ class Editor extends Component {
 
     render() {
         const {
-            editorInfo: { title, desc, elements, activeEle, activeKey },
+            editorInfo: { title, desc, elements, activeEle, activeId },
         } = this.props;
         const { isDown, dragName, movingX, movingY, deleteShow } = this.state;
 

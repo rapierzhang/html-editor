@@ -20,7 +20,7 @@ const editorInfo = {
     desc: '', // 简介
 
     isEdit: false, // 是否编辑状态
-    activeKey: '', // 选中元素的key
+    activeId: '', // 选中元素的id
     activeEle: {}, // 选中的元素
 
     //画布位置
@@ -54,7 +54,7 @@ export default (state = editorInfo, action) => {
             return { ...state, index: state.index + 1 };
         // 选中状态
         case ACTIVE_KEY_SET:
-            return { ...state, activeKey: action.activeKey };
+            return { ...state, activeId: action.activeId };
         // 设置编辑状态
         case EDIT_STATUS_SET:
             return { ...state, isEdit: action.isEdit };

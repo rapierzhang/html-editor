@@ -6,7 +6,7 @@ import { Select, Switch } from '../../../component';
 import { AttrList } from './index';
 import './attr-form.scss';
 import {
-    activeKeySet,
+    activeIdSet,
     attributeLoad,
     attributeUpdate,
     elementSelect,
@@ -128,29 +128,29 @@ class ArrtForm extends Component {
     // 样式更改
     onStyleChange(attrName, e) {
         const value = typeof e == 'object' ? e.target.value : e;
-        const { elements, activeKey } = this.props.editorInfo;
-        const thisNode = utils.deepSearch(elements, activeKey);
+        const { elements, activeId } = this.props.editorInfo;
+        const thisNode = utils.deepSearch(elements, activeId);
         const thisStyle = thisNode.css || {};
         const newNode = {
             ...thisNode,
             css: { ...thisStyle, [attrName]: value },
         };
-        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
     }
 
     // 删除元素
     removeEle() {
-        const { elements, activeKey } = this.props.editorInfo;
-        const newElements = utils.deepRemove(elements, activeKey);
+        const { elements, activeId } = this.props.editorInfo;
+        const newElements = utils.deepRemove(elements, activeId);
         this.props.dispatch(elementsUpdate(newElements));
         this.close();
     }
 
     // 关闭
     close() {
-        this.props.dispatch(activeKeySet(false));
+        this.props.dispatch(activeIdSet(false));
         this.props.dispatch(isEditSet(false));
     }
 
@@ -159,14 +159,14 @@ class ArrtForm extends Component {
     }
 
     // 渲染树结构
-    renderTree(elements, activeKey, floor = 0) {
+    renderTree(elements, activeId, floor = 0) {
         const arr = Object.values(elements);
         return arr.map((ele, idx) => {
             const key = `${idx}-${parseInt(Math.random() * 1e5)}`;
             const row = (
                 <div
                     key={key}
-                    className={classNames('tree-item', { active: ele.id === activeKey })}
+                    className={classNames('tree-item', { active: ele.id === activeId })}
                     style={{ paddingLeft: `${floor * 10}px` }}
                     onClick={this.selectNode.bind(this, ele)}
                     onMouseDown={this.showMenu.bind(this, ele.id)}
@@ -175,7 +175,7 @@ class ArrtForm extends Component {
                 </div>
             );
             if (ele.children) {
-                return [row, this.renderTree(ele.children, activeKey, floor + 1)];
+                return [row, this.renderTree(ele.children, activeId, floor + 1)];
             } else {
                 return row;
             }
@@ -185,8 +185,8 @@ class ArrtForm extends Component {
     // 选择节点
     selectNode(ele) {
         this.setState({ hoverId: '' });
-        const { activeKey, elements } = this.props.editorInfo;
-        this.props.dispatch(elementSelect(ele.id, activeKey, elements));
+        const { activeId, elements } = this.props.editorInfo;
+        this.props.dispatch(elementSelect(ele.id, activeId, elements));
     }
 
     // 展示菜单
@@ -213,20 +213,20 @@ class ArrtForm extends Component {
     // 更改树的结构
     changeTree(position) {
         let newTree = {};
-        const { elements, activeKey } = this.props.editorInfo;
+        const { elements, activeId } = this.props.editorInfo;
         const { hoverId, hoverNode } = this.state;
         // 先将hover的元素删除
         const removedElements = utils.deepRemove(elements, hoverId);
         // 在插入到相应位置
         switch (position) {
             case 'before':
-                newTree = utils.deepInsertSameFloor(removedElements, activeKey, true, { [hoverId]: hoverNode });
+                newTree = utils.deepInsertSameFloor(removedElements, activeId, true, { [hoverId]: hoverNode });
                 break;
             case 'in':
-                newTree = utils.deepInsert(removedElements, activeKey, { [hoverId]: hoverNode });
+                newTree = utils.deepInsert(removedElements, activeId, { [hoverId]: hoverNode });
                 break;
             case 'after':
-                newTree = utils.deepInsertSameFloor(removedElements, activeKey, false, { [hoverId]: hoverNode });
+                newTree = utils.deepInsertSameFloor(removedElements, activeId, false, { [hoverId]: hoverNode });
                 break;
         }
         // 更新树
@@ -243,14 +243,14 @@ class ArrtForm extends Component {
     }
 
     render() {
-        const { pid, elements, isEdit, activeKey, activeEle = {} } = this.props.editorInfo;
+        const { pid, elements, isEdit, activeId, activeEle = {} } = this.props.editorInfo;
         const { navIndex, movingX, movingY, hoverId } = this.state;
         const { css = {} } = activeEle;
 
         return (
             <div className='attribute' onClick={this.hideMenu.bind(this)}>
                 {/*------ 菜单 ------*/}
-                {activeKey && hoverId && activeKey != hoverId && (
+                {activeId && hoverId && activeId != hoverId && (
                     <div className='attr-phantom' style={{ left: movingX, top: movingY }}>
                         <div className='row' onClick={this.changeTree.bind(this, 'before')}>
                             移动到选中元素前
@@ -298,7 +298,7 @@ class ArrtForm extends Component {
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
                                         {/*------ 删除节点 ------*/}
-                                        {activeKey !== 'root' && (
+                                        {activeId !== 'root' && (
                                             <div className='row'>
                                                 <div
                                                     className='del-ele button danger'
@@ -622,7 +622,7 @@ class ArrtForm extends Component {
                     </div>
                 ) : (
                     <div className='tree' ref='tree'>
-                        {this.renderTree(elements, activeKey)}
+                        {this.renderTree(elements, activeId)}
                     </div>
                 )}
             </div>

@@ -47,10 +47,10 @@ export const elementsUpdate = elements => dispatch => {
 };
 
 // 选中元素
-export const activeKeySet = activeKey => dispatch => {
+export const activeIdSet = activeId => dispatch => {
     dispatch({
         type: ACTIVE_KEY_SET,
-        activeKey,
+        activeId,
     });
 };
 
@@ -63,8 +63,8 @@ export const isEditSet = isEdit => dispatch => {
 };
 
 // 设置选中元素的属性
-export const attributeLoad = (elements, activeKey) => dispatch => {
-    const activeEle = utils.deepSearch(elements, activeKey);
+export const attributeLoad = (elements, activeId) => dispatch => {
+    const activeEle = utils.deepSearch(elements, activeId);
     dispatch({
         type: ATTRIBUTE_LOAD,
         activeEle,
@@ -80,10 +80,10 @@ export const attributeUpdate = activeEle => dispatch => {
 };
 
 // 选择编辑
-export const elementSelect = (id, activeKey, elements, confirm) => dispatch => {
-    dispatch(activeKeySet(id));
+export const elementSelect = (id, activeId, elements, confirm) => dispatch => {
+    dispatch(activeIdSet(id));
     dispatch(attributeLoad(elements, id));
-    if (id == activeKey || confirm) {
+    if (id == activeId || confirm) {
         dispatch(isEditSet(true));
     } else {
         dispatch(isEditSet(false));

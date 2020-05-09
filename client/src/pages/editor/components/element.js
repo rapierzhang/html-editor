@@ -34,9 +34,9 @@ class Element extends Component {
     }
 
     selectNode(id, e) {
-        const { activeKey, elements } = this.props.editorInfo;
+        const { activeId, elements } = this.props.editorInfo;
         e.stopPropagation();
-        this.props.dispatch(elementSelect(id, activeKey, elements));
+        this.props.dispatch(elementSelect(id, activeId, elements));
     }
 
     renderElement(item) {
@@ -250,8 +250,8 @@ class Element extends Component {
 
     // 样式更改
     onStyleChange(data) {
-        const { elements, activeKey } = this.props.editorInfo;
-        const thisNode = utils.deepSearch(elements, activeKey);
+        const { elements, activeId } = this.props.editorInfo;
+        const thisNode = utils.deepSearch(elements, activeId);
         const thisCss = thisNode.css || {};
         const newNode = {
             ...thisNode,
@@ -260,7 +260,7 @@ class Element extends Component {
         for (let k in data) {
             newNode.css[k] = data[k];
         }
-        const newElements = utils.deepUpdate(elements, { [activeKey]: newNode });
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
     }
@@ -268,10 +268,10 @@ class Element extends Component {
     render() {
         const {
             item,
-            editorInfo: { activeKey, canvasPosition: { ctxWidth, ctxHeight }, dialogMap },
+            editorInfo: { activeId, canvasPosition: { ctxWidth, ctxHeight }, dialogMap },
         } = this.props;
         const { id, css = {}, element } = item;
-        const active = id == activeKey;
+        const active = id == activeId;
         // 元素可以更改大小
         const canResize = !utils.has(['Text', 'Link', 'Radio', 'Checkbox'], element);
         // 根节点
