@@ -198,7 +198,6 @@ const utils = {
             const [k, v] = item.split(':');
             obj[k] = v;
         })
-
         return obj;
     },
     // 区分用途为 外部定位,内部样式

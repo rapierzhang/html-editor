@@ -369,8 +369,11 @@ const writeCss = (dirPath, htmlTree) => {
     if (!cssDirExists) fs.mkdirSync(cssDirPath);
     let cssContext = defaultCss();
     const cssArr = utils.objToArr(htmlTree);
-    cssArr.forEach(({ css, id }) => {
+    cssArr.forEach(({ css = {}, id }) => {
         let cssContent = '';
+        const { extra = '' } = css;
+        css = { ...css, ...utils.cssStrToObj(extra) };
+        delete css.extra;
         if (css) {
             const cssLen = Object.keys(css).length;
             let cssRowIdx = 0;

@@ -29,7 +29,7 @@ const utils = {
     res: (code = 200, msg = 'ok', data = {}) => ({
         code,
         msg,
-        data
+        data,
     }),
     // 时间格式化
     dateFormat: (ms, fmt) => {
@@ -59,12 +59,25 @@ const utils = {
     },
     // uuid
     uuid: () => {
-        return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, c =>  {
-            let r = Math.random() * 16 | 0,
-                v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            let r = (Math.random() * 16) | 0,
+                v = c == 'x' ? r : (r & 0x3) | 0x8;
             return v.toString(16);
         });
-    }
+    },
+    // 去除空格
+    trim: str => str.replace(/ /g, ''),
+    // css字符串转obj
+    cssStrToObj(text = '') {
+        let obj = {};
+        const arr = utils.trim(text).replace('\n', '').split(';');
+        arr.forEach(item => {
+            if (!item) return;
+            const [k, v] = item.split(':');
+            obj[k] = v;
+        });
+        return obj;
+    },
 };
 
 module.exports = utils;
