@@ -43,7 +43,7 @@ class Select extends Component {
     render() {
         const { list } = this.props;
         const { listOpen, activeVal } = this.state;
-        
+
         return (
             <div className='select'>
                 <div className='active-option' onClick={this.openList.bind(this)}>

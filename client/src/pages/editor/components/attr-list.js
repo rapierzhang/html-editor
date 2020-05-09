@@ -63,35 +63,40 @@ class AttrList extends Component {
         this.onListChange(idx, data.url);
     }
 
-    render() {
-        const { pid, activeEle = {} } = this.props.editorInfo;
+    // 渲染attr
+    renderAttr(item, activeEle) {
+        const { type, value, inputType, list: selectList } = item;
         const { list = [] } = activeEle;
-
-        return attrList(this, activeEle).map((item, idx) => (
-            <div key={`row-${idx}`} className='row'>
-                <span>{item.text}</span>
-                {item.type === 'input' && <input type={item.inputType} value={activeEle[item.value]} {...item.func} />}
-                {item.type === 'textarea' && <textarea value={activeEle[item.value]} {...item.func} />}
-                {item.type === 'switch' && <Switch value={activeEle[item.value]} {...item.func} />}
-                {item.type === 'select' && (
-                    <Select list={item.list} value={activeEle[item.value]} {...item.func} />
-                )}
-                {item.type === 'image' && (
+        const eleVal = activeEle[value];
+        const onChange = {
+            onChange: this.onAttrChange.bind(this, value)
+        }
+        switch (type) {
+            case 'input':
+                return <input type={inputType} value={eleVal} {...onChange} />;
+            case 'textarea':
+                return <textarea value={eleVal} {...onChange} />;
+            case 'switch':
+                return <Switch value={eleVal} {...onChange} />;
+            case 'select':
+                return <Select list={selectList} value={eleVal} {...onChange} />;
+            case 'image':
+                return (
                     <div className='upload-image'>
-                        <input type='text' value={activeEle[item.value]} {...item.func} />
+                        <input type='text' value={eleVal} {...onChange} />
                         {/*^^^^^^*/}
                         <Upload
                             className='upload-btn'
                             url={'http://localhost:3000/api/file/upload'}
                             fileName='file'
-                            data={{ pid }}
                             onUploadSucc={this.onUploadSucc.bind(this)}
                         >
                             <span>上传</span>
                         </Upload>
                     </div>
-                )}
-                {item.type === 'imageList' && (
+                );
+            case 'imageList':
+                return (
                     <div className='image-list'>
                         {list.map((row, idx) => (
                             <div key={`item-${idx}`} className='image-item'>
@@ -101,7 +106,6 @@ class AttrList extends Component {
                                     className='upload-btn'
                                     url={'http://localhost:3000/api/file/upload'}
                                     fileName='file'
-                                    data={{ pid }}
                                     onUploadSucc={this.onListUploadSucc.bind(this, idx)}
                                 >
                                     <span>上传</span>
@@ -112,7 +116,19 @@ class AttrList extends Component {
                             +
                         </div>
                     </div>
-                )}
+                );
+            default:
+                return '';
+        }
+    }
+
+    render() {
+        const { activeEle = {} } = this.props.editorInfo;
+
+        return attrList(this, activeEle).map((item, idx) => (
+            <div key={`row-${idx}`} className='row'>
+                <span>{item.text}</span>
+                {this.renderAttr(item, activeEle)}
             </div>
         ));
     }
