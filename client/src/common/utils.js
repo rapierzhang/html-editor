@@ -77,7 +77,7 @@ const utils = {
      * @param    obj         object  需要插入的树
      * @param    id          string  插入在哪个节点前后
      * @param    before      bool    插入在节点的前后
-     * @oaram    insertObj   object  插入的对象
+     * @oaram    insertObj   object  插入的对象          {id: {id:...}}
      * return                object  插入后的树
      * */
     deepInsertSameFloor: (obj, id, before, insertObj) => {

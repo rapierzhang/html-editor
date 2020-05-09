@@ -215,6 +215,10 @@ class ArrtForm extends Component {
         let newTree = {};
         const { elements, activeId } = this.props.editorInfo;
         const { hoverId, hoverNode } = this.state;
+        if (activeId === 'root' && utils.has(['before', 'after'], position)) {
+            utils.toast('不能插入在Root元素前后');
+            return;
+        }
         // 先将hover的元素删除
         const removedElements = utils.deepRemove(elements, hoverId);
         // 在插入到相应位置
