@@ -145,12 +145,17 @@ class Editor extends Component {
     componentDidMount() {
         setTimeout(() => this.ctxPosition(), 500);
         this.init();
+
+        // 禁止右击菜单
+        document.oncontextmenu = () => false;
+
         // ^^^^^^ 鼠标右击
-        document.onmousedown = function (e) {
+        /*document.onmousedown = e => {
             const event = e || window.event;
             if (event.button == '2') {
+                console.error(111, e)
             }
-        };
+        };*/
     }
 
     // 初始化

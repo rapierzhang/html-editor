@@ -107,16 +107,12 @@ class ArrtForm extends Component {
         super(...arguments);
         this.state = {
             navIndex: 0,
-            isDown: false,
+            hoverId: '',
+            hoverNode: {},
+
             movingX: 0,
             movingY: 0,
-
-            treeTop: 0,
-            treeBottom: 0,
-            treeLeft: 0,
-            treeRight: 0,
         };
-        this.timer = {};
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -172,7 +168,8 @@ class ArrtForm extends Component {
                     key={key}
                     className={classNames('tree-item', { active: ele.id === activeKey })}
                     style={{ paddingLeft: `${floor * 10}px` }}
-                    onMouseDown={this.onDragTree.bind(this, ele)}
+                    onClick={this.selectNode.bind(this, ele)}
+                    onMouseDown={this.showMenu.bind(this, ele.id)}
                 >
                     <span>|- {ele.element}</span>
                 </div>
@@ -185,79 +182,55 @@ class ArrtForm extends Component {
         });
     }
 
-    // 获取树的定位
-    treePosition() {
-        const tree = this.refs.tree;
-        const { offsetTop, offsetHeight, offsetLeft, offsetWidth } = tree;
-        this.setState({
-            treeTop: offsetTop,
-            treeBottom: offsetTop + offsetHeight,
-            treeLeft: offsetLeft,
-            treeRight: offsetLeft + offsetWidth,
-        });
-    }
-
     // 选择节点
     selectNode(ele) {
+        this.setState({ hoverId: '' });
         const { activeKey, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(ele.id, activeKey, elements));
     }
 
-    // 拖拽树的节点
-    onDragTree(ele, evt) {
-        const firstTime = new Date().getTime();
-        this.treePosition();
-        this.timer = setTimeout(() => this.setState({ isDown: true }), 300);
-
-        // 拖拽中
-        window.onmousemove = e => {
-            if (!this.state.isDown) return;
-            //获取x和y
+    // 展示菜单
+    showMenu(id, e) {
+        const { button, pageX, pageY } = e;
+        const { elements } = this.props.editorInfo;
+        const hoverNode = utils.deepSearch(elements, id);
+        if (button == 2) {
             this.setState({
-                movingX: e.clientX,
-                movingY: e.clientY,
+                movingX: pageX,
+                movingY: pageY,
+                hoverId: id,
+                hoverNode,
             });
-        };
-        // 拖拽结束
-        window.onmouseup = e => {
-            const lastTime = new Date().getTime();
-            // 解决onMousedown和onClick冲突
-            if (lastTime - firstTime < 300) {
-                clearTimeout(this.timer);
-                this.selectNode(ele);
-                this.setState({ isDown: false });
-            } else {
-                const { elements } = this.props.editorInfo;
-                const { isDown, treeTop, treeBottom, treeLeft, treeRight } = this.state;
-                if (!isDown) return;
+        }
+    }
 
-                const endX = e.clientX;
-                const endY = e.clientY;
-                if (endX > treeLeft && endX < treeRight && endY > treeTop && endY < treeBottom) {
-                    // 先删除节点
-                    const removedElements = utils.deepRemove(elements, ele.id);
-                    // 深度优先遍历子节点
-                    const treeArr = utils.objDepthFirstTraversal(elements);
-                    // 重置虚拟元素
-                    this.setState({ isDown: false, movingX: 0, movingY: 0 });
-                    // 判断加载哪个元素的前后
-                    const index = Math.floor(endY / 30) - 1; // 第几个元素
+    // 隐藏菜单
+    hideMenu(e) {
+        e.stopPropagation();
+        this.setState({ hoverId: '' });
+    }
 
-                    const dot = ((endY / 30).toFixed(1) - index).toFixed(1);
-                    const isBefore = treeArr.length - 1 > index ? true : dot < 0.5; //前后
-                    const hoverId = treeArr[Math.min(index, treeArr.length - 1)]; // 最后悬停时的元素key
-                    if (hoverId == ele.id) return; // 没变return
-                    const newElements = utils.deepInsertSameFloor(removedElements, hoverId, isBefore, {
-                        [ele.id]: ele,
-                    });
-                    this.props.dispatch(elementsUpdate(newElements));
-                    console.error('在里面');
-                } else {
-                    console.error('在外面');
-                    return;
-                }
-            }
-        };
+    // 更改树的结构
+    changeTree(position) {
+        let newTree = {};
+        const { elements, activeKey } = this.props.editorInfo;
+        const { hoverId, hoverNode } = this.state;
+        // 先将hover的元素删除
+        const removedElements = utils.deepRemove(elements, hoverId);
+        // 在插入到相应位置
+        switch (position) {
+            case 'before':
+                newTree = utils.deepInsertSameFloor(removedElements, activeKey, true, { [hoverId]: hoverNode });
+                break;
+            case 'in':
+                newTree = utils.deepInsert(removedElements, activeKey, { [hoverId]: hoverNode });
+                break;
+            case 'after':
+                newTree = utils.deepInsertSameFloor(removedElements, activeKey, false, { [hoverId]: hoverNode });
+                break;
+        }
+        // 更新树
+        this.props.dispatch(elementsUpdate(newTree));
     }
 
     // 切换flex
@@ -271,14 +244,23 @@ class ArrtForm extends Component {
 
     render() {
         const { pid, elements, isEdit, activeKey, activeEle = {} } = this.props.editorInfo;
-        const { navIndex, isDown, movingX, movingY } = this.state;
+        const { navIndex, movingX, movingY, hoverId } = this.state;
         const { css = {} } = activeEle;
 
         return (
-            <div className='attribute'>
-                {isDown && (
+            <div className='attribute' onClick={this.hideMenu.bind(this)}>
+                {/*------ 菜单 ------*/}
+                {activeKey && hoverId && activeKey != hoverId && (
                     <div className='attr-phantom' style={{ left: movingX, top: movingY }}>
-                        000
+                        <div className='row' onClick={this.changeTree.bind(this, 'before')}>
+                            移动到选中元素前
+                        </div>
+                        <div className='row' onClick={this.changeTree.bind(this, 'in')}>
+                            移动到选中元素内
+                        </div>
+                        <div className='row' onClick={this.changeTree.bind(this, 'after')}>
+                            移动到选中元素后
+                        </div>
                     </div>
                 )}
                 {isEdit ? (

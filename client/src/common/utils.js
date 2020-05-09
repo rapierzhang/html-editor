@@ -75,17 +75,17 @@ const utils = {
     /*
      * 插入到某个元素的前后
      * @param    obj         object  需要插入的树
-     * @param    k           string  插入在哪个节点前后
+     * @param    id          string  插入在哪个节点前后
      * @param    before      bool    插入在节点的前后
      * @oaram    insertObj   object  插入的对象
      * return                object  插入后的树
      * */
-    deepInsertSameFloor: (obj, k, before, insertObj) => {
+    deepInsertSameFloor: (obj, id, before, insertObj) => {
         let target = {};
-        if (obj.hasOwnProperty(k)) {
+        if (obj.hasOwnProperty(id)) {
             const arr = Object.values(obj);
             arr.forEach(item => {
-                if (item.id === k) {
+                if (item.id === id) {
                     if (before) {
                         target = { ...target, ...insertObj, [item.id]: item };
                     } else {
@@ -100,7 +100,7 @@ const utils = {
                 if (obj[key].children) {
                     target[key] = {
                         ...obj[key],
-                        children: utils.deepInsertSameFloor(obj[key].children, k, before, insertObj),
+                        children: utils.deepInsertSameFloor(obj[key].children, id, before, insertObj),
                     };
                 } else {
                     target[key] = obj[key];

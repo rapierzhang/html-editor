@@ -317,6 +317,12 @@ const renderElement = data => {
             return `
                 <img id='${id}' class='element image ${id}' ${renderAttribute(data)} />
                 `;
+        case 'Dialog':
+            return `
+                <div id='${id}' class='element dialog ${id}'>
+                    ${children ? renderHtml(children) : ''}
+                </div>
+                `;
         default:
             return '无此元素';
     }
@@ -566,15 +572,40 @@ body {
 .upload>input {
     display: none;
 }
+
+.dialog {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9990;
+    display: none;
+}
+
+.dialog.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 `;
 };
 
 // 默认js
 const defaultJavascript = `
+    // toast
     window.toast = msg => {
         const $toast = $('#toast');
         $toast.text(msg);
         $toast.show();
         setTimeout(() => $toast.hide(), 3000);
     }
+    // dialog
+    window.dialog = {
+        show: id => $('#' + id).addClass('show'),
+        hide: id => $('#' + id).removeClass('show'),
+    } 
+    
 `;
