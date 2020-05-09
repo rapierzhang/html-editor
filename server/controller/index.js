@@ -264,7 +264,7 @@ const renderElement = data => {
         case 'Form':
             return `
                 <div id='${id}' class='element form ${id}' ${renderAttribute(data)}>
-                    ${children && renderHtml(children)}
+                    ${children ? renderHtml(children) : ''}
                 </div>
             `;
         case 'Input':
