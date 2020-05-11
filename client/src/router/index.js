@@ -1,14 +1,14 @@
 import React from 'react';
-import { HashRouter, Route, Switch, useHistory, withRouter } from 'react-router-dom';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import List from '../pages/list/';
 import Editor from '../pages/editor';
 
 const RootRouter = () => (
-    <HashRouter>
+    <BrowserRouter>
         <Switch>
-            <Route path='/' component={Editor} />
+            <Route path='/list' component={List} />
             <Route path='/editor' component={Editor} />
         </Switch>
-    </HashRouter>
+    </BrowserRouter>
 );
 export default RootRouter;

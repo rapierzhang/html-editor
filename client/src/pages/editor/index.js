@@ -174,7 +174,8 @@ class Editor extends Component {
                 htmlTree && this.props.dispatch(elementsUpdate(htmlTree));
                 title && this.props.dispatch(titleSet(title));
                 desc && this.props.dispatch(descSet(desc));
-                location.href = `${location.origin}/#/editor?pid=${pid}`;
+                // 设置参数但不跳转
+                window.history.pushState(null, null, `${location.origin}/editor?pid=${pid}`);
             })
             .catch(err => {
                 console.error(err);
