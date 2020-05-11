@@ -9,7 +9,8 @@ const cors = require('koa2-cors'); //跨域处理
 
 const path = require('path');
 
-const index = require('./routes/index');
+const list = require('./routes/list');
+const page = require('./routes/page');
 const users = require('./routes/users');
 const file = require('./routes/file');
 
@@ -17,12 +18,6 @@ const file = require('./routes/file');
 onerror(app);
 
 // middlewares
-/*app.use(
-    bodyparser({
-        enableTypes: ['json', 'form', 'text'],
-    }),
-);*/
-
 app.use(
     koaBody({
         patchKoa: true,
@@ -71,7 +66,8 @@ app.use(async (ctx, next) => {
 });
 
 // routes
-app.use(index.routes(), index.allowedMethods());
+app.use(list.routes(), list.allowedMethods());
+app.use(page.routes(), page.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
 app.use(file.routes(), file.allowedMethods());
 

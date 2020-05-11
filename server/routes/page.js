@@ -1,5 +1,5 @@
 const router = require('koa-router')();
-const controller = require('../controller/index');
+const controller = require('../controller/page');
 // 设置url前缀
 router.prefix('/api/page');
 
@@ -15,7 +15,7 @@ router.post('/delete', controller.pageDelete);
 
 router.post('/release', controller.pageRelease);
 
-router.post('/test', async (ctx, next) => {
+router.get('/test', async (ctx, next) => {
     console.log('-------------');
     console.log('ctx.header: ', ctx.header);
     console.log('ctx.headers: ', ctx.headers);
