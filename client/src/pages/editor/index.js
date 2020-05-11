@@ -24,7 +24,8 @@ import {
     descSet,
     activeIdSet,
     isEditSet,
-    listPreviewSave
+    listPreviewSave,
+    htmlDelete,
 } from './actions';
 
 // 模板列表
@@ -143,6 +144,7 @@ class Editor extends Component {
             movingY: 0,
 
             deleteShow: false,
+            deletePid: '',
         };
     }
 
@@ -345,7 +347,7 @@ class Editor extends Component {
             title,
             desc,
             htmlTree: elements,
-            preview
+            preview,
         })
             .then(res => {
                 utils.toast(res.result ? '保存成功' : '保存失败');
@@ -397,16 +399,33 @@ class Editor extends Component {
         this.setState({ deleteShow });
     }
 
+    delInputChange(e) {
+        const deletePid = e.target.value;
+        this.setState({ deletePid });
+    }
+
     // 确认删除
     delConfirm() {
-        this.deleteDialogHandle(false);
+        const { pid } = this.props.editorInfo;
+        const { deletePid } = this.state;
+        if (deletePid === pid) {
+            htmlDelete({ pid }).then(res => {
+                if (res.result === true) {
+                    utils.toast('删除成功');
+                    setTimeout(() => window.close(), 3000);
+                }
+            });
+            this.deleteDialogHandle(false);
+        } else {
+            utils.toast('请输入正确的pid');
+        }
     }
 
     render() {
         const {
             editorInfo: { title, desc, elements, activeEle, activeId },
         } = this.props;
-        const { isDown, dragName, movingX, movingY, deleteShow } = this.state;
+        const { isDown, dragName, movingX, movingY, deleteShow, deletePid } = this.state;
 
         return (
             <div className='editor'>
@@ -500,7 +519,13 @@ class Editor extends Component {
                         </div>
                     }
                 >
-                    <div className=''>测试</div>
+                    <input
+                        type='text'
+                        className='delete-input'
+                        placeholder='请填写本页面id'
+                        value={deletePid}
+                        onChange={this.delInputChange.bind(this)}
+                    />
                 </Dialog>
             </div>
         );

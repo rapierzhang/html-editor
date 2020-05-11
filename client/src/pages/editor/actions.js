@@ -158,6 +158,15 @@ export const htmlRelease = params => {
     }).then(res => res.data);
 };
 
+// 删除页面
+export const htmlDelete = params => {
+    return fetch({
+        url: '/api/page/delete',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
+};
+
 // dialog控制
 export const dialogHandle = (id, state) => dispatch => {
     dispatch({

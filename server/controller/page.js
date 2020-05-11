@@ -127,7 +127,16 @@ exports.pageOpen = async (ctx, next) => {
     }
 };
 // 页面删除
-exports.pageDelete = async (ctx, next) => {};
+exports.pageDelete = async (ctx, next) => {
+    const { pid } = ctx.request.body;
+    const resultPage = await PageModule.remove({ pid });
+    const resultList = await ListModule.remove({ pid });
+    if (resultPage.ok === 1 && resultList.ok === 1) {
+        ctx.body = utils.res(200, 'ok', { result: true });
+    } else {
+        ctx.body = utils.res(500, '删除失败', { result: false });
+    }
+};
 // 页面发布
 exports.pageRelease = async (ctx, next) => {
     const { pid } = ctx.request.body;
