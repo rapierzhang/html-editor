@@ -3,6 +3,6 @@ const controller = require('../controller/list');
 // 设置url前缀
 router.prefix('/api/list');
 
-router.get('/get', controller.listGet);
+router.post('/get', controller.listGet);
 
 module.exports = router;

@@ -1,9 +1,29 @@
-.body{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-.page{
-    flex: 1;
-    padding: 20px 0;
+.page-list {
+    .header {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 0 20px;
+
+        .title {
+            font-size: 22px;
+            color: #262626;
+        }
+
+        .btn-box {
+
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 30px 50px;
+    }
 }

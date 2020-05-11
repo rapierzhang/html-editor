@@ -330,7 +330,7 @@ class Editor extends Component {
         const { elements, pid, index, title, desc } = this.props.editorInfo;
         let preview = '';
         // 生成截图
-        await html2canvas(document.getElementById('context')).then(async canvas => {
+        await html2canvas(document.getElementById('root')).then(async canvas => {
             const base64Data = canvas.toDataURL('image/png');
             const blob = utils.dataURItoBlob(base64Data);
             const formData = new FormData();
