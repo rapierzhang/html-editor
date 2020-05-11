@@ -9,8 +9,8 @@ const pageSchema = new Schema({
     desc: String,
     preview: String,
     htmlTree: Object,
-    createTime: String,
-    updateTime: String,
+    createTime: Number,
+    updateTime: Number,
 });
 
 const PageModel = mongoose.model('page', pageSchema);

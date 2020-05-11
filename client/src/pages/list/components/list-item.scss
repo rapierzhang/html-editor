@@ -14,7 +14,7 @@
 
     .img-box {
         width: 180px;
-        height: 220px;
+        height: 200px;
         overflow: scroll;
         border: 1px solid #d9d9d9;
         border-radius: 2px;
@@ -26,6 +26,7 @@
     }
 
     .title {
+        width: 180px;
         font-size: 18px;
         font-weight: 700;
         margin-top: 5px;
@@ -35,8 +36,16 @@
     }
 
     .desc {
+        width: 180px;
         color: #8c8c8c;
         margin-top: 5px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    .create-time {
+        margin-top: 10px;
     }
 
 }

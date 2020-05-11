@@ -8,8 +8,8 @@ const listSchema = new Schema({
     title: String,
     desc: String,
     preview: String,
-    createTime: String,
-    updateTime: String,
+    createTime: Number,
+    updateTime: Number,
 });
 
 const ListModel = mongoose.model('list', listSchema);

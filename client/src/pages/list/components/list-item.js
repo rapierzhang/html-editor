@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './list-item.scss';
+import { utils } from '../../../common';
 
 class ListItem extends Component {
     constructor(props) {
@@ -22,8 +23,14 @@ class ListItem extends Component {
                 </div>
                 <div className='title' title={title}>{title}</div>
                 <div className='desc' title={desc}>{desc}</div>
-                <div className='create-time'>{createTime}</div>
-                <div className='update-time'>{updateTime}</div>
+                <div className='create-time'>
+                    <p>创建时间：</p>
+                    <p>{utils.dateFormat(createTime, 'yyyy-MM-dd hh:mm:ss')}</p>
+                </div>
+                <div className='update-time'>
+                    <p>更改时间：</p>
+                    <p>{utils.dateFormat(updateTime, 'yyyy-MM-dd hh:mm:s')}</p>
+                </div>
             </div>
         );
     }

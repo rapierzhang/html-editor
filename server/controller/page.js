@@ -19,7 +19,7 @@ exports.pageGet = async (ctx, next) => {
 // 页面信息保存
 exports.pageSave = async (ctx, next) => {
     let { pid, index, title, desc, htmlTree, preview } = ctx.request.body;
-    const time = utils.dateFormat(new Date().getTime());
+    const time = new Date().getTime();
     let pageResult = false;
     let listResult = false;
     let msg = '';
