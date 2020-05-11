@@ -80,6 +80,18 @@ export const attrList = (that, item) => {
                 list: ['application/json', 'application/x-www-form-urlencoded'],
                 value: 'contentType',
             },
+            {
+                text: '上传成功',
+                type: 'textarea',
+                placeholder: 'res是返回数据',
+                value: 'onSucc',
+            },
+            {
+                text: '上传失败',
+                type: 'textarea',
+                placeholder: 'err是返回数据',
+                value: 'onErr',
+            },
         ],
         Input: [
             {
@@ -180,13 +192,15 @@ export const attrList = (that, item) => {
                 value: 'name',
             },
             {
-                text: 'onSucc',
+                text: '上传成功',
                 type: 'textarea',
+                placeholder: 'res是返回数据',
                 value: 'onSucc',
             },
             {
-                text: 'onErr',
+                text: '上传失败',
                 type: 'textarea',
+                placeholder: 'err是返回数据',
                 value: 'onErr',
             },
         ],

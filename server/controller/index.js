@@ -373,10 +373,13 @@ const writeCss = (dirPath, htmlTree) => {
     cssArr.forEach(({ css = {}, id }) => {
         let cssContent = '';
         const { extra = '' } = css;
-        css = { ...css, ...utils.cssStrToObj(extra) };
-        delete css.extra;
-        if (css) {
-            const cssLen = Object.keys(css).length;
+        // 如果有扩展css
+        if (extra) {
+            css = { ...css, ...utils.cssStrToObj(extra) };
+            delete css.extra;
+        }
+        const cssLen = Object.keys(css).length;
+        if (cssLen > 0) {
             let cssRowIdx = 0;
             for (let key in css) {
                 cssContent += `${utils.toLine(key)}: ${css[key]};`;
@@ -385,7 +388,10 @@ const writeCss = (dirPath, htmlTree) => {
                     cssContent += ``;
                 }
             }
-            const cssItem = `.${id} {${cssContent}}`;
+            // 末尾添加空行
+            const cssItem = `.${id} {${cssContent}}
+            
+            `;
             cssContext += cssItem;
         }
     });

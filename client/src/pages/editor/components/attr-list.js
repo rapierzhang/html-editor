@@ -65,17 +65,17 @@ class AttrList extends Component {
 
     // 渲染attr
     renderAttr(item, activeEle) {
-        const { type, value, inputType, list: selectList } = item;
+        const { type, value, inputType, list: selectList, placeholder } = item;
         const { list = [] } = activeEle;
         const eleVal = activeEle[value];
         const onChange = {
-            onChange: this.onAttrChange.bind(this, value)
-        }
+            onChange: this.onAttrChange.bind(this, value),
+        };
         switch (type) {
             case 'input':
-                return <input type={inputType} value={eleVal} {...onChange} />;
+                return <input type={inputType} value={eleVal} placeholder={placeholder} {...onChange} />;
             case 'textarea':
-                return <textarea value={eleVal} {...onChange} />;
+                return <textarea value={eleVal} placeholder={placeholder} {...onChange} />;
             case 'switch':
                 return <Switch value={eleVal} {...onChange} />;
             case 'select':

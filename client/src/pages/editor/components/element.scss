@@ -3,6 +3,7 @@
     min-width: 10px;
     min-height: 12px;
     z-index: 1;
+    display: inline-block;
 
     &.can-resize {
         display: block;

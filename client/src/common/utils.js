@@ -201,7 +201,7 @@ const utils = {
         return obj;
     },
     // 区分用途为 外部定位,内部样式
-    cssFilter(css, out) {
+    cssFilter(css = {}, out) {
         // css扩展
         const { extra = '' } = css;
         const extraObj = utils.cssTtrToObj(utils.has(extra, '-') ? utils.toHump(extra): extra);
@@ -257,6 +257,7 @@ const utils = {
     lineToUnderLine: str => str.replace(/-/g, '_'),
     // 组件默认方法
     defaultJs(element, id, data) {
+        const underLineId = utils.lineToUnderLine(id);
         let js = '';
         switch (element) {
             case 'Swiper':
@@ -270,17 +271,16 @@ const utils = {
                 `;
                 break;
             case 'Upload':
-                const underLineId = utils.lineToUnderLine(id);
                 js = `
-                    const ${underLineId}_ele = $('#${id}');
-                    const ${underLineId}_file_ele = $('#${id}-file');
-                    const ${underLineId}_url_ele = $('#${id}-url');
+                    const $${underLineId} = $('#${id}');
+                    const $${underLineId}_file = $('#${id}-file');
+                    const $${underLineId}_url = $('#${id}-url');
                     
-                    ${underLineId}_ele.on('click', () => ${underLineId}_file_ele[0].click());
+                    $${underLineId}.on('click', () => $${underLineId}_file[0].click());
                     
-                    ${underLineId}_file_ele.on('change', (e) => {
-                        const url = ${underLineId}_ele.attr('url');
-                        const fileName = ${underLineId}_ele.attr('file-name');
+                    $${underLineId}_file.on('change', e => {
+                        const url = $${underLineId}.attr('url');
+                        const fileName = $${underLineId}.attr('file-name');
                         const formData = new FormData();
                         formData.append(fileName, e.target.files[0]);
                         $.ajax({
@@ -293,11 +293,11 @@ const utils = {
                             processData: false,
                         })
                             .then(res => {
-                                ${underLineId}_url_ele.val(res.data.url);
-                                eval(${underLineId}_ele.attr('on-succ'));
+                                $${underLineId}_url.val(res.data.url);
+                                eval($${underLineId}.attr('on-succ'));
                             })
                             .catch(err => {
-                                eval(${underLineId}_ele.attr('on-err'));
+                                eval($${underLineId}.attr('on-err'));
                             });
                     });
                 `;
@@ -306,11 +306,11 @@ const utils = {
                 const { formId } = data;
                 js = `
                     $('#${id}').on('click', () => {
-                        const formEle = $('#${formId}');
-                        const url = formEle.attr('url') || '';
-                        const type = formEle.attr('fetch-type') || 'post';
-                        const contentType = formEle.attr('content-type') || 'application/json';
-                        const child = formEle.find('[name]');
+                        const $form = $('#${formId}');
+                        const url = $form.attr('url') || '';
+                        const type = $form.attr('fetch-type') || 'post';
+                        const contentType = $form.attr('content-type') || 'application/json';
+                        const child = $form.find('[name]');
                         let data = {};
                         [...child].forEach(item => {
                             const { type, name, value, checked } = item;
@@ -337,12 +337,14 @@ const utils = {
                             dataType: 'json',
                             contentType,
                             data,
-                        })
-                        .then(res => {
-                            console.error('success', res);
-                        })
-                        .catch(err => {
-                            console.error('error', err);
+                            success: res => {
+                                console.error(111, res);
+                                eval($form.attr('on-succ'));
+                            },
+                            error: err => {
+                                console.error(222, err);
+                                eval($form.attr('on-err'));
+                            },
                         });
                     });
                 `;
