@@ -8,7 +8,7 @@ const process = require('child_process');
 // 页面信息获取
 exports.pageGet = async (ctx, next) => {
     let { pid } = ctx.request.body;
-    const result = await PageModule.findOne({ pid });
+    const result = await PageModule.findOne({ pid }, { _id: 0, __v: 0 });
     if (result) {
         ctx.body = utils.res(200, 'ok', result);
     } else {
