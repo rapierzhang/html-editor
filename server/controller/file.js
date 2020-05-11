@@ -31,7 +31,7 @@ exports.listPreviewSave = async (ctx, next) => {
     const { files, body } = ctx.request;
     const { pid } = body;
     const { path: sourceFile } = files['file'];
-    const dirPath = `${path.resolve('./')}/public/list`;
+    const dirPath = `${path.resolve('./')}/public/preview`;
     const dirExists = fs.existsSync(dirPath);
     // 判断之前是否生成过代码目录
   if (!dirExists) fs.mkdirSync(dirPath);
@@ -44,7 +44,7 @@ exports.listPreviewSave = async (ctx, next) => {
         ctx.body = utils.res(403, 'move fail');
     } else {
         ctx.body = utils.res(200, 'ok', {
-            url: `http://localhost:3000/list/${imageName}`,
+            url: `http://localhost:3000/preview/${imageName}`,
         });
     }
 };

@@ -8,7 +8,7 @@
 /client/dist
 /server/public/html
 /server/public/upload
-/server/public/list
+/server/public/preview
 
 # misc
 .DS_Store
