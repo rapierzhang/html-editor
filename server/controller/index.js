@@ -171,9 +171,9 @@ const writeJs = (dirPath, htmlTree) => {
         }
         // 绑定事件
         if (bindJs) {
-            jsContext += `const ele${utils.delLine(id)} = $('#${id}');`;
+            jsContext += `const $${utils.delLine(id)} = $('#${id}');`;
             jsContext += `
-                ele${utils.delLine(id)}.on('${bindType}', () => {
+                $${utils.delLine(id)}.on('${bindType}', () => {
                         ${bindJs}
                     });`;
         }
@@ -184,7 +184,8 @@ const writeJs = (dirPath, htmlTree) => {
         // 空行
         if (initJs || bindJs || defaultJs || extraJs) {
             jsContext += `
-`;
+
+            `;
         }
     });
     fs.writeFileSync(`${jsDirPath}/index.js`, jsContext);
@@ -414,7 +415,7 @@ const defaultHtml = (pid, title = '', text = '') => {
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
         <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/css/swiper.css">
-        <link rel="stylesheet" href="./${pid}/css/index.css" />
+        <link rel="stylesheet" href="./${pid}/css/index.build.css" />
         <script>
             !(function(x) {
                 function w() {
