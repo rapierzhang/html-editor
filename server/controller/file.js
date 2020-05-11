@@ -26,3 +26,25 @@ exports.fileUpload = async (ctx, next) => {
         });
     }
 };
+
+exports.listPreviewSave = async (ctx, next) => {
+    const { files, body } = ctx.request;
+    const { pid } = body;
+    const { path: sourceFile } = files['file'];
+    const dirPath = `${path.resolve('./')}/public/list`;
+    const dirExists = fs.existsSync(dirPath);
+    // 判断之前是否生成过代码目录
+  if (!dirExists) fs.mkdirSync(dirPath);
+
+  const imageName = `${pid}.jpg`;
+  const destFile = `${dirPath}/${imageName}`;
+    // 移动文件
+    const err = await fs.renameSync(sourceFile, destFile);
+    if (err) {
+        ctx.body = utils.res(403, 'move fail');
+    } else {
+        ctx.body = utils.res(200, 'ok', {
+            url: `http://localhost:3000/list/${imageName}`,
+        });
+    }
+};

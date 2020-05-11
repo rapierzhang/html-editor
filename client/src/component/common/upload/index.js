@@ -29,7 +29,7 @@ class Upload extends Component {
         if (value) {
             const formData = new FormData();
             [...targetFiles].map(item => {
-                formData.append(fileName, item);
+                formData.append(fileName, item); // TODO 多文件?
             });
             for (let k in data) {
                 formData.append(k, data[k]);

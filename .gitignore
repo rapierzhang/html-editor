@@ -8,6 +8,8 @@
 /client/dist
 /server/public/html
 /server/public/upload
+/server/public/list
+
 # misc
 .DS_Store
 npm-debug.log*

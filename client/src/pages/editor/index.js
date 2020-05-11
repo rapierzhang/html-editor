@@ -4,7 +4,9 @@ import classNames from 'classnames';
 import { Dialog } from '../../component';
 import { Element, ArrtForm } from './components';
 import utils from '../../common/utils';
+import uploadFile from '../../common/upload';
 import query from 'query-string';
+import html2canvas from 'html2canvas';
 import './editor.scss';
 import {
     pageInit,
@@ -22,6 +24,7 @@ import {
     descSet,
     activeIdSet,
     isEditSet,
+    listPreviewSave
 } from './actions';
 
 // 模板列表
@@ -94,7 +97,7 @@ const componentList = [
             {
                 title: '提交',
                 component: 'Submit',
-            }
+            },
         ],
     },
     {
@@ -132,6 +135,7 @@ class Editor extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            pid: '',
             isDown: false,
             dragName: '',
             // 移动中位置
@@ -161,6 +165,7 @@ class Editor extends Component {
     // 初始化
     init() {
         const { pid } = query.parse(this.props.location.search);
+        this.setState({ pid });
         pageInit({ pid })
             .then(res => {
                 const { pid, index, title, desc, htmlTree } = res;
@@ -320,15 +325,26 @@ class Editor extends Component {
     }
 
     // 保存
-    save() {
+    async save() {
         const { elements, pid, index, title, desc } = this.props.editorInfo;
+        let preview = '';
+        // 生成截图
+        await html2canvas(document.getElementById('context')).then(async canvas => {
+            const base64Data = canvas.toDataURL('image/png');
+            const blob = utils.dataURItoBlob(base64Data);
+            const formData = new FormData();
+            formData.append('file', blob);
+            formData.append('pid', pid);
+            // 保存截图
+            preview = await listPreviewSave(formData);
+        });
         htmlSave({
             pid,
             index,
             title,
             desc,
             htmlTree: elements,
-            // preview
+            preview
         })
             .then(res => {
                 utils.toast(res.result ? '保存成功' : '保存失败');
@@ -452,7 +468,7 @@ class Editor extends Component {
                     </div>
                     {/*------ 画布 ------*/}
                     <div className='table' onClick={this.unSelect.bind(this)}>
-                        <div className='context' ref='ctx'>
+                        <div id='context' className='context' ref='ctx'>
                             {this.renderElements(elements)}
                         </div>
                     </div>
@@ -472,7 +488,7 @@ class Editor extends Component {
                 <Dialog
                     title='删除确认'
                     show={deleteShow}
-                    renderFooter={(
+                    renderFooter={
                         <div className='footer'>
                             <div className='button cancel' onClick={this.deleteDialogHandle.bind(this, false)}>
                                 取消
@@ -481,7 +497,7 @@ class Editor extends Component {
                                 确认
                             </div>
                         </div>
-                    )}
+                    }
                 >
                     <div className=''>测试</div>
                 </Dialog>

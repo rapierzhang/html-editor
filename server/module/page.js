@@ -7,11 +7,12 @@ const pageSchema = new Schema({
     index: Number,
     title: String,
     desc: String,
+    preview: String,
     htmlTree: Object,
     createTime: String,
     updateTime: String,
 });
 
-const PageModel = mongoose.model('page', pageSchema)
+const PageModel = mongoose.model('page', pageSchema);
 
 module.exports = PageModel;

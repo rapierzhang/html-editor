@@ -304,6 +304,7 @@ const utils = {
                 break;
             case 'Submit':
                 const { formId } = data;
+                // TODO 返回值
                 js = `
                     $('#${id}').on('click', () => {
                         const $form = $('#${formId}');
@@ -353,6 +354,21 @@ const utils = {
                 js = '';
         }
         return js ? { defaultJs: js } : {};
+    },
+
+    // base64转blob
+    dataURItoBlob (base64Data) {
+        let byteString;
+        if (base64Data.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(base64Data.split(',')[1]);
+        else
+            byteString = unescape(base64Data.split(',')[1]);
+        const mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+        let ia = new Uint8Array(byteString.length);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ia], {type: mimeString});
     },
 };
 

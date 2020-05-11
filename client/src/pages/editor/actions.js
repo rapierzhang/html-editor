@@ -14,6 +14,7 @@ import {
 } from './action-types';
 import { fetch } from '../../common';
 import utils from '../../common/utils';
+import uploadFile from '../../common/upload';
 
 // 设置pid
 export const pidSet = pid => dispatch => {
@@ -165,3 +166,8 @@ export const dialogHandle = (id, state) => dispatch => {
         state,
     });
 };
+
+export const listPreviewSave = formData =>
+    uploadFile({ url: 'http://localhost:3000/api/file/list_preview_save', formData })// ^^^^^^
+        .then(res => res.data.url)
+        .catch(() => '');
