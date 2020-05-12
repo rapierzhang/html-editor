@@ -539,7 +539,10 @@ class ArrtForm extends Component {
                                                                         )}
                                                                         value={css.paddingTop}
                                                                     />
-                                                                    {activeEle.element !== 'Text' ? (
+                                                                    {!utils.has(
+                                                                        ['Text', 'Link', 'Radio', 'Checkbox'],
+                                                                        activeEle.element,
+                                                                    ) ? (
                                                                         <div className='entity'>
                                                                             <input
                                                                                 className='entity-input'
