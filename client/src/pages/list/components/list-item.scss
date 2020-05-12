@@ -12,6 +12,11 @@
     margin: 10px;
     border-radius: 2px;
 
+    &:hover {
+        top: -4px;
+        box-shadow: 0px 10px 14px 0 rgba(0,0,0,0.08);
+    }
+
     .img-box {
         width: 170px;
         height: 200px;

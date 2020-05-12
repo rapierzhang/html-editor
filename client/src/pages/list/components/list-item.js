@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './list-item.scss';
 import { utils } from '../../../common';
+import './list-item.scss';
 
 class ListItem extends Component {
     constructor(props) {
