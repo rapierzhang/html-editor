@@ -1,4 +1,5 @@
 import { Toast } from '../component/';
+import copy from 'copy-to-clipboard';
 
 const fetchStatus = {
     defaultData: {
@@ -20,41 +21,35 @@ const fetchStatus = {
             },
         });
     },
-    fetchSucc(that, key, data, func) {
+    fetchSucc(that, key, data) {
         /*
          * 请求成功
          * @param   that     this
          * @param   key      名称
          * @param   data     数据
          * */
-        that.setState(
-            {
-                [key]: {
-                    isInit: true,
-                    fetchStatus: 'success',
-                    data,
-                },
+        that.setState({
+            [key]: {
+                isInit: true,
+                fetchStatus: 'success',
+                data,
             },
-            func,
-        );
+        });
     },
-    fetchErr(that, key, data, func) {
+    fetchErr(that, key, data) {
         /*
          * 请求失败
          * @param   that     this
          * @param   key      名称
          * @param   data     错误信息
          * */
-        that.setState(
-            {
-                [key]: {
-                    isInit: false,
-                    fetchStatus: 'error',
-                    data,
-                },
+        that.setState({
+            [key]: {
+                isInit: false,
+                fetchStatus: 'error',
+                data,
             },
-            func,
-        );
+        });
     },
 };
 
@@ -458,7 +453,13 @@ const utils = {
         }
         return new Blob([ia], { type: mimeString });
     },
-    enter(e) {},
+    // 监听回车
+    enter: e => new Promise(resolve => (e.which == 13 || e.keyCode == 13) && resolve()),
+    // 复制
+    copy(text) {
+        copy(text);
+        utils.toast('复制成功！');
+    },
     ...fetchStatus,
 };
 

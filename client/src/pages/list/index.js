@@ -59,9 +59,7 @@ class List extends Component {
 
     // 监听回车
     enterPress(e) {
-        if (e.which == 13 || e.keyCode == 13) {
-            this.search();
-        }
+        utils.enter(e).then(() => this.search());
     }
 
     // 取消查询

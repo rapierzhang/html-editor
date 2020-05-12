@@ -422,9 +422,15 @@ class Editor extends Component {
         }
     }
 
+    // 复制pid
+    copyPid() {
+        const { pid } = this.props.editorInfo;
+        utils.copy(pid);
+    }
+
     render() {
         const {
-            editorInfo: { title, desc, elements, activeEle, activeId },
+            editorInfo: { pid, title, desc, elements, activeEle, activeId },
         } = this.props;
         const { isDown, dragName, movingX, movingY, deleteShow, deletePid } = this.state;
 
@@ -520,10 +526,13 @@ class Editor extends Component {
                         </div>
                     }
                 >
+                    <p className='delete-key' onClick={this.copyPid.bind(this)}>
+                        {pid}
+                    </p>
                     <input
                         type='text'
                         className='delete-input'
-                        placeholder='请填写本页面id'
+                        placeholder='请粘贴上面的id入内删除'
                         value={deletePid}
                         onChange={this.delInputChange.bind(this)}
                     />
