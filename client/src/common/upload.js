@@ -11,7 +11,12 @@ const uploadFile = opts => {
         axios
             .post(url, formData, config)
             .then(res => {
-                resolve(res.data);
+                const { data } = res
+                if (data.code === 200) {
+                    resolve(data);
+                } else {
+                    reject(data);
+                }
             })
             .catch(err => {
                 reject(err);

@@ -104,21 +104,21 @@ const alignItemsList = [
 const bgRepeatList = [
     {
         title: '重复',
-        value: 'repeat'
+        value: 'repeat',
     },
     {
         title: 'X轴重复',
-        value: 'repeat-x'
+        value: 'repeat-x',
     },
     {
         title: 'Y轴重复',
-        value: 'repeat-y'
+        value: 'repeat-y',
     },
     {
         title: '不重复',
-        value: 'no-repeat'
-    }
-]
+        value: 'no-repeat',
+    },
+];
 
 class ArrtForm extends Component {
     constructor() {
@@ -262,6 +262,15 @@ class ArrtForm extends Component {
         } else {
             this.onStyleChange('display', 'block');
         }
+    }
+
+    onBgUploadSucc(data) {
+        const { url } = data;
+        this.onStyleChange('backgroundImage', `url(${url})`);
+    }
+
+    onBgUploadErr() {
+        utils.toast('上传失败');
     }
 
     render() {
@@ -429,11 +438,24 @@ class ArrtForm extends Component {
                                             </div>
                                             <div className='row'>
                                                 <span>背景图: </span>
-                                                <input
-                                                    type='text'
-                                                    onChange={this.onStyleChange.bind(this, 'backgroundImage')}
-                                                    value={css.backgroundImage}
-                                                />
+                                                <div className='upload-image'>
+                                                    <input
+                                                        type='text'
+                                                        value={css.backgroundImage}
+                                                        onChange={this.onStyleChange.bind(this, 'backgroundImage')}
+                                                    />
+                                                    {/*^^^^^^*/}
+                                                    <Upload
+                                                        className='upload-btn'
+                                                        url={'http://localhost:3000/api/file/upload'}
+                                                        fileName='file'
+                                                        data={{pid: '65d0cf96c6104d6a8b0dec6e3c6b3023'}}
+                                                        onUploadSucc={this.onBgUploadSucc.bind(this)}
+                                                        onUploadErr={this.onBgUploadErr.bind(this)}
+                                                    >
+                                                        <span>上传</span>
+                                                    </Upload>
+                                                </div>
                                             </div>
                                             <div className='row'>
                                                 <span>背景位置: </span>
