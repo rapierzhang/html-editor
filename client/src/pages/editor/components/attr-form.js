@@ -130,11 +130,27 @@ class ArrtForm extends Component {
 
             movingX: 0,
             movingY: 0,
+
+            activeId: '',
+            activeEle: {},
         };
     }
 
     static getDerivedStateFromProps(props, state) {
-        // console.error(props.editorInfo.activeEle)
+        const { activeId, activeEle } = props.editorInfo;
+        // 选中元素
+        if (activeId != state.activeId) {
+            return {
+                activeId,
+                activeEle,
+            };
+        }
+        // 更新属性
+        if (JSON.stringify(activeEle) != JSON.stringify(state.activeEle)) {
+            return {
+                activeEle,
+            }
+        }
         return null;
     }
 
@@ -172,6 +188,7 @@ class ArrtForm extends Component {
         this.props.dispatch(isEditSet(false));
     }
 
+    // 弹窗控制
     dialogHandle(id, state) {
         this.props.dispatch(dialogHandle(id, state));
     }
@@ -273,9 +290,52 @@ class ArrtForm extends Component {
         utils.toast('上传失败');
     }
 
+    // 背景图相关
+    bgImageFocus() {
+        const { activeEle } = this.state;
+        const { css } = activeEle;
+        const backgroundImage = css.backgroundImage.match(/url\((.*)\)/, '$1')[1];
+        this.setState({
+            activeEle: {
+                ...activeEle,
+                css: {
+                    ...css,
+                    backgroundImage
+                },
+            },
+        });
+    }
+
+    bgImageChange(e) {
+        const { activeEle } = this.state;
+        const { css } = activeEle;
+        css.backgroundImage = e.target.value;
+        this.setState({
+            activeEle: {
+                ...activeEle,
+                css,
+            },
+        });
+    }
+
+    bgImageBlur(e) {
+        const backgroundImage = `url(${e.target.value})`;
+        const { activeEle } = this.state;
+        this.setState({
+            activeEle: {
+                ...activeEle,
+                css: {
+                    ...activeEle.css,
+                    backgroundImage,
+                },
+            },
+        });
+        this.onStyleChange('backgroundImage', backgroundImage);
+    }
+
     render() {
-        const { pid, elements, isEdit, activeId, activeEle = {} } = this.props.editorInfo;
-        const { navIndex, movingX, movingY, hoverId } = this.state;
+        const { pid, elements, isEdit } = this.props.editorInfo;
+        const { navIndex, movingX, movingY, hoverId, activeId, activeEle } = this.state;
         const { css = {} } = activeEle;
 
         return (
@@ -432,8 +492,9 @@ class ArrtForm extends Component {
                                                 <span>背景颜色: </span>
                                                 <input
                                                     type='text'
-                                                    onChange={this.onStyleChange.bind(this, 'backgroundColor')}
                                                     value={css.backgroundColor}
+                                                    placeholder='#xxxxxx 或 rgb(*, *, *)'
+                                                    onChange={this.onStyleChange.bind(this, 'backgroundColor')}
                                                 />
                                             </div>
                                             <div className='row'>
@@ -441,15 +502,18 @@ class ArrtForm extends Component {
                                                 <div className='upload-image'>
                                                     <input
                                                         type='text'
+                                                        placeholder='url(*****)'
                                                         value={css.backgroundImage}
-                                                        onChange={this.onStyleChange.bind(this, 'backgroundImage')}
+                                                        onFocus={this.bgImageFocus.bind(this)}
+                                                        onChange={this.bgImageChange.bind(this)}
+                                                        onBlur={this.bgImageBlur.bind(this)}
                                                     />
                                                     {/*^^^^^^*/}
                                                     <Upload
                                                         className='upload-btn'
                                                         url={'http://localhost:3000/api/file/upload'}
                                                         fileName='file'
-                                                        data={{pid: '65d0cf96c6104d6a8b0dec6e3c6b3023'}}
+                                                        data={{ pid: '65d0cf96c6104d6a8b0dec6e3c6b3023' }}
                                                         onUploadSucc={this.onBgUploadSucc.bind(this)}
                                                         onUploadErr={this.onBgUploadErr.bind(this)}
                                                     >
@@ -461,6 +525,7 @@ class ArrtForm extends Component {
                                                 <span>背景位置: </span>
                                                 <input
                                                     type='text'
+                                                    placeholder='**px **px'
                                                     onChange={this.onStyleChange.bind(this, 'backgroundPosition')}
                                                     value={css.backgroundPosition}
                                                 />
@@ -469,6 +534,7 @@ class ArrtForm extends Component {
                                                 <span>背景大小: </span>
                                                 <input
                                                     type='text'
+                                                    placeholder='xx% xx%'
                                                     onChange={this.onStyleChange.bind(this, 'backgroundSize')}
                                                     value={css.backgroundPosition}
                                                 />
@@ -494,22 +560,24 @@ class ArrtForm extends Component {
                                                 <span>字号: </span>
                                                 <input
                                                     type='text'
-                                                    onChange={this.onStyleChange.bind(this, 'fontSize')}
                                                     value={css.fontSize}
+                                                    placeholder='12px'
+                                                    onChange={this.onStyleChange.bind(this, 'fontSize')}
                                                 />
                                             </div>
                                             <div className='row'>
                                                 <span>颜色: </span>
                                                 <input
                                                     type='text'
-                                                    onChange={this.onStyleChange.bind(this, 'color')}
+                                                    placeholder='#xxxxxx 或 rgb(*, *, *)'
                                                     value={css.color}
+                                                    onChange={this.onStyleChange.bind(this, 'color')}
                                                 />
                                             </div>
                                             <div className='row'>
                                                 <span>粗细: </span>
                                                 <input
-                                                    type='text'
+                                                    type='500'
                                                     onChange={this.onStyleChange.bind(this, 'fontWeight')}
                                                     value={css.fontWeight}
                                                 />
@@ -518,8 +586,8 @@ class ArrtForm extends Component {
                                                 <span>字体: </span>
                                                 <input
                                                     type='text'
-                                                    onChange={this.onStyleChange.bind(this, 'fontFamily')}
                                                     value={css.fontFamily}
+                                                    onChange={this.onStyleChange.bind(this, 'fontFamily')}
                                                 />
                                             </div>
                                         </div>
@@ -534,8 +602,9 @@ class ArrtForm extends Component {
                                                 <span>圆角</span>
                                                 <input
                                                     type='text'
-                                                    onChange={this.onStyleChange.bind(this, 'borderRadius')}
+                                                    placeholder='0px'
                                                     value={css.borderRadius}
+                                                    onChange={this.onStyleChange.bind(this, 'borderRadius')}
                                                 />
                                             </div>
                                         </div>
