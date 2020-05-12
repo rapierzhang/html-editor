@@ -27,7 +27,7 @@ exports.pageSave = async (ctx, next) => {
     if (result) {
         console.error('有数据 修改');
         try {
-            pageResult = await PageModule.update(
+            pageResult = await PageModule.updateOne(
                 { pid },
                 {
                     $set: {
@@ -39,7 +39,7 @@ exports.pageSave = async (ctx, next) => {
                     },
                 },
             );
-            listResult = await ListModule.update(
+            listResult = await ListModule.updateOne(
                 { pid },
                 {
                     $set: {
@@ -80,7 +80,6 @@ exports.pageSave = async (ctx, next) => {
             msg = e;
         }
     }
-    console.error(pageResult);
 
     if (!!pageResult && !!listResult) {
         ctx.body = utils.res(200, 'ok', { result: true });
@@ -129,8 +128,16 @@ exports.pageOpen = async (ctx, next) => {
 // 页面删除
 exports.pageDelete = async (ctx, next) => {
     const { pid } = ctx.request.body;
-    const resultPage = await PageModule.remove({ pid });
-    const resultList = await ListModule.remove({ pid });
+    const resultPage = await PageModule.deleteOne({ pid });
+    const resultList = await ListModule.deleteOne({ pid });
+
+    const dirPath = `${path.resolve('./')}/public/html/${pid}`;
+    // 删除生成目录
+    utils.delFile(dirPath);
+    // 删除生成文件
+    fs.unlinkSync(`${path.resolve('./')}/public/preview/${pid}.jpg`);
+
+
     if (resultPage.ok === 1 && resultList.ok === 1) {
         ctx.body = utils.res(200, 'ok', { result: true });
     } else {

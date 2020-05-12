@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const utils = {
     // 对象转扁平化数组
     objToArr: obj => {
@@ -70,13 +72,32 @@ const utils = {
     // css字符串转obj
     cssStrToObj(text = '') {
         let obj = {};
-        const arr = utils.trim(text).replace('\n', '').split(';');
+        const arr = utils
+            .trim(text)
+            .replace('\n', '')
+            .split(';');
         arr.forEach(item => {
             if (!item) return;
             const [k, v] = item.split(':');
             obj[k] = v;
         });
         return obj;
+    },
+
+    delFile(path) {
+        let files = [];
+        if (fs.existsSync(path)) {
+            files = fs.readdirSync(path);
+            files.forEach(file => {
+                const curPath = `${path}/${file}`;
+                if (fs.statSync(curPath).isDirectory()) {
+                    utils.delFile(curPath);
+                } else {
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(path);
+        }
     },
 };
 
