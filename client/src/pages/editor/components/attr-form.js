@@ -334,16 +334,16 @@ class ArrtForm extends Component {
                                                 />
                                             </div>
                                             {utils.has(['absolute', 'fixed', 'relative'], css.position) &&
-                                            directionList.map((row, idx) => (
-                                                <div key={`row-${idx}`} className='row'>
-                                                    <span>{row}: </span>
-                                                    <input
-                                                        type='text'
-                                                        onChange={this.onStyleChange.bind(this, row)}
-                                                        value={css[row]}
-                                                    />
-                                                </div>
-                                            ))}
+                                                directionList.map((row, idx) => (
+                                                    <div key={`row-${idx}`} className='row'>
+                                                        <span>{row}: </span>
+                                                        <input
+                                                            type='text'
+                                                            onChange={this.onStyleChange.bind(this, row)}
+                                                            value={css[row]}
+                                                        />
+                                                    </div>
+                                                ))}
                                         </div>
                                     </div>
                                 )}
@@ -539,29 +539,33 @@ class ArrtForm extends Component {
                                                                         )}
                                                                         value={css.paddingTop}
                                                                     />
-                                                                    <div className='entity'>
-                                                                        <input
-                                                                            className='entity-input'
-                                                                            type='text'
-                                                                            placeholder='width'
-                                                                            onChange={this.onStyleChange.bind(
-                                                                                this,
-                                                                                'width',
-                                                                            )}
-                                                                            value={css.width}
-                                                                        />
-                                                                        x
-                                                                        <input
-                                                                            className='entity-input'
-                                                                            type='text'
-                                                                            placeholder='height'
-                                                                            onChange={this.onStyleChange.bind(
-                                                                                this,
-                                                                                'height',
-                                                                            )}
-                                                                            value={css.height}
-                                                                        />
-                                                                    </div>
+                                                                    {activeEle.element !== 'Text' ? (
+                                                                        <div className='entity'>
+                                                                            <input
+                                                                                className='entity-input'
+                                                                                type='text'
+                                                                                placeholder='width'
+                                                                                onChange={this.onStyleChange.bind(
+                                                                                    this,
+                                                                                    'width',
+                                                                                )}
+                                                                                value={css.width}
+                                                                            />
+                                                                            x
+                                                                            <input
+                                                                                className='entity-input'
+                                                                                type='text'
+                                                                                placeholder='height'
+                                                                                onChange={this.onStyleChange.bind(
+                                                                                    this,
+                                                                                    'height',
+                                                                                )}
+                                                                                value={css.height}
+                                                                            />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className='entity' />
+                                                                    )}
                                                                     <input
                                                                         className='padding-input'
                                                                         type='text'
