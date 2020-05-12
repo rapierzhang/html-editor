@@ -289,6 +289,9 @@ class Editor extends Component {
                 utils.toast('只有容器元素可以容纳其他元素');
                 return;
             }
+        } else if (element === 'Dialog') {
+        // dialog 放到最外层
+            newElements = { ...elements, ...{ [id]: defaultEle } };
         } else {
             newElements = utils.deepInsert(elements, 'root', { [id]: defaultEle });
         }
