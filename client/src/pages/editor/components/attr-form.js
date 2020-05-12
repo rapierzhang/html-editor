@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import utils from '../../../common/utils';
 import classNames from 'classnames';
 import { Select, Switch } from '../../../component';
-import { AttrList } from './index';
+import { AttrList, Box } from './index';
 import './attr-form.scss';
 import {
     activeIdSet,
@@ -101,6 +101,24 @@ const alignItemsList = [
         value: 'stretch',
     },
 ];
+const bgRepeatList = [
+    {
+        title: '重复',
+        value: 'repeat'
+    },
+    {
+        title: 'X轴重复',
+        value: 'repeat-x'
+    },
+    {
+        title: 'Y轴重复',
+        value: 'repeat-y'
+    },
+    {
+        title: '不重复',
+        value: 'no-repeat'
+    }
+]
 
 class ArrtForm extends Component {
     constructor() {
@@ -402,6 +420,14 @@ class ArrtForm extends Component {
                                         <div className='card-title'>背景</div>
                                         <div className='card-content'>
                                             <div className='row'>
+                                                <span>背景颜色: </span>
+                                                <input
+                                                    type='text'
+                                                    onChange={this.onStyleChange.bind(this, 'backgroundColor')}
+                                                    value={css.backgroundColor}
+                                                />
+                                            </div>
+                                            <div className='row'>
                                                 <span>背景图: </span>
                                                 <input
                                                     type='text'
@@ -410,11 +436,28 @@ class ArrtForm extends Component {
                                                 />
                                             </div>
                                             <div className='row'>
-                                                <span>背景颜色: </span>
+                                                <span>背景位置: </span>
                                                 <input
                                                     type='text'
-                                                    onChange={this.onStyleChange.bind(this, 'backgroundColor')}
-                                                    value={css.backgroundColor}
+                                                    onChange={this.onStyleChange.bind(this, 'backgroundPosition')}
+                                                    value={css.backgroundPosition}
+                                                />
+                                            </div>
+                                            <div className='row'>
+                                                <span>背景大小: </span>
+                                                <input
+                                                    type='text'
+                                                    onChange={this.onStyleChange.bind(this, 'backgroundSize')}
+                                                    value={css.backgroundPosition}
+                                                />
+                                            </div>
+                                            <div className='row'>
+                                                <span>背景重复: </span>
+                                                <Select
+                                                    list={bgRepeatList}
+                                                    value={css.backgroundRepeat || 'repeat'}
+                                                    titleShow
+                                                    onChange={this.onStyleChange.bind(this, 'backgroundRepeat')}
                                                 />
                                             </div>
                                         </div>
@@ -478,153 +521,7 @@ class ArrtForm extends Component {
                                 )}
                                 {/*------ 盒子模型 ------*/}
                                 {!utils.has(['Root', 'Dialog'], activeEle.element) && (
-                                    <div className='attr-card'>
-                                        <div className='card-title'>盒子</div>
-                                        <div className='card-content'>
-                                            <div className='box-model'>
-                                                <span className='tag'>margin</span>
-                                                <input
-                                                    className='box-input'
-                                                    type='text'
-                                                    placeholder='-'
-                                                    onChange={this.onStyleChange.bind(this, 'marginLeft')}
-                                                    value={css.marginLeft}
-                                                />
-                                                <div className='margin-inner'>
-                                                    <input
-                                                        className='box-input'
-                                                        type='text'
-                                                        placeholder='-'
-                                                        onChange={this.onStyleChange.bind(this, 'marginTop')}
-                                                        value={css.marginTop}
-                                                    />
-                                                    <div className='border'>
-                                                        <span className='tag'>border</span>
-                                                        <input
-                                                            className='box-input'
-                                                            type='text'
-                                                            placeholder='-'
-                                                            onChange={this.onStyleChange.bind(this, 'borderLeft')}
-                                                            value={css.borderLeft}
-                                                        />
-                                                        <div className='border-inner'>
-                                                            <input
-                                                                className='box-input'
-                                                                type='text'
-                                                                placeholder='-'
-                                                                onChange={this.onStyleChange.bind(this, 'borderTop')}
-                                                                value={css.borderTop}
-                                                            />
-                                                            <div className='padding'>
-                                                                <span className='tag'>padding</span>
-
-                                                                <input
-                                                                    className='padding-input'
-                                                                    type='text'
-                                                                    placeholder='-'
-                                                                    onChange={this.onStyleChange.bind(
-                                                                        this,
-                                                                        'paddingLeft',
-                                                                    )}
-                                                                    value={css.paddingLeft}
-                                                                />
-                                                                <div className='padding-inner'>
-                                                                    <input
-                                                                        className='padding-input'
-                                                                        type='text'
-                                                                        placeholder='-'
-                                                                        onChange={this.onStyleChange.bind(
-                                                                            this,
-                                                                            'paddingTop',
-                                                                        )}
-                                                                        value={css.paddingTop}
-                                                                    />
-                                                                    {!utils.has(
-                                                                        ['Text', 'Link', 'Radio', 'Checkbox'],
-                                                                        activeEle.element,
-                                                                    ) ? (
-                                                                        <div className='entity'>
-                                                                            <input
-                                                                                className='entity-input'
-                                                                                type='text'
-                                                                                placeholder='width'
-                                                                                onChange={this.onStyleChange.bind(
-                                                                                    this,
-                                                                                    'width',
-                                                                                )}
-                                                                                value={css.width}
-                                                                            />
-                                                                            x
-                                                                            <input
-                                                                                className='entity-input'
-                                                                                type='text'
-                                                                                placeholder='height'
-                                                                                onChange={this.onStyleChange.bind(
-                                                                                    this,
-                                                                                    'height',
-                                                                                )}
-                                                                                value={css.height}
-                                                                            />
-                                                                        </div>
-                                                                    ) : (
-                                                                        <div className='entity' />
-                                                                    )}
-                                                                    <input
-                                                                        className='padding-input'
-                                                                        type='text'
-                                                                        placeholder='-'
-                                                                        onChange={this.onStyleChange.bind(
-                                                                            this,
-                                                                            'paddingBottom',
-                                                                        )}
-                                                                        value={css.paddingBottom}
-                                                                    />
-                                                                </div>
-                                                                <input
-                                                                    className='padding-input'
-                                                                    type='text'
-                                                                    placeholder='-'
-                                                                    onChange={this.onStyleChange.bind(
-                                                                        this,
-                                                                        'paddingRight',
-                                                                    )}
-                                                                    value={css.paddingRight}
-                                                                />
-                                                            </div>
-                                                            <input
-                                                                className='box-input'
-                                                                type='text'
-                                                                placeholder='-'
-                                                                onChange={this.onStyleChange.bind(this, 'borderBottom')}
-                                                                value={css.borderBottom}
-                                                            />
-                                                        </div>
-                                                        <input
-                                                            className='box-input'
-                                                            type='text'
-                                                            placeholder='-'
-                                                            onChange={this.onStyleChange.bind(this, 'borderRight')}
-                                                            value={css.borderRight}
-                                                        />
-                                                    </div>
-                                                    <input
-                                                        className='box-input'
-                                                        type='text'
-                                                        placeholder='-'
-                                                        onChange={this.onStyleChange.bind(this, 'marginBottom')}
-                                                        value={css.marginBottom}
-                                                    />
-                                                </div>
-                                                <input
-                                                    className='box-input'
-                                                    type='text'
-                                                    placeholder='-'
-                                                    onChange={this.onStyleChange.bind(this, 'marginRight')}
-                                                    value={css.marginRight}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <Box css={css} activeEle={activeEle} onChange={this.onStyleChange.bind(this)} />
                                 )}
                                 {/*------ 扩展 ------*/}
                                 <div className='attr-card'>
