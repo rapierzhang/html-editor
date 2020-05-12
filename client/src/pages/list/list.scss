@@ -20,10 +20,20 @@
     }
 
     .content {
+        width: 1366px;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
         align-items: flex-start;
+        flex-wrap: wrap;
         padding: 30px 50px;
+        margin: 0 auto;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
     }
 }

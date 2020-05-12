@@ -1,5 +1,63 @@
 import { Toast } from '../component/';
 
+const fetchStatus = {
+    defaultData: {
+        isInit: false,
+        fetchStatus: 'norequest',
+        data: {},
+    },
+    fetchLoading(that, key) {
+        /*
+         * 请求中
+         * @param  that     this
+         * @param  key      名称
+         * */
+        that.setState({
+            [key]: {
+                isInit: that.state[key].isInit,
+                fetchStatus: 'loading',
+                data: that.state[key].data,
+            },
+        });
+    },
+    fetchSucc(that, key, data, func) {
+        /*
+         * 请求成功
+         * @param   that     this
+         * @param   key      名称
+         * @param   data     数据
+         * */
+        that.setState(
+            {
+                [key]: {
+                    isInit: true,
+                    fetchStatus: 'success',
+                    data,
+                },
+            },
+            func,
+        );
+    },
+    fetchErr(that, key, data, func) {
+        /*
+         * 请求失败
+         * @param   that     this
+         * @param   key      名称
+         * @param   data     错误信息
+         * */
+        that.setState(
+            {
+                [key]: {
+                    isInit: false,
+                    fetchStatus: 'error',
+                    data,
+                },
+            },
+            func,
+        );
+    },
+};
+
 const utils = {
     /*
      * 节点查询
@@ -396,6 +454,7 @@ const utils = {
         }
         return new Blob([ia], {type: mimeString});
     },
+    ...fetchStatus
 };
 
 export default utils;

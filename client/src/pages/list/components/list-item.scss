@@ -1,5 +1,5 @@
 .list-item {
-    width: 200px;
+    width: 190px;
     height: 380px;
     display: flex;
     flex-direction: column;
@@ -13,7 +13,7 @@
     border-radius: 2px;
 
     .img-box {
-        width: 180px;
+        width: 170px;
         height: 200px;
         overflow: scroll;
         border: 1px solid #d9d9d9;
@@ -21,12 +21,12 @@
 
         .img {
             float: left;
-            width: 180px;
+            width: 170px;
         }
     }
 
     .title {
-        width: 180px;
+        width: 170px;
         font-size: 18px;
         font-weight: 700;
         margin-top: 5px;
@@ -36,7 +36,7 @@
     }
 
     .desc {
-        width: 180px;
+        width: 170px;
         color: #8c8c8c;
         margin-top: 5px;
         overflow:hidden;

@@ -1,0 +1,50 @@
+.page-box {
+    display: inline-block;
+    height: 30px;
+    margin: 20px 0;
+
+    .page-item {
+        float: left;
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        text-align: center;
+        border-radius: 2px;
+        border: 1px solid #e8e8e8;
+        background: #fff;
+        font-size: 14px;
+        color: #595959;
+        margin: 0 4px;
+        cursor: pointer;
+
+        &.active {
+            background: #007aff;
+            border: 1px solid #007aff;
+            color: #fff;
+        }
+    }
+
+    .page-btn {
+        float: left;
+        width: 58px;
+        height: 28px;
+        line-height: 28px;
+        border: 1px solid #e8e8e8;
+        border-radius: 2px;
+        background: #fff;
+        text-align: center;
+        font-size: 14px;
+        color: #595959;
+        margin: 0 4px;
+        cursor: pointer;
+
+        &.disable {
+            color: #bfbfbf;
+            cursor: default;
+        }
+    }
+
+    .icon-page-more {
+        float: left;
+    }
+}
