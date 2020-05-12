@@ -65,7 +65,7 @@ const utils = {
      * @param    key         string  需要查询的key
      * return                object  查到的子树
      * */
-    deepSearch: (obj1, key1) => {
+    deepSearch(obj1, key1) {
         let target = {};
         const recursion = (obj, key) => {
             if (obj.hasOwnProperty(key)) {
@@ -87,7 +87,7 @@ const utils = {
      * @param    obj2         object  需要更改的子树
      * return                 object  更新后的树
      * */
-    deepUpdate: (obj1, obj2) => {
+    deepUpdate(obj1, obj2) {
         const k = Object.keys(obj2)[0];
         let target = {};
         if (obj1.hasOwnProperty(k)) {
@@ -110,7 +110,7 @@ const utils = {
      * @oaram    insertObj   object  插入的对象
      * return                object  插入后的树
      * */
-    deepInsert: (obj, k, insertObj) => {
+    deepInsert(obj, k, insertObj) {
         let target = {};
         for (let key in obj) {
             const item = obj[key];
@@ -138,7 +138,7 @@ const utils = {
      * @oaram    insertObj   object  插入的对象          {id: {id:...}}
      * return                object  插入后的树
      * */
-    deepInsertSameFloor: (obj, id, before, insertObj) => {
+    deepInsertSameFloor(obj, id, before, insertObj) {
         let target = {};
         if (obj.hasOwnProperty(id)) {
             const arr = Object.values(obj);
@@ -173,7 +173,7 @@ const utils = {
      * @param    k       string  需要删除节点的key
      * return            object  删除后的树
      * */
-    deepRemove: (obj, k) => {
+    deepRemove(obj, k) {
         let target = {};
         if (!!obj[k]) {
             let objCopy = { ...obj };
@@ -200,7 +200,7 @@ const utils = {
      * @param    initObj object  需要遍历的树
      * return            array   结构话后的数组
      * */
-    objDepthFirstTraversal: initObj => {
+    objDepthFirstTraversal(initObj) {
         let list = [];
         const render = obj => {
             Object.values(obj).map((item, idx) => {
@@ -223,7 +223,7 @@ const utils = {
      * @param {string} [fmt] 输出格式，不传默认为 {yyyy-MM-dd hh:mm:ss}
      * @return {string} 返回转换后的时间字符串
      */
-    dateFormat: (ms, fmt) => {
+    dateFormat(ms, fmt) {
         const date = new Date(parseInt(ms));
         fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
         const o = {
@@ -243,7 +243,7 @@ const utils = {
         return fmt;
     },
     // 属性自动补全
-    autoComplete: (attr, text) => {
+    autoComplete(attr, text) {
         const pxArr = [
             ...['fontSize', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
             ...['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'width', 'height'],
@@ -257,7 +257,7 @@ const utils = {
         return text;
     },
     // 属性自动过滤
-    autoFilter: (attr, text) => {
+    autoFilter(attr, text) {
         const pxArr = [
             ...['fontSize', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
             ...['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'width', 'height'],
@@ -276,20 +276,23 @@ const utils = {
     toHump: str => str.replace(/\-(\w)/g, (all, letter) => letter.toUpperCase()),
     cssTtrToObj(text = '') {
         let obj = {};
-        const arr = utils.trim(text).replace('\n', '').split(';');
+        const arr = utils
+            .trim(text)
+            .replace('\n', '')
+            .split(';');
         arr.forEach(item => {
             if (!item) return;
             const [k, v] = item.split(':');
             obj[k] = v;
-        })
+        });
         return obj;
     },
     // 区分用途为 外部定位,内部样式
     cssFilter(css = {}, out) {
         // css扩展
         const { extra = '' } = css;
-        const extraObj = utils.cssTtrToObj(utils.has(extra, '-') ? utils.toHump(extra): extra);
-        css = {...css, ...extraObj};
+        const extraObj = utils.cssTtrToObj(utils.has(extra, '-') ? utils.toHump(extra) : extra);
+        css = { ...css, ...extraObj };
         delete css.extra;
         let obj = {};
         const distinguishArr = [
@@ -441,20 +444,22 @@ const utils = {
     },
 
     // base64转blob
-    dataURItoBlob (base64Data) {
+    dataURItoBlob(base64Data) {
         let byteString;
-        if (base64Data.split(',')[0].indexOf('base64') >= 0)
-            byteString = atob(base64Data.split(',')[1]);
-        else
-            byteString = unescape(base64Data.split(',')[1]);
-        const mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+        if (base64Data.split(',')[0].indexOf('base64') >= 0) byteString = atob(base64Data.split(',')[1]);
+        else byteString = unescape(base64Data.split(',')[1]);
+        const mimeString = base64Data
+            .split(',')[0]
+            .split(':')[1]
+            .split(';')[0];
         let ia = new Uint8Array(byteString.length);
         for (let i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        return new Blob([ia], {type: mimeString});
+        return new Blob([ia], { type: mimeString });
     },
-    ...fetchStatus
+    enter(e) {},
+    ...fetchStatus,
 };
 
 export default utils;

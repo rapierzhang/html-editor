@@ -186,11 +186,12 @@ class Editor extends Component {
 
     // 控制标题
     async handleTitle(status) {
+        const { title } = this.props.editorInfo;
         await this.setState({ titleEdit: status });
         if (status) {
-            this.props.dispatch(titleSet(''));
+            if (title == '未命名页面') this.props.dispatch(titleSet(''));
         } else {
-            if (!this.props.editorInfo.title) this.props.dispatch(titleSet('未命名页面'));
+            if (!title) this.props.dispatch(titleSet('未命名页面'));
         }
     }
 
