@@ -52,6 +52,22 @@
         }
     }
 
+    .search-tag-box {
+        width: 1366px;
+        margin: 20px auto 0;
+        padding: 10px;
+
+        .tag {
+            border: 1px solid #d9d9d9;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+
+        .close {
+            cursor: pointer;
+        }
+    }
+
     .content {
         width: 1366px;
         display: flex;

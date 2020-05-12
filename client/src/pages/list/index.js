@@ -5,11 +5,14 @@ import { utils } from '../../common';
 import { Page } from '../../component/common';
 import './list.scss';
 
+const defaultPageSize = 6;
+
 class List extends Component {
     constructor(props) {
         super(props);
         this.state = {
             searchText: '',
+            searchingText: '',
 
             listData: utils.defaultData,
         };
@@ -20,9 +23,9 @@ class List extends Component {
     }
 
     // ^^^^^^
-    listGet(pn = 1, ps = 6) {
+    listGet(pn = 1, ps = defaultPageSize, text) {
         utils.fetchLoading(this, 'listData');
-        listGet({ pn, ps })
+        listGet({ pn, ps, text })
             .then(listData => utils.fetchSucc(this, 'listData', listData))
             .catch(() => utils.fetchErr(this, 'listData'));
     }
@@ -34,7 +37,7 @@ class List extends Component {
 
     // 更改页码
     pageChange(index) {
-        this.listGet(index);
+        this.listGet(index, defaultPageSize, this.state.searchingText);
     }
 
     // 输入搜索内容
@@ -47,11 +50,28 @@ class List extends Component {
     // 模糊查询
     search() {
         const { searchText } = this.state;
-        console.error(searchText)
+        this.setState({
+            searchingText: searchText,
+            searchText: '',
+        });
+        this.listGet(1, defaultPageSize, searchText);
+    }
+
+    // 监听回车
+    enterPress(e) {
+        if (e.which == 13 || e.keyCode == 13) {
+            this.search();
+        }
+    }
+
+    // 取消查询
+    unSearch() {
+        this.setState({ searchingText: '' });
+        this.listGet(1);
     }
 
     render() {
-        const { listData } = this.state;
+        const { listData, searchText, searchingText } = this.state;
         const {
             fetchStatus,
             data: { pageList = [], totalPage, pageNo },
@@ -68,9 +88,13 @@ class List extends Component {
                                 className='search-input'
                                 type='text'
                                 placeholder='请输入标题或简介的关键字'
+                                value={searchText}
                                 onChange={this.searchChange.bind(this)}
+                                onKeyPress={this.enterPress.bind(this)}
                             />
-                            <div className='search-btn' onClick={this.search.bind(this)}>搜索</div>
+                            <div className='search-btn' onClick={this.search.bind(this)}>
+                                搜索
+                            </div>
                         </div>
                         <div className='btn-box'>
                             <div className='button primary' onClick={this.newPage.bind(this)}>
@@ -79,6 +103,19 @@ class List extends Component {
                         </div>
                     </div>
                 </div>
+                {/*------ 搜索条目 ------*/}
+                {searchingText && (
+                    <div className='search-tag-box'>
+                        <span>搜索：</span>
+                        <span className='tag'>
+                            {searchingText}{' '}
+                            <span className='close' onClick={this.unSearch.bind(this)}>
+                                x
+                            </span>
+                        </span>
+                    </div>
+                )}
+
                 {/*------ 内容 ------*/}
                 <div className='content'>
                     {pageList.map((item, idx) => (
