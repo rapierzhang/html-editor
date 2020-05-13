@@ -182,8 +182,8 @@ const defaultHtml = (pid, title = '', text = '') => {
         <meta name="apple-mobile-web-app-status-bar-style" content="white" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
-        <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/css/swiper.css">
-        <link rel="stylesheet" href="./${pid}/css/index.build.css" />
+        <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/css/swiper.min.css">
+        <link rel="stylesheet" href="./${pid}/css/index.min.css" />
         <script>
             !(function(x) {
                 function w() {
@@ -217,7 +217,7 @@ const defaultHtml = (pid, title = '', text = '') => {
             ${text}
         </div>
         <div id="toast" class="toast"></div>
-        <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/js/swiper.min.js"></script>
         <script src="./${pid}/js/index.js"></script>
     </body>
