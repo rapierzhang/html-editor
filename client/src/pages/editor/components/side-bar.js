@@ -4,7 +4,7 @@ import utils from '../../../common/utils';
 import classNames from 'classnames';
 import { Select, Switch } from '../../../component';
 import { AttrList, Box } from './index';
-import './attr-form.scss';
+import './side-bar.scss';
 import {
     activeIdSet,
     attributeLoad,
@@ -120,7 +120,7 @@ const bgRepeatList = [
     },
 ];
 
-class ArrtForm extends Component {
+class SideBar extends Component {
     constructor() {
         super(...arguments);
         this.state = {
@@ -652,4 +652,4 @@ class ArrtForm extends Component {
 export default connect(
     ({ editorInfo }) => ({ editorInfo }),
     dispatch => ({ dispatch }),
-)(ArrtForm);
+)(SideBar);

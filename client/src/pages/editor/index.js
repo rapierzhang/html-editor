@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Dialog } from '../../component';
-import { Element, ArrtForm } from './components';
+import { Element, SideBar } from './components';
 import utils from '../../common/utils';
 import uploadFile from '../../common/upload';
 import query from 'query-string';
@@ -512,7 +512,7 @@ class Editor extends Component {
                     </div>
                     {/*------ 属性 ------*/}
                     <div className='side-bar'>
-                        <ArrtForm />
+                        <SideBar />
                     </div>
                 </div>
                 {/*------ 拖拽虚拟元素 ------*/}

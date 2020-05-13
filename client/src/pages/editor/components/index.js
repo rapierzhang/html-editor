@@ -1,6 +1,6 @@
 import Element from './element';
-import ArrtForm from './attr-form';
+import SideBar from './side-bar';
 import AttrList from './attr-list';
 import Box from './box';
 
-export { Element, ArrtForm, AttrList, Box };
+export { Element, SideBar, AttrList, Box };
