@@ -227,15 +227,19 @@ class ArrtForm extends Component {
     // 展示菜单
     showMenu(id, e) {
         const { button, pageX, pageY } = e;
-        const { elements } = this.props.editorInfo;
-        const hoverNode = utils.deepSearch(elements, id);
         if (button == 2) {
-            this.setState({
-                movingX: pageX,
-                movingY: pageY,
-                hoverId: id,
-                hoverNode,
-            });
+            const { elements, activeId } = this.props.editorInfo;
+            const hoverNode = utils.deepSearch(elements, id);
+            const contain = utils.deepSearch({[id]: hoverNode}, activeId).hasOwnProperty('element');
+            // 父元素不能插入子元素中
+            if (!contain) {
+                this.setState({
+                    movingX: pageX,
+                    movingY: pageY,
+                    hoverId: id,
+                    hoverNode,
+                });
+            }
         }
     }
 
@@ -340,7 +344,7 @@ class ArrtForm extends Component {
 
         return (
             <div className='attribute' onClick={this.hideMenu.bind(this)}>
-                {/*------ 菜单 ------*/}
+                {/*------ 菜单 必须有选中才展示 ------*/}
                 {activeId && hoverId && activeId != hoverId && (
                     <div className='attr-phantom' style={{ left: movingX, top: movingY }}>
                         <div className='row' onClick={this.changeTree.bind(this, 'before')}>
