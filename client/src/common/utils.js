@@ -237,37 +237,9 @@ const utils = {
                 fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
         return fmt;
     },
-    // 属性自动补全
-    autoComplete(attr, text) {
-        const pxArr = [
-            ...['fontSize', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
-            ...['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'width', 'height'],
-            ...['top', 'right', 'bottom', 'left'],
-        ];
-        const colorArr = ['color', 'backgroundColor'];
-        const urlArr = ['backgroundImage'];
-        if (utils.has(pxArr, attr)) return `${text}px`;
-        // if (utils.has(colorArr, attr)) return `#${text}`;
-        if (utils.has(urlArr, attr)) return `url(${text})`;
-        return text;
-    },
-    // 属性自动过滤
-    autoFilter(attr, text) {
-        const pxArr = [
-            ...['fontSize', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
-            ...['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'width', 'height'],
-            ...['top', 'right', 'bottom', 'left'],
-        ];
-        const urlArr = ['backgroundImage'];
-        if (utils.has(pxArr, attr)) return text.replace(/px/g, '');
-        if (utils.has(urlArr, attr)) return text.match(/url(\S*)/);
-        return text;
-    },
     // 弹层
     toast: msg => ({ ...Toast(msg) }),
     trim: str => str.replace(/ /g, ''),
-    // 驼峰转-
-    toLine: str => str.replace(/([A-Z])/g, '-$1').toLowerCase(),
     toHump: str => str.replace(/\-(\w)/g, (all, letter) => letter.toUpperCase()),
     cssTtrToObj(text = '') {
         let obj = {};
@@ -336,106 +308,6 @@ const utils = {
         }
         return o;
     },
-    lineToUnderLine: str => str.replace(/-/g, '_'),
-    // 组件默认方法
-    defaultJs(element, id, data) {
-        const underLineId = utils.lineToUnderLine(id);
-        let js = '';
-        switch (element) {
-            case 'Swiper':
-                js = `
-                    new Swiper('.swiper-container', {
-                    loop: true,
-                    pagination: {
-                        el: '.swiper-pagination',
-                    },
-                });
-                `;
-                break;
-            case 'Upload':
-                js = `
-                    const $${underLineId} = $('#${id}');
-                    const $${underLineId}_file = $('#${id}-file');
-                    const $${underLineId}_url = $('#${id}-url');
-                    
-                    $${underLineId}.on('click', () => $${underLineId}_file[0].click());
-                    
-                    $${underLineId}_file.on('change', e => {
-                        const url = $${underLineId}.attr('url');
-                        const fileName = $${underLineId}.attr('file-name');
-                        const formData = new FormData();
-                        formData.append(fileName, e.target.files[0]);
-                        $.ajax({
-                            type: 'post',
-                            url,
-                            data: formData,
-                            dataType: 'json',
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                        })
-                            .then(res => {
-                                $${underLineId}_url.val(res.data.url);
-                                eval($${underLineId}.attr('on-succ'));
-                            })
-                            .catch(err => {
-                                eval($${underLineId}.attr('on-err'));
-                            });
-                    });
-                `;
-                break;
-            case 'Submit':
-                const { formId } = data;
-                // TODO 返回值
-                js = `
-                    $('#${id}').on('click', () => {
-                        const $form = $('#${formId}');
-                        const url = $form.attr('url') || '';
-                        const type = $form.attr('fetch-type') || 'post';
-                        const contentType = $form.attr('content-type') || 'application/json';
-                        const child = $form.find('[name]');
-                        let data = {};
-                        [...child].forEach(item => {
-                            const { type, name, value, checked } = item;
-                            if (type === 'radio') {
-                                if (checked) data[name] = value;
-                            } else if (type === 'checkbox') {
-                                if (checked) {
-                                    if (data[name]) {
-                                        data[name].push(value);
-                                    } else {
-                                        data[name] = [value];
-                                    }
-                                }
-                            } else {
-                                data[name] = value;
-                            }
-                        });
-                        if (contentType === 'application/json') {
-                            data = JSON.stringify(data);
-                        }
-                        $.ajax({
-                            url,
-                            type,
-                            dataType: 'json',
-                            contentType,
-                            data,
-                            success: res => {
-                                FORM_SUCC
-                            },
-                            error: err => {
-                                FORM_ERR
-                            },
-                        });
-                    });
-                `;
-                break;
-            default:
-                js = '';
-        }
-        return js ? { defaultJs: js } : {};
-    },
-
     // base64转blob
     dataURItoBlob(base64Data) {
         let byteString;

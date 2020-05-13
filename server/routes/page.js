@@ -15,7 +15,7 @@ router.post('/delete', controller.pageDelete);
 
 router.post('/release', controller.pageRelease);
 
-router.get('/test', async (ctx, next) => {
+router.post('/test', async (ctx, next) => {
     console.log('-------------');
     console.log('ctx.header: ', ctx.header);
     console.log('ctx.headers: ', ctx.headers);

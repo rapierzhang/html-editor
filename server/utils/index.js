@@ -121,6 +121,7 @@ const utils = {
         recursion(obj, key);
         return target;
     },
+    lineToUnderLine: str => str.replace(/-/g, '_'),
 };
 
 module.exports = utils;

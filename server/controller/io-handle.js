@@ -409,12 +409,13 @@ exports.writeJs = (dirPath, htmlTree) => {
     jsContext += defaultJavascript;
     const jsArr = utils.objToArr(htmlTree);
     jsArr.forEach(item => {
-        const { id, element, formId, initJs, bindJs, bindType, defaultJs, extraJs } = item;
+        const { id, element, formId, initJs, bindJs, bindType, extraJs, onSucc, onErr } = item;
         // 初始化js
         if (initJs) {
             jsContext += initJs;
         }
 
+        let defaultJs = eleDefaultJs(element, id, { formId, onSucc, onErr });
         if (element === 'Submit') {
             const formData = utils.deepSearch(htmlTree, formId);
             const { onSucc, onErr } = formData;
@@ -446,6 +447,103 @@ exports.writeJs = (dirPath, htmlTree) => {
         }
     });
     fs.writeFileSync(`${jsDirPath}/index.js`, jsContext);
+};
+
+const eleDefaultJs = (element, id, data) => {
+    const underLineId = utils.lineToUnderLine(id);
+    let js = '';
+    switch (element) {
+        case 'Swiper':
+            js = `
+                new Swiper('.swiper-container', {
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+            `;
+            break;
+        case 'Upload':
+            js = `
+                const $${underLineId} = $('#${id}');
+                const $${underLineId}_file = $('#${id}-file');
+                const $${underLineId}_url = $('#${id}-url');
+                
+                $${underLineId}.on('click', () => $${underLineId}_file[0].click());
+                
+                $${underLineId}_file.on('change', e => {
+                    const url = $${underLineId}.attr('url');
+                    const fileName = $${underLineId}.attr('file-name');
+                    const formData = new FormData();
+                    formData.append(fileName, e.target.files[0]);
+                    $.ajax({
+                        type: 'post',
+                        url,
+                        data: formData,
+                        dataType: 'json',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                    })
+                        .then(res => {
+                            $${underLineId}_url.val(res.data.url);
+                            ${data.onSucc}
+                        })
+                        .catch(err => {
+                            ${data.onErr}
+                        });
+                });
+            `;
+            break;
+        case 'Submit':
+            const { formId } = data;
+            js = `
+                $('#${id}').on('click', () => {
+                    const $form = $('#${formId}');
+                    const url = $form.attr('url') || '';
+                    const type = $form.attr('fetch-type') || 'post';
+                    const contentType = $form.attr('content-type') || 'application/json';
+                    const child = $form.find('[name]');
+                    let data = {};
+                    [...child].forEach(item => {
+                        const { type, name, value, checked } = item;
+                        if (type === 'radio') {
+                            if (checked) data[name] = value;
+                        } else if (type === 'checkbox') {
+                            if (checked) {
+                                if (data[name]) {
+                                    data[name].push(value);
+                                } else {
+                                    data[name] = [value];
+                                }
+                            }
+                        } else {
+                            data[name] = value;
+                        }
+                    });
+                    if (contentType === 'application/json') {
+                        data = JSON.stringify(data);
+                    }
+                    $.ajax({
+                        url,
+                        type,
+                        dataType: 'json',
+                        contentType,
+                        data,
+                    })
+                        .then(res => {
+                            FORM_SUCC
+                        })
+                        .catch(err => {
+                            FORM_ERR
+                        })
+                });
+            `;
+            break;
+        default:
+            js = '';
+    }
+    return js;
 };
 
 // 默认js

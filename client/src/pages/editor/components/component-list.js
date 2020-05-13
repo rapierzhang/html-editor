@@ -177,7 +177,6 @@ class ComponentList extends Component {
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
             ...(element === 'Submit' ? { formId: activeId } : {}),
-            ...utils.defaultJs(element, id, { formId: activeId }), // 组件自带的js
         };
         if (element === 'Dialog') {
             // dialog 放到最外层 并默认展示
