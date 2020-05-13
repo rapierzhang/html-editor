@@ -345,7 +345,7 @@ class SideBar extends Component {
         const dialogStatus = dialogMap[activeId];
 
         return (
-            <div className='attribute' onClick={this.hideMenu.bind(this)}>
+            <div className='side-bar' onClick={this.hideMenu.bind(this)}>
                 {/*------ 菜单 必须有选中才展示 ------*/}
                 {activeId && hoverId && activeId != hoverId && (
                     <div className='attr-phantom' style={{ left: movingX, top: movingY }}>

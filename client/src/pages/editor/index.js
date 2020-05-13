@@ -294,9 +294,7 @@ class Editor extends Component {
                         </div>
                     </div>
                     {/*------ 属性 ------*/}
-                    <div className='side-bar'>
-                        <SideBar />
-                    </div>
+                    <SideBar />
                 </div>
                 {/*------ 删除弹窗 ------*/}
                 <Dialog

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './box.scss';
 import utils from '../../../common/utils';
 
 class Box extends Component {
