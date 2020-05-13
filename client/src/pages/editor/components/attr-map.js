@@ -118,10 +118,10 @@ export const attrList = (that, item) => {
                 value: 'placeholder',
             },
             {
-                text: 'maxLength',
+                text: '最大长度',
                 type: 'input',
                 inputType: 'number',
-                value: 'maxLength',
+                value: 'maxlength',
             },
         ],
         Textarea: [
@@ -138,10 +138,10 @@ export const attrList = (that, item) => {
                 value: 'placeholder',
             },
             {
-                text: 'maxLength',
+                text: '最大长度',
                 type: 'input',
                 inputType: 'number',
-                value: 'maxLength',
+                value: 'maxlength',
             },
         ],
         Checkbox: [

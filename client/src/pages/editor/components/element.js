@@ -44,7 +44,7 @@ class Element extends Component {
         const { id, css, text = '', list = [], label, name } = item;
         // 折行处理
         const textList = text.split('\n');
-        let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text']);
+        let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text', 'maxlength']);
         attr = utils.objValFilter(attr, ['false']);
         const style = utils.cssFilter(css, false);
         switch (item.element) {
