@@ -4,16 +4,13 @@ import classNames from 'classnames';
 import { Dialog } from '../../component';
 import { Element, SideBar, ComponentList } from './components';
 import utils from '../../common/utils';
-import uploadFile from '../../common/upload';
 import query from 'query-string';
 import html2canvas from 'html2canvas';
 import './editor.scss';
 import {
     pageInit,
-    indexIncrement,
     pidSet,
     canvasPositionSet,
-    elementSelect,
     elementsUpdate,
     htmlSave,
     htmlBuild,
@@ -25,7 +22,7 @@ import {
     activeIdSet,
     isEditSet,
     listPreviewSave,
-    htmlDelete, dialogHandle,
+    htmlDelete,
 } from './actions';
 
 

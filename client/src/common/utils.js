@@ -60,20 +60,20 @@ const utils = {
      * @param    key         string  需要查询的key
      * return                object  查到的子树
      * */
-    deepSearch(obj1, key1) {
+    deepSearch(obj, key) {
         let target = {};
-        const recursion = (obj, key) => {
-            if (obj.hasOwnProperty(key)) {
-                target = obj[key];
+        const recursion = (o, k) => {
+            if (o.hasOwnProperty(k)) {
+                target = o[k];
             } else {
-                for (let item in obj) {
-                    if (obj[item].children) {
-                        recursion(obj[item].children, key);
+                for (let item in o) {
+                    if (o[item].children) {
+                        recursion(o[item].children, k);
                     }
                 }
             }
         };
-        recursion(obj1, key1);
+        recursion(obj, key);
         return target;
     },
     /*
@@ -421,12 +421,10 @@ const utils = {
                             contentType,
                             data,
                             success: res => {
-                                console.error(111, res);
-                                eval($form.attr('on-succ'));
+                                FORM_SUCC
                             },
                             error: err => {
-                                console.error(222, err);
-                                eval($form.attr('on-err'));
+                                FORM_ERR
                             },
                         });
                     });

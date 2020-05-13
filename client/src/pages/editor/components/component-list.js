@@ -112,10 +112,11 @@ class ComponentList extends Component {
     constructor() {
         super(...arguments);
         this.state = {
-            isDown: false, dragName: '', // 移动中位置
+            isDown: false,
+            dragName: '', // 移动中位置
             movingX: 0,
             movingY: 0,
-        }
+        };
     }
 
     // 设置唯一key
@@ -175,6 +176,7 @@ class ComponentList extends Component {
             id,
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
+            ...(element === 'Submit' ? { formId: activeId } : {}),
             ...utils.defaultJs(element, id, { formId: activeId }), // 组件自带的js
         };
         if (element === 'Dialog') {

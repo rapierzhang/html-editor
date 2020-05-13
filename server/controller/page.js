@@ -137,7 +137,6 @@ exports.pageDelete = async (ctx, next) => {
     // 删除生成文件
     fs.unlinkSync(`${path.resolve('./')}/public/preview/${pid}.jpg`);
 
-
     if (resultPage.ok === 1 && resultList.ok === 1) {
         ctx.body = utils.res(200, 'ok', { result: true });
     } else {
@@ -176,22 +175,30 @@ const writeJs = (dirPath, htmlTree) => {
     jsContext += defaultJavascript;
     const jsArr = utils.objToArr(htmlTree);
     jsArr.forEach(item => {
-        const { id, initJs, bindJs, bindType, defaultJs, extraJs } = item;
+        const { id, element, formId, initJs, bindJs, bindType, defaultJs, extraJs } = item;
         // 初始化js
         if (initJs) {
             jsContext += initJs;
         }
-        // 默认组件js
-        if (defaultJs) {
-            jsContext += defaultJs;
+
+        if (element === 'Submit') {
+            const formData = utils.deepSearch(htmlTree, formId);
+            const { onSucc, onErr } = formData;
+            const submitJs = defaultJs.replace(/FORM_SUCC/g, onSucc).replace(/FORM_ERR/g, onErr);
+            jsContext += submitJs;
+        } else {
+            // 默认组件js
+            if (defaultJs) {
+                jsContext += defaultJs;
+            }
         }
         // 绑定事件
         if (bindJs) {
             jsContext += `const $${utils.delLine(id)} = $('#${id}');`;
             jsContext += `
                 $${utils.delLine(id)}.on('${bindType}', () => {
-                        ${bindJs}
-                    });`;
+                    ${bindJs}
+                });`;
         }
         // 扩展js
         if (extraJs) {
@@ -630,8 +637,8 @@ const defaultJavascript = `
     }
     // dialog
     window.dialog = {
-        show: id => $('#' + id).addClass('show'),
-        hide: id => $('#' + id).removeClass('show'),
+        show: id => $(\`#\${id}\`).addClass('show'),
+        hide: id => $(\`#\${id}\`).removeClass('show'),
     } 
     
 `;

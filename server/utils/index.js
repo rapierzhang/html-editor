@@ -99,6 +99,28 @@ const utils = {
             fs.rmdirSync(path);
         }
     },
+    /*
+     * 节点查询
+     * @param    obj         object  需要查询的树
+     * @param    key         string  需要查询的key
+     * return                object  查到的子树
+     * */
+    deepSearch(obj, key) {
+        let target = {};
+        const recursion = (o, k) => {
+            if (o.hasOwnProperty(k)) {
+                target = o[k];
+            } else {
+                for (let item in o) {
+                    if (o[item].children) {
+                        recursion(o[item].children, k);
+                    }
+                }
+            }
+        };
+        recursion(obj, key);
+        return target;
+    },
 };
 
 module.exports = utils;
