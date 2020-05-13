@@ -148,8 +148,9 @@ class ArrtForm extends Component {
         // 更新属性
         if (JSON.stringify(activeEle) != JSON.stringify(state.activeEle)) {
             return {
+                activeId,
                 activeEle,
-            }
+            };
         }
         return null;
     }
@@ -230,7 +231,7 @@ class ArrtForm extends Component {
         if (button == 2) {
             const { elements, activeId } = this.props.editorInfo;
             const hoverNode = utils.deepSearch(elements, id);
-            const contain = utils.deepSearch({[id]: hoverNode}, activeId).hasOwnProperty('element');
+            const contain = utils.deepSearch({ [id]: hoverNode }, activeId).hasOwnProperty('element');
             // 父元素不能插入子元素中
             if (!contain) {
                 this.setState({
@@ -304,7 +305,7 @@ class ArrtForm extends Component {
                 ...activeEle,
                 css: {
                     ...css,
-                    backgroundImage
+                    backgroundImage,
                 },
             },
         });
@@ -338,9 +339,10 @@ class ArrtForm extends Component {
     }
 
     render() {
-        const { pid, elements, isEdit } = this.props.editorInfo;
+        const { pid, elements, isEdit, dialogMap } = this.props.editorInfo;
         const { navIndex, movingX, movingY, hoverId, activeId, activeEle } = this.state;
         const { css = {} } = activeEle;
+        const dialogStatus = dialogMap[activeId];
 
         return (
             <div className='attribute' onClick={this.hideMenu.bind(this)}>
@@ -383,13 +385,16 @@ class ArrtForm extends Component {
                             <div className='attr-box'>
                                 <div className='attr-card'>
                                     <div className='card-content'>
-                                        <div className='row'>id: {activeEle.id}</div>
-                                        <div className='row'>
-                                            <span>展示</span>
-                                            {activeEle.element === 'Dialog' && (
-                                                <Switch onChange={this.dialogHandle.bind(this, activeEle.id)} />
-                                            )}
-                                        </div>
+                                        <div className='row'>id: {activeId}</div>
+                                        {activeEle.element === 'Dialog' && (
+                                            <div className='row'>
+                                                <span>展示</span>
+                                                <Switch
+                                                    onChange={this.dialogHandle.bind(this, activeEle)}
+                                                    value={dialogStatus}
+                                                />
+                                            </div>
+                                        )}
                                         {/*------ 属性列表 ------*/}
                                         <AttrList />
                                         {/*------ 删除节点 ------*/}

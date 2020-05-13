@@ -25,7 +25,7 @@ import {
     activeIdSet,
     isEditSet,
     listPreviewSave,
-    htmlDelete,
+    htmlDelete, dialogHandle,
 } from './actions';
 
 // 模板列表
@@ -155,6 +155,9 @@ class Editor extends Component {
         // 禁止右击菜单
         document.oncontextmenu = () => false;
 
+        //禁止鼠标选中文本
+        document.onselectstart = () => false;
+
         // ^^^^^^ 鼠标右击
         /*document.onmousedown = e => {
             const event = e || window.event;
@@ -270,7 +273,6 @@ class Editor extends Component {
 
     // 设置元素成功
     setSucc(element) {
-        console.error('set success!!!');
         const { elements, index, activeId, activeEle } = this.props.editorInfo;
         const id = this.uniqueKey(index);
         let newElements;
@@ -279,25 +281,29 @@ class Editor extends Component {
             id,
             text: '',
             onClick: this.onNodeSelect.bind(this, id),
-            ...utils.defaultJs(element, id, { formId: activeId }),
+            ...utils.defaultJs(element, id, { formId: activeId }), // 组件自带的js
         };
-        // 嵌套
-        if (activeId) {
+        if (element === 'Dialog') {
+            // dialog 放到最外层 并默认展示
+            newElements = { ...elements, ...{ [id]: defaultEle } };
+            this.props.dispatch(dialogHandle(id, true));
+        } else if (activeId) {
+            console.error(containerElement, activeEle.element)
+            // 嵌套
             if (utils.has(containerElement, activeEle.element)) {
                 newElements = utils.deepInsert(elements, activeId, { [id]: defaultEle });
             } else {
                 utils.toast('只有容器元素可以容纳其他元素');
                 return;
             }
-        } else if (element === 'Dialog') {
-        // dialog 放到最外层
-            newElements = { ...elements, ...{ [id]: defaultEle } };
         } else {
+            // 普通插入
             newElements = utils.deepInsert(elements, 'root', { [id]: defaultEle });
         }
         this.props.dispatch(indexIncrement()); // 索引自增
         this.props.dispatch(elementsUpdate(newElements)); // 元素更新
-        this.props.dispatch(elementSelect(id, activeId, elements)); // 默认选中元素
+        this.props.dispatch(elementSelect(id, activeId, this.props.editorInfo.elements)); // 选中元素 后面element得取更新过后的
+        console.error('set success!!!');
     }
 
     // 设置元素失败
@@ -386,6 +392,7 @@ class Editor extends Component {
             });
     }
 
+    // 发布
     release() {
         const { pid } = this.props.editorInfo;
         htmlRelease({ pid })
@@ -430,6 +437,7 @@ class Editor extends Component {
         const { pid } = this.props.editorInfo;
         utils.copy(pid);
     }
+
 
     render() {
         const {
