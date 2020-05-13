@@ -12,7 +12,8 @@ exports.listGet = async (ctx, next) => {
         : {};
     const pageList = await ListModule.find(condition, { _id: 0, __v: 0 })
         .limit(ps)
-        .skip(pn * ps);
+        .skip(pn * ps)
+        .sort({ createTime: -1 });
     const totalCount = await ListModule.find(condition).count();
     const totalPage = Math.ceil(totalCount / ps);
 
