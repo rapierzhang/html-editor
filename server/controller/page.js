@@ -223,7 +223,6 @@ const writeHtml = (dirPath, data) => {
 };
 
 // 渲染html
-
 const renderHtml = htmlTree => {
     let html = '';
     for (let key in htmlTree) {
@@ -419,14 +418,6 @@ const writeCss = (dirPath, htmlTree) => {
         }
     });
     fs.writeFileSync(`${cssDirPath}/index.css`, cssContext);
-};
-
-const pxToRem = text => {
-    if (text.search(/[0-9]px/) > -1) {
-        return ((parseInt(text) * 2) / 45).toFixed(6) + 'rem';
-    } else {
-        return text;
-    }
 };
 
 // 默认html
