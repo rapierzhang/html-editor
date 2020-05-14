@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import utils from '../../../common/utils';
 import { connect } from 'react-redux';
 import { attrList } from './attr-map';
@@ -36,7 +37,7 @@ class AttrList extends Component {
         const { activeEle: thisNode, activeId, elements } = this.props.editorInfo;
         const newNode = {
             ...thisNode,
-            list: [...(thisNode.list || []), ''],
+            imageList: [...(thisNode.imageList || []), ''],
         };
         const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -47,11 +48,11 @@ class AttrList extends Component {
     onListChange(idx, e) {
         const value = !!e.target ? e.target.value : e;
         const { elements, activeId, activeEle: thisNode } = this.props.editorInfo;
-        const { list } = thisNode;
-        list[idx] = value;
+        const { imageList } = thisNode;
+        imageList[idx] = value;
         const newNode = {
             ...thisNode,
-            list,
+            imageList,
         };
         const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -63,10 +64,15 @@ class AttrList extends Component {
         this.onListChange(idx, data.url);
     }
 
+    // key value 列表增加
+    onKeyValListAdd() {
+
+    }
+
     // 渲染attr
     renderAttr(item, activeEle) {
-        const { type, value, inputType, list: selectList, placeholder } = item;
-        const { list = [] } = activeEle;
+        const { type, value, inputType, list: selectList, keyValList = [], placeholder } = item;
+        const { imageList = [] } = activeEle;
         const eleVal = activeEle[value];
         const onChange = {
             onChange: this.onAttrChange.bind(this, value),
@@ -98,13 +104,14 @@ class AttrList extends Component {
             case 'imageList':
                 return (
                     <div className='image-list'>
-                        {list.map((row, idx) => (
+                        {imageList.map((row, idx) => (
                             <div key={`item-${idx}`} className='image-item'>
                                 <input type='text' value={row} onChange={this.onListChange.bind(this, idx)} />
                                 {/*^^^^^^*/}
                                 <Upload
                                     className='upload-btn'
                                     url={'http://localhost:3000/api/file/upload'}
+                                    data={{pid: this.props.editorInfo.pid}}
                                     fileName='file'
                                     onUploadSucc={this.onListUploadSucc.bind(this, idx)}
                                 >
@@ -117,6 +124,21 @@ class AttrList extends Component {
                         </div>
                     </div>
                 );
+            case 'keyValList':
+                return (
+                    <div className='key-val-list'>
+                        {keyValList.map((item, idx) => (
+                            <div key={`item-${idx}`} className='item'>
+                                <span>key: </span>
+                                <input type='text' value={item.key} />
+                                <span>value: </span>
+                                <input type='text' value={item.value} />
+                                <span className='delete'>-</span>
+                            </div>
+                        ))}
+                        <div className='add' onClick={this.onKeyValListAdd.bind(this)}>+</div>
+                    </div>
+                );
             default:
                 return '';
         }
@@ -126,8 +148,8 @@ class AttrList extends Component {
         const { activeEle = {} } = this.props.editorInfo;
 
         return attrList(this, activeEle).map((item, idx) => (
-            <div key={`row-${idx}`} className='row'>
-                <span>{item.text}</span>
+            <div key={`row-${idx}`} className={classNames(item.column ? 'column' : 'row')}>
+                <span className='title'>{item.text}</span>
                 {this.renderAttr(item, activeEle)}
             </div>
         ));

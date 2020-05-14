@@ -144,6 +144,20 @@ export const attrList = (that, item) => {
                 value: 'maxlength',
             },
         ],
+        Radio: [
+            {
+                text: 'name',
+                type: 'input',
+                inputType: 'text',
+                value: 'name',
+            },
+            {
+                text: 'label',
+                type: 'input',
+                inputType: 'text',
+                value: 'label',
+            },
+        ],
         Checkbox: [
             {
                 text: 'name',
@@ -158,18 +172,12 @@ export const attrList = (that, item) => {
                 value: 'label',
             },
         ],
-        Radio: [
+        Select: [
             {
-                text: 'name',
-                type: 'input',
-                inputType: 'text',
-                value: 'name',
-            },
-            {
-                text: 'label',
-                type: 'input',
-                inputType: 'text',
-                value: 'label',
+                text: '数据列表',
+                type: 'keyValList',
+                value: 'selectList',
+                column: true
             },
         ],
         Upload: [

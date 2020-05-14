@@ -50,7 +50,7 @@ const renderElement = data => {
             return `
                 <div id='${id}' class='element swiper swiper-container ${id}' ${renderAttribute(data)}>
                     <div class='swiper-wrapper'>
-                        ${data.list.map(
+                        ${data.imageList.map(
                             url =>
                                 `<div class='swiper-slide'>
                                      <img class='swiper-image' src='${url}'/>
@@ -106,7 +106,11 @@ const renderElement = data => {
                 </span>
             `;
         case 'Select':
-            return ``;
+            return `
+                <div id='${id}' class='element select ${id}' ${renderAttribute(data)}>
+                    <input id='${id}-input' type='text' name='${name}' >
+                </div>
+            `;
         case 'Upload':
             return `
                 <div id='${id}' class='element upload ${id}' ${renderAttribute(data)}>
@@ -152,7 +156,7 @@ const renderAttribute = data => {
         if (
             // 需要过滤的属性
             [
-                ...['id', 'key', 'element', 'children', 'css', 'style', 'text', 'list', 'label'],
+                ...['id', 'key', 'element', 'children', 'css', 'style', 'text', 'label', 'imageList'],
                 ...['initJs', 'bindJs', 'bindType', 'defaultJs', 'extraJs', 'onSucc', 'onErr'],
             ].indexOf(k) > -1
         ) {
@@ -183,6 +187,7 @@ const defaultHtml = (pid, title = '', text = '') => {
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
         <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/css/swiper.min.css">
+        <link rel="stylesheet" href="/css/picker.min.css">
         <link rel="stylesheet" href="./${pid}/css/index.min.css" />
         <script>
             !(function(x) {
@@ -219,6 +224,7 @@ const defaultHtml = (pid, title = '', text = '') => {
         <div id="toast" class="toast"></div>
         <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/js/swiper.min.js"></script>
+        <script src="/javascripts/picker.min.js"></script>
         <script src="./${pid}/js/index.js"></script>
     </body>
 </html>`;
@@ -538,6 +544,28 @@ const eleDefaultJs = (element, id, data) => {
                         .catch(err => {
                             FORM_ERR
                         })
+                });
+            `;
+            break;
+        case 'Select':
+            const { selectList } = data;
+            js = `
+                const ${underLineId}_picker = new Picker({
+                    data: [${selectList}],
+                });
+                
+                const $${underLineId} = $('#${underLineId}');
+                ${underLineId}.on('click', () => picker.show());
+                ${underLineId}_picker.on('picker.select', (selectedVal, selectedIndex) => {
+                    $${underLineId}.text(data[selectedIndex[0]].text);
+                });
+                
+                ${underLineId}_picker.on('picker.change', (index, selectedIndex) => {
+                    console.error(111, index);
+                });
+                
+                ${underLineId}_picker.on('picker.valuechange', (selectedVal, selectedIndex) => {
+                    console.error(222, selectedVal);
                 });
             `;
             break;

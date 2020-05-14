@@ -41,7 +41,7 @@ class Element extends Component {
     }
 
     renderElement(item) {
-        const { id, css, text = '', list = [], label, name } = item;
+        const { id, css, text = '', imageList = [], label, name } = item;
         // 折行处理
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text', 'maxlength']);
@@ -65,7 +65,7 @@ class Element extends Component {
                 return (
                     <div id={id} className={classNames('element', 'swiper', 'swiper-container', id)} style={style}>
                         <div className='swiper-wrapper'>
-                            {list.map((url, idx) => (
+                            {imageList.map((url, idx) => (
                                 <div key={`item-${idx}`} className='swiper-slide'>
                                     <img className='swiper-image' src={url} alt='' />
                                 </div>
@@ -132,7 +132,7 @@ class Element extends Component {
                     </span>
                 );
             case 'Select':
-                return <div id={id} className={classNames('element', 'select', id)} style={style}></div>;
+                return <div id={id} className={classNames('element', 'select', id)} style={style}>请选择</div>;
             case 'Upload':
                 return (
                     <div id={id} className={classNames('element', 'upload', id)} style={style}>
