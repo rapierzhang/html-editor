@@ -12,6 +12,10 @@ class AttrList extends Component {
         super(...arguments);
     }
 
+    static getDerivedStateFromProps(props, state) {
+        
+    }
+
     // 属性更改 {...item.func}中调用 ^^^^^^
     onAttrChange(attrName, e) {
         // 判断是event传入的值还是组件传入的值
@@ -33,12 +37,13 @@ class AttrList extends Component {
     }
 
     // 添加空行
-    onListAdd() {
+    onListAdd(name, defaultRow) {
         const { activeEle: thisNode, activeId, elements } = this.props.editorInfo;
         const newNode = {
             ...thisNode,
-            imageList: [...(thisNode.imageList || []), ''],
+            [name]: [...(thisNode[name] || []), defaultRow],
         };
+        console.error(newNode);
         const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
@@ -64,15 +69,24 @@ class AttrList extends Component {
         this.onListChange(idx, data.url);
     }
 
-    // key value 列表增加
-    onKeyValListAdd() {
-
+    onKeyValListChange(idx, name, e) {
+        const { value } = e.target;
+        const { elements, activeId, activeEle: thisNode } = this.props.editorInfo;
+        const { keyValList } = thisNode;
+        keyValList[idx][name] = value;
+        const newNode = {
+            ...thisNode,
+            keyValList,
+        };
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
+        this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(newNode));
     }
 
     // 渲染attr
     renderAttr(item, activeEle) {
-        const { type, value, inputType, list: selectList, keyValList = [], placeholder } = item;
-        const { imageList = [] } = activeEle;
+        const { type, value, inputType, list: selectList, placeholder } = item;
+        const { imageList = [], keyValList = [] } = activeEle;
         const eleVal = activeEle[value];
         const onChange = {
             onChange: this.onAttrChange.bind(this, value),
@@ -111,7 +125,7 @@ class AttrList extends Component {
                                 <Upload
                                     className='upload-btn'
                                     url={'http://localhost:3000/api/file/upload'}
-                                    data={{pid: this.props.editorInfo.pid}}
+                                    data={{ pid: this.props.editorInfo.pid }}
                                     fileName='file'
                                     onUploadSucc={this.onListUploadSucc.bind(this, idx)}
                                 >
@@ -119,7 +133,7 @@ class AttrList extends Component {
                                 </Upload>
                             </div>
                         ))}
-                        <div className='add' onClick={this.onListAdd.bind(this)}>
+                        <div className='add' onClick={this.onListAdd.bind(this, 'imageList', '')}>
                             +
                         </div>
                     </div>
@@ -130,13 +144,23 @@ class AttrList extends Component {
                         {keyValList.map((item, idx) => (
                             <div key={`item-${idx}`} className='item'>
                                 <span>key: </span>
-                                <input type='text' value={item.key} />
+                                <input
+                                    type='text'
+                                    value={item.key}
+                                    onChange={this.onKeyValListChange.bind(this, idx, 'key')}
+                                />
                                 <span>value: </span>
-                                <input type='text' value={item.value} />
+                                <input
+                                    type='text'
+                                    value={item.value}
+                                    onChange={this.onKeyValListChange.bind(this, idx, 'value')}
+                                />
                                 <span className='delete'>-</span>
                             </div>
                         ))}
-                        <div className='add' onClick={this.onKeyValListAdd.bind(this)}>+</div>
+                        <div className='add' onClick={this.onListAdd.bind(this, 'keyValList', {})}>
+                            +
+                        </div>
                     </div>
                 );
             default:
