@@ -15,7 +15,7 @@ router.post('/delete', controller.pageDelete);
 
 router.post('/release', controller.pageRelease);
 
-router.post('/test', async (ctx, next) => {
+const test = async (ctx, next) => {
     console.log('-------------');
     console.log('ctx.header: ', ctx.header);
     console.log('ctx.headers: ', ctx.headers);
@@ -48,6 +48,9 @@ router.post('/test', async (ctx, next) => {
     ctx.body = {
         title: 'koa2 json',
     };
-});
+}
+
+router.get('/test', test);
+router.post('/test', test);
 
 module.exports = router;

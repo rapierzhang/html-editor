@@ -13,6 +13,7 @@ const list = require('./routes/list');
 const page = require('./routes/page');
 const users = require('./routes/users');
 const file = require('./routes/file');
+const proxy = require('./routes/proxy');
 
 // error handler
 onerror(app);
@@ -70,6 +71,7 @@ app.use(list.routes(), list.allowedMethods());
 app.use(page.routes(), page.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
 app.use(file.routes(), file.allowedMethods());
+app.use(proxy.routes(), proxy.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
