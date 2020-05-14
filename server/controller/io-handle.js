@@ -107,9 +107,9 @@ const renderElement = data => {
             `;
         case 'Select':
             return `
-                <div id='${id}' class='element select ${id}' ${renderAttribute(data)}>
-                    点击选择
-                    <input id='${id}-input' type='text' name='${name}' >
+                <div class='element select ${id}' >
+                    <div id='${id}' class="select-btn" >点击选择</div>
+                    <input id='${id}-input' type='text' ${renderAttribute(data)} >
                 </div>
             `;
         case 'Upload':
@@ -377,6 +377,11 @@ body {
 .select {
     border: 1px solid #d9d9d9;
     border-radius: 2px;
+}
+
+.select-btn {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -565,6 +570,7 @@ const eleDefaultJs = (element, id, data) => {
             const { keyValList } = data;
             js = `
                 const $${underLineId} = $('#${id}');
+                const $${underLineId}_input = $('#${id}-input')
                 const ${underLineId}_data = ${JSON.stringify(keyValList)};
 
                 const ${underLineId}_picker = new Picker({
@@ -582,6 +588,7 @@ const eleDefaultJs = (element, id, data) => {
                 
                 ${underLineId}_picker.on('picker.valuechange', (selectedVal, selectedIndex) => {
                     console.error(222, selectedVal);
+                    $${underLineId}_input.val(selectedVal[0]);
                 });
             `;
             break;
