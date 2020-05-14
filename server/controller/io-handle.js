@@ -108,6 +108,7 @@ const renderElement = data => {
         case 'Select':
             return `
                 <div id='${id}' class='element select ${id}' ${renderAttribute(data)}>
+                    点击选择
                     <input id='${id}-input' type='text' name='${name}' >
                 </div>
             `;
@@ -156,7 +157,7 @@ const renderAttribute = data => {
         if (
             // 需要过滤的属性
             [
-                ...['id', 'key', 'element', 'children', 'css', 'style', 'text', 'label', 'imageList'],
+                ...['id', 'key', 'element', 'children', 'css', 'style', 'text', 'label', 'imageList', 'keyValList',],
                 ...['initJs', 'bindJs', 'bindType', 'defaultJs', 'extraJs', 'onSucc', 'onErr'],
             ].indexOf(k) > -1
         ) {
@@ -187,7 +188,6 @@ const defaultHtml = (pid, title = '', text = '') => {
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>${title}</title>
         <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/css/swiper.min.css">
-        <link rel="stylesheet" href="/css/picker.min.css">
         <link rel="stylesheet" href="./${pid}/css/index.min.css" />
         <script>
             !(function(x) {
@@ -198,7 +198,7 @@ const defaultHtml = (pid, title = '', text = '') => {
                         r = s.documentElement,
                         a = r.getBoundingClientRect().width;
                     if (!v && !u) {
-                        var n = !!x.navigator.appVersion.match(/AppleWebKit.*Mobile.*/);
+                        const n = !!x.navigator.appVersion.match(/AppleWebKit.*Mobile.*/);
                         v = x.devicePixelRatio;
                         (v = n ? v : 1), (u = 1 / v);
                     }
@@ -374,6 +374,20 @@ body {
     margin-left: 5px; /*^^^^^^*/
 }
 
+.select {
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.select input {
+    display: none;
+}
+
 .submit {
     display: flex;
     flex-direction: row;
@@ -416,13 +430,13 @@ exports.writeJs = (dirPath, htmlTree) => {
     jsContext += defaultJavascript;
     const jsArr = utils.objToArr(htmlTree);
     jsArr.forEach(item => {
-        const { id, element, formId, initJs, bindJs, bindType, extraJs, onSucc, onErr } = item;
+        const { id, element, formId, initJs, bindJs, bindType, extraJs, onSucc, onErr, imageList, keyValList } = item;
         // 初始化js
         if (initJs) {
             jsContext += initJs;
         }
 
-        let defaultJs = eleDefaultJs(element, id, { formId, onSucc, onErr });
+        let defaultJs = eleDefaultJs(element, id, { formId, onSucc, onErr, imageList, keyValList });
         if (element === 'Submit') {
             const formData = utils.deepSearch(htmlTree, formId);
             const { onSucc, onErr } = formData;
@@ -548,16 +562,18 @@ const eleDefaultJs = (element, id, data) => {
             `;
             break;
         case 'Select':
-            const { selectList } = data;
+            const { keyValList } = data;
             js = `
+                const $${underLineId} = $('#${id}');
+                const ${underLineId}_data = ${JSON.stringify(keyValList)};
+
                 const ${underLineId}_picker = new Picker({
-                    data: [${selectList}],
+                    data: [${underLineId}_data],
                 });
                 
-                const $${underLineId} = $('#${underLineId}');
-                ${underLineId}.on('click', () => picker.show());
+                $${underLineId}.on('click', () => ${underLineId}_picker.show());
                 ${underLineId}_picker.on('picker.select', (selectedVal, selectedIndex) => {
-                    $${underLineId}.text(data[selectedIndex[0]].text);
+                    $${underLineId}.text(${underLineId}_data[selectedIndex[0]].text);
                 });
                 
                 ${underLineId}_picker.on('picker.change', (index, selectedIndex) => {

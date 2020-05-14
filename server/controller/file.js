@@ -5,7 +5,6 @@ const utils = require('../utils/index');
 exports.fileUpload = async (ctx, next) => {
     const { files, body } = ctx.request;
     const { pid } = body;
-    console.error(111, pid)
     const { path: sourceFile } = files['file'];
     const imageName = path.basename(sourceFile).replace(/upload_/g, '');
     const dirPath = `${path.resolve('./')}/public/html/${pid}`;

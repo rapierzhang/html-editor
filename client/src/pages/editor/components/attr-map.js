@@ -174,6 +174,12 @@ export const attrList = (that, item) => {
         ],
         Select: [
             {
+                text: 'name',
+                type: 'input',
+                inputType: 'text',
+                value: 'name',
+            },
+            {
                 text: '数据列表',
                 type: 'keyValList',
                 value: 'selectList',

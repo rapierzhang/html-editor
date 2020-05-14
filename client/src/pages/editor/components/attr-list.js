@@ -10,10 +10,26 @@ import './attr-list.scss';
 class AttrList extends Component {
     constructor() {
         super(...arguments);
+        this.state = {
+            activeId: '',
+            activeEle: {},
+        }
     }
 
     static getDerivedStateFromProps(props, state) {
-        
+        const { activeId, activeEle } = props.editorInfo;
+        console.error(111, activeId)
+        if (activeId !== state.activeId) {
+            return {
+                activeId,
+                activeEle
+            }
+        }
+        if (JSON.stringify(props.activeEle) !== JSON.stringify(state)) {
+            return {
+                activeEle,
+            }
+        }
     }
 
     // 属性更改 {...item.func}中调用 ^^^^^^
@@ -43,7 +59,6 @@ class AttrList extends Component {
             ...thisNode,
             [name]: [...(thisNode[name] || []), defaultRow],
         };
-        console.error(newNode);
         const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
         this.props.dispatch(attributeUpdate(newNode));
@@ -146,8 +161,8 @@ class AttrList extends Component {
                                 <span>key: </span>
                                 <input
                                     type='text'
-                                    value={item.key}
-                                    onChange={this.onKeyValListChange.bind(this, idx, 'key')}
+                                    value={item.text}
+                                    onChange={this.onKeyValListChange.bind(this, idx, 'text')}
                                 />
                                 <span>value: </span>
                                 <input
@@ -169,7 +184,7 @@ class AttrList extends Component {
     }
 
     render() {
-        const { activeEle = {} } = this.props.editorInfo;
+        const { activeEle = {} } = this.state;
 
         return attrList(this, activeEle).map((item, idx) => (
             <div key={`row-${idx}`} className={classNames(item.column ? 'column' : 'row')}>
