@@ -28,9 +28,8 @@
 27 不能缩放无大小  ✔
 28 受控组件  ✔
 29 编辑器
-30 代理
+30 代理  ✔
 31 背景图正则匹配空  ✔
-https://mall.sogou.com/api/product/category/category_list
 
 
 容器
