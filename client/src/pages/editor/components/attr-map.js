@@ -8,7 +8,7 @@ export const attrList = (that, item) => {
             },
         ],
 
-        View:  [
+        View: [
             {
                 text: '事件',
                 type: 'select',
@@ -34,6 +34,7 @@ export const attrList = (that, item) => {
             {
                 text: '图片地址',
                 type: 'imageList',
+                column: true,
             },
         ],
 
@@ -183,7 +184,7 @@ export const attrList = (that, item) => {
                 text: '数据列表',
                 type: 'keyValList',
                 value: 'selectList',
-                column: true
+                column: true,
             },
         ],
         Upload: [

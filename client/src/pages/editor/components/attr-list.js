@@ -13,7 +13,7 @@ class AttrList extends Component {
         this.state = {
             activeId: '',
             activeEle: {},
-        }
+        };
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -21,13 +21,13 @@ class AttrList extends Component {
         if (activeId !== state.activeId) {
             return {
                 activeId,
-                activeEle
-            }
+                activeEle,
+            };
         }
         if (JSON.stringify(props.activeEle) !== JSON.stringify(state)) {
             return {
                 activeEle,
-            }
+            };
         }
     }
 
@@ -52,11 +52,25 @@ class AttrList extends Component {
     }
 
     // 添加空行
-    onListAdd(name, defaultRow) {
+    onListAdd(type, defaultRow) {
         const { activeEle: thisNode, activeId, elements } = this.props.editorInfo;
         const newNode = {
             ...thisNode,
-            [name]: [...(thisNode[name] || []), defaultRow],
+            [type]: [...(thisNode[type] || []), defaultRow],
+        };
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
+        this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(newNode));
+    }
+
+    // 删除行
+    onListDel(type, idx) {
+        const { activeEle: thisNode, activeId, elements } = this.props.editorInfo;
+        let thisList = thisNode[type];
+        thisList.splice(idx, 1);
+        const newNode = {
+            ...thisNode,
+            [type]: thisList,
         };
         const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
@@ -134,7 +148,12 @@ class AttrList extends Component {
                     <div className='image-list'>
                         {imageList.map((row, idx) => (
                             <div key={`item-${idx}`} className='image-item'>
-                                <input type='text' value={row} onChange={this.onListChange.bind(this, idx)} />
+                                <input
+                                    className='image-input'
+                                    type='text'
+                                    value={row}
+                                    onChange={this.onListChange.bind(this, idx)}
+                                />
                                 {/*^^^^^^*/}
                                 <Upload
                                     className='upload-btn'
@@ -145,6 +164,9 @@ class AttrList extends Component {
                                 >
                                     <span>上传</span>
                                 </Upload>
+                                <span className='delete' onClick={this.onListDel.bind(this, 'imageList', idx)}>
+                                    -
+                                </span>
                             </div>
                         ))}
                         <div className='add' onClick={this.onListAdd.bind(this, 'imageList', '')}>
@@ -169,7 +191,9 @@ class AttrList extends Component {
                                     value={item.value}
                                     onChange={this.onKeyValListChange.bind(this, idx, 'value')}
                                 />
-                                <span className='delete'>-</span>
+                                <span className='delete' onClick={this.onListDel.bind(this, 'keyValList', idx)}>
+                                    -
+                                </span>
                             </div>
                         ))}
                         <div className='add' onClick={this.onListAdd.bind(this, 'keyValList', {})}>
