@@ -157,7 +157,7 @@ const renderAttribute = data => {
         if (
             // 需要过滤的属性
             [
-                ...['id', 'key', 'element', 'children', 'css', 'style', 'text', 'label', 'imageList', 'keyValList',],
+                ...['id', 'key', 'element', 'children', 'css', 'style', 'text', 'label', 'imageList', 'keyValList'],
                 ...['initJs', 'bindJs', 'bindType', 'defaultJs', 'extraJs', 'onSucc', 'onErr'],
             ].indexOf(k) > -1
         ) {

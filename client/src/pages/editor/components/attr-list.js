@@ -18,7 +18,6 @@ class AttrList extends Component {
 
     static getDerivedStateFromProps(props, state) {
         const { activeId, activeEle } = props.editorInfo;
-        console.error(111, activeId)
         if (activeId !== state.activeId) {
             return {
                 activeId,

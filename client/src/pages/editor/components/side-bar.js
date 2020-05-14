@@ -147,6 +147,10 @@ class SideBar extends Component {
         }
         // 更新属性
         if (JSON.stringify(activeEle) != JSON.stringify(state.activeEle)) {
+            // backgroundImage需要特殊处理url()
+            const { css = {} } = activeEle;
+            if (css.backgroundImage && (css.backgroundImage != state.activeEle.css.backgroundImage)) return null;
+
             return {
                 activeId,
                 activeEle,
@@ -299,42 +303,25 @@ class SideBar extends Component {
     bgImageFocus() {
         const { activeEle } = this.state;
         const { css } = activeEle;
-        const backgroundImage = css.backgroundImage.match(/url\((.*)\)/, '$1')[1];
-        this.setState({
-            activeEle: {
-                ...activeEle,
-                css: {
-                    ...css,
-                    backgroundImage,
-                },
-            },
-        });
+        let { backgroundImage = '' } = css;
+        const bgImageMatch = backgroundImage.match(/url\((.*)\)/, '$1');
+        if (bgImageMatch) {
+            activeEle.css.backgroundImage = bgImageMatch[1];
+            this.setState({ activeEle });
+        }
     }
 
     bgImageChange(e) {
         const { activeEle } = this.state;
-        const { css } = activeEle;
-        css.backgroundImage = e.target.value;
-        this.setState({
-            activeEle: {
-                ...activeEle,
-                css,
-            },
-        });
+        activeEle.css.backgroundImage = e.target.value;
+        this.setState({ activeEle });
     }
 
     bgImageBlur(e) {
-        const backgroundImage = `url(${e.target.value})`;
+        const backgroundImage = e.target.value ? `url(${e.target.value})` : '';
         const { activeEle } = this.state;
-        this.setState({
-            activeEle: {
-                ...activeEle,
-                css: {
-                    ...activeEle.css,
-                    backgroundImage,
-                },
-            },
-        });
+        activeEle.css.backgroundImage = backgroundImage;
+        this.setState({ activeEle });
         this.onStyleChange('backgroundImage', backgroundImage);
     }
 
