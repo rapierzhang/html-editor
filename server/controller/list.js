@@ -3,6 +3,12 @@ const ListModule = require('../module/list');
 
 exports.listGet = async (ctx, next) => {
     let { pn = 0, ps = 1, text = '' } = ctx.request.body;
+    if (typeof pn !== 'number') {
+        pn = parseInt(pn);
+    }
+    if (typeof ps !== 'number') {
+        ps = parseInt(ps);
+    }
     pn = pn - 1;
     const regexp = new RegExp(text);
     const condition = text
@@ -14,7 +20,7 @@ exports.listGet = async (ctx, next) => {
         .limit(ps)
         .skip(pn * ps)
         .sort({ createTime: -1 });
-    const totalCount = await ListModule.find(condition).count();
+    const totalCount = await ListModule.find(condition).countDocuments();
     const totalPage = Math.ceil(totalCount / ps);
 
     const result = {

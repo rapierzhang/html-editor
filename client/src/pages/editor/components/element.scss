@@ -121,6 +121,14 @@
             }
         }
 
+        &.select {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            padding-left: 10px;
+        }
+
         &.submit {
             display: flex;
             flex-direction: row;
