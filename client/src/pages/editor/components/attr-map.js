@@ -76,6 +76,11 @@ export const attrList = (that, item) => {
                 value: 'fetchType',
             },
             {
+                text: '使用代理',
+                type: 'switch',
+                value: 'useProxy',
+            },
+            {
                 text: '头部',
                 type: 'select',
                 list: ['application/json', 'application/x-www-form-urlencoded'],

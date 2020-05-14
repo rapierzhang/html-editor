@@ -163,7 +163,7 @@ const renderAttribute = data => {
         ) {
             continue;
         } else if (data[k] === true) {
-            str += k;
+            str += utils.toLine(k);
         } else if (data[k] === false) {
             continue;
         } else {
@@ -526,11 +526,16 @@ const eleDefaultJs = (element, id, data) => {
             js = `
                 $('#${id}').on('click', () => {
                     const $form = $('#${formId}');
-                    const url = $form.attr('url') || '';
-                    const type = $form.attr('fetch-type') || 'post';
+                    let url = $form.attr('url') || '';
+                    const fetchType = $form.attr('fetch-type') || 'post';
                     const contentType = $form.attr('content-type') || 'application/json';
+                    const useProxy = $form[0].hasAttribute('use-proxy');
                     const child = $form.find('[name]');
                     let data = {};
+                    if (useProxy) {
+                        data.proxyUrl = url;
+                        url = 'http://localhost:3000/api/proxy'; // ^^^^^^
+                    }
                     [...child].forEach(item => {
                         const { type, name, value, checked } = item;
                         if (type === 'radio') {
@@ -552,7 +557,7 @@ const eleDefaultJs = (element, id, data) => {
                     }
                     $.ajax({
                         url,
-                        type,
+                        type: fetchType,
                         dataType: 'json',
                         contentType,
                         data,
