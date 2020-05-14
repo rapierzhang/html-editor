@@ -230,18 +230,18 @@ class SideBar extends Component {
     }
 
     // 展示菜单
-    showMenu(id, e) {
+    showMenu(hoverId, e) {
         const { button, pageX, pageY } = e;
         if (button == 2) {
             const { elements, activeId } = this.props.editorInfo;
-            const hoverNode = utils.deepSearch(elements, id);
-            const contain = utils.deepSearch({ [id]: hoverNode }, activeId).hasOwnProperty('element');
+            const hoverNode = utils.deepSearch(elements, hoverId);
+            const contain = utils.deepSearch({ [hoverId]: hoverNode }, activeId).hasOwnProperty('element');
             // 父元素不能插入子元素中
             if (!contain) {
                 this.setState({
                     movingX: pageX,
                     movingY: pageY,
-                    hoverId: id,
+                    hoverId,
                     hoverNode,
                 });
             }
