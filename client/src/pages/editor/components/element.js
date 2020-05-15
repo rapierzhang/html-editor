@@ -267,7 +267,7 @@ class Element extends Component {
         const { id, css = {}, element } = item;
         const active = id == activeId;
         // 元素可以更改大小
-        const canResize = !utils.has(['Text', 'Link', 'Radio', 'Checkbox'], element);
+        const canResize = !utils.has(['Text', 'Icon', 'Link', 'Radio', 'Checkbox'], element);
         switch (element) {
             // 根节点
             case 'Root':
