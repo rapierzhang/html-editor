@@ -7,8 +7,9 @@ const pageSchema = new Schema({
     index: Number,
     title: String,
     desc: String,
-    preview: String,
     htmlTree: Object,
+    iconfontUrl: String,
+    iconList: Array,
     createTime: Number,
     updateTime: Number,
 });

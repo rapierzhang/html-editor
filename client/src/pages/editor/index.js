@@ -22,7 +22,7 @@ import {
     activeIdSet,
     isEditSet,
     listPreviewSave,
-    htmlDelete,
+    htmlDelete, iconListSet,
 } from './actions';
 
 
@@ -62,12 +62,17 @@ class Editor extends Component {
         this.setState({ pid });
         pageInit({ pid })
             .then(res => {
-                const { pid, index, title, desc, htmlTree } = res;
+                const { pid, index, title, desc, htmlTree, iconfontUrl, iconList } = res;
                 this.props.dispatch(pidSet(pid));
                 index && this.props.dispatch(indexSet(index));
                 htmlTree && this.props.dispatch(elementsUpdate(htmlTree));
                 title && this.props.dispatch(titleSet(title));
                 desc && this.props.dispatch(descSet(desc));
+                if (iconfontUrl) {
+                    this.props.dispatch(iconListSet(iconfontUrl, iconList));
+                    const header = document.getElementById('iconfont');
+                    header.setAttribute('href', iconfontUrl);
+                }
                 // 设置参数但不跳转
                 window.history.pushState(null, null, `${location.origin}/editor?pid=${pid}`);
             })

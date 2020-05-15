@@ -163,15 +163,22 @@ exports.pageRelease = async (ctx, next) => {
 exports.iconSave = async (ctx, next) => {
     let { pid, iconfontUrl } = ctx.request.body;
     iconfontUrl = iconfontUrl.replace(/.*\/\//, 'https://');
-    let cssList = [];
+    let iconList = [];
 
     await axios
         .get(iconfontUrl)
-        .then(res => {
+        .then(async res => {
             const str = res.data;
             let cssMap = [...(str.match(/icon(.*)\:before/g) || [])];
-            cssMap.forEach(item => cssList.push(item.replace(':before', '')));
-            ctx.body = utils.res(200, 'ok', { pid, cssList });
+            cssMap.forEach(item => iconList.push(item.replace(':before', '')));
+
+            const pageResult = await PageModule.updateOne({ pid }, { $set: { iconfontUrl, iconList } });
+
+            if (pageResult) {
+                ctx.body = utils.res(200, 'ok', { pid, iconfontUrl, iconList });
+            } else {
+                ctx.body = utils.res(500, 'update err', {});
+            }
         })
         .catch(err => {
             ctx.body = utils.res(500, 'fetch err', err);

@@ -91,6 +91,18 @@
             }
         }
 
+        &.icon {
+            font-family: 'iconfont' !important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
         &.textarea {
             resize: none;
         }
@@ -136,7 +148,6 @@
             align-items: center;
             cursor: pointer;
         }
-
     }
 }
 

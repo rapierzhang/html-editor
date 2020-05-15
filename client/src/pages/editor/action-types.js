@@ -10,3 +10,4 @@ export const PID_SET = 'pid/set';
 export const TITLE_SET = 'title/set';
 export const DESC_SET = 'desc/set';
 export const DIALOG_HANDLE = 'dialog/handle';
+export const ICON_LIST_SET = 'icon/list/set';

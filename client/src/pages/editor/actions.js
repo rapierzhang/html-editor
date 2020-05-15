@@ -11,6 +11,7 @@ import {
     TITLE_SET,
     DESC_SET,
     DIALOG_HANDLE,
+    ICON_LIST_SET,
 } from './action-types';
 import { fetch } from '../../common';
 import utils from '../../common/utils';
@@ -176,7 +177,24 @@ export const dialogHandle = (id, state) => dispatch => {
     });
 };
 
+// 预览图保存
 export const listPreviewSave = formData =>
     uploadFile({ url: 'http://localhost:3000/api/file/list_preview_save', formData })// ^^^^^^
         .then(res => res.data.url)
         .catch(() => '');
+
+export const iconUpload = params => {
+    return fetch({
+        url: '/api/page/icon_save',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
+}
+
+export const iconListSet = (iconfontUrl, iconList) => dispatch => {
+    dispatch({
+        type: ICON_LIST_SET,
+        iconfontUrl,
+        iconList
+    });
+}

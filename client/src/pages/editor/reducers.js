@@ -11,6 +11,7 @@ import {
     TITLE_SET,
     DESC_SET,
     DIALOG_HANDLE,
+    ICON_LIST_SET,
 } from './action-types';
 
 const editorInfo = {
@@ -40,6 +41,9 @@ const editorInfo = {
         },
     },
     dialogMap: {},
+
+    iconfontUrl: '',
+    iconList: [],
 };
 
 export default (state = editorInfo, action) => {
@@ -76,6 +80,8 @@ export default (state = editorInfo, action) => {
             return { ...state, desc: action.desc };
         case DIALOG_HANDLE:
             return { ...state, dialogMap: { [action.id]: action.state } };
+        case ICON_LIST_SET:
+            return { ...state, iconfontUrl: action.iconfontUrl, iconList: action.iconList };
         default:
             return state;
     }

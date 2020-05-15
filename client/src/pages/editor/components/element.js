@@ -41,7 +41,7 @@ class Element extends Component {
     }
 
     renderElement(item) {
-        const { id, css, text = '', imageList = [], label, name } = item;
+        const { id, css, text = '', imageList = [], label, name, extClass } = item;
         // 折行处理
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text', 'maxlength']);
@@ -96,7 +96,7 @@ class Element extends Component {
                     </span>
                 );
             case 'Icon':
-                return <i id={id} className={classNames('element', 'text', id)} style={style}></i>;
+                return <i id={id} className={classNames('element', 'icon', id, extClass)} style={style}></i>;
             // 表单
             case 'Form':
                 return (

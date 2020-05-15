@@ -13,6 +13,8 @@ import {
     elementsUpdate,
     isEditSet,
     dialogHandle,
+    iconUpload,
+    iconListSet,
 } from '../actions';
 import Upload from '../../../component/common/upload';
 
@@ -139,7 +141,7 @@ class SideBar extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        const { activeId, activeEle } = props.editorInfo;
+        const { activeId, activeEle, iconfontUrl } = props.editorInfo;
         // 选中元素
         if (activeId != state.activeId) {
             return {
@@ -158,6 +160,12 @@ class SideBar extends Component {
                 activeEle,
             };
         }
+
+        // if (iconfontUrl != state.iconfontUrl) {
+        //     return {
+        //         iconfontUrl
+        //     }
+        // }
         return null;
     }
 
@@ -328,16 +336,40 @@ class SideBar extends Component {
     }
 
     onIconChange(e) {
-        this.setState({ iconfontUrl: e.target.value })
+        this.setState({ iconfontUrl: e.target.value });
     }
 
     // iconfont上传
     uploadIcon() {
+        const { pid } = this.props.editorInfo;
+        const { iconfontUrl } = this.state;
+        iconUpload({ pid, iconfontUrl })
+            .then(res => {
+                const { iconfontUrl, iconList } = res;
+                const header = document.getElementById('iconfont');
+                header.setAttribute('href', iconfontUrl);
+                this.props.dispatch(iconListSet(iconfontUrl, iconList));
+                utils.toast('上传成功');
+            })
+            .catch(err => {
+                utils.toast('上传失败');
+            });
+    }
 
+    iconSelect(icon) {
+        const { elements, activeId, activeEle: thisNode } = this.props.editorInfo;
+        const extClass = icon;
+        const newNode = {
+            ...thisNode,
+            extClass,
+        };
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
+        this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(newNode));
     }
 
     render() {
-        const { pid, elements, isEdit, dialogMap } = this.props.editorInfo;
+        const { pid, elements, isEdit, dialogMap, iconList = [], iconfontUrl: defaultIconUrl } = this.props.editorInfo;
         const { navIndex, movingX, movingY, hoverId, activeId, activeEle, iconfontUrl } = this.state;
         const { css = {} } = activeEle;
         const dialogStatus = dialogMap[activeId];
@@ -394,9 +426,27 @@ class SideBar extends Component {
                                             </div>
                                         )}
                                         {activeEle.element === 'Icon' && (
-                                            <div className='row'>
-                                                <input className='icon-input' type='text' value={iconfontUrl} onChange={this.onIconChange.bind(this)} />
-                                                <div className='button primary' onClick={this.uploadIcon.bind(this)}>上传</div>
+                                            <div>
+                                                <div className='row'>
+                                                    <input
+                                                        className='icon-input'
+                                                        type='text'
+                                                        placeholder={defaultIconUrl}
+                                                        value={iconfontUrl}
+                                                        onChange={this.onIconChange.bind(this)}
+                                                    />
+                                                    <div className='button primary' onClick={this.uploadIcon.bind(this)}>
+                                                        上传
+                                                    </div>
+                                                </div>
+                                                <div className='icon-box'>
+                                                    {iconList.map((icon, idx) => (
+                                                        <div key={`icon-${idx}`} className="icon-item" onClick={this.iconSelect.bind(this, icon)}>
+                                                            <i className={classNames('iconfont', icon)} />
+                                                        </div>
+                                                        )
+                                                    )}
+                                                </div>
                                             </div>
                                         )}
                                         {/*------ 属性列表 ------*/}
@@ -565,7 +615,7 @@ class SideBar extends Component {
                                     </div>
                                 )}
                                 {/*------ 字体 ------*/}
-                                {utils.has(['Root', 'Text', 'Input', 'Textarea', 'Submit'], activeEle.element) && (
+                                {utils.has(['Root', 'Text', 'Input', 'Textarea', 'Submit', 'Icon'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>字体</div>
                                         <div className='card-content'>
