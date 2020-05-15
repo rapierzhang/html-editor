@@ -223,7 +223,7 @@ class Editor extends Component {
         if (deletePid === pid) {
             htmlDelete({ pid }).then(res => {
                 if (res.result === true) {
-                    utils.toast('删除成功');
+                    utils.toast('删除成功 3秒后页面关闭');
                     setTimeout(() => window.close(), 3000);
                 }
             });

@@ -136,6 +136,7 @@ class AttrList extends Component {
                         <Upload
                             className='upload-btn'
                             url={'http://localhost:3000/api/file/upload'}
+                            data={{ pid: this.props.editorInfo.pid }}
                             fileName='file'
                             onUploadSucc={this.onUploadSucc.bind(this)}
                         >

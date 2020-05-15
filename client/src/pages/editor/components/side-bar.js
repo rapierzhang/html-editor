@@ -121,6 +121,24 @@ const bgRepeatList = [
         value: 'no-repeat',
     },
 ];
+const textAlignList = [
+    {
+        title: '居左',
+        value: 'left'
+    },
+    {
+        title: '居右',
+        value: 'right'
+    },
+    {
+        title: '居中',
+        value: 'center'
+    },
+    {
+        title: '两端',
+        value: 'justify'
+    },
+];
 
 class SideBar extends Component {
     constructor() {
@@ -506,7 +524,7 @@ class SideBar extends Component {
                                 {/*------ 排列 ------*/}
                                 {utils.has(['View', 'ScrollView', 'Form', 'Upload'], activeEle.element) && (
                                     <div className='attr-card'>
-                                        <div className='card-title'>flax布局</div>
+                                        <div className='card-title'>flex布局</div>
                                         <div className='card-content'>
                                             <div className='row'>
                                                 <span>启用</span>
@@ -546,6 +564,23 @@ class SideBar extends Component {
                                                     </div>
                                                 </div>
                                             )}
+                                        </div>
+                                    </div>
+                                )}
+                                {/*------ 文字排列 ------*/}
+                                {utils.has(['Text'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>文字布局</div>
+                                        <div className='card-content'>
+                                            <div className='row'>
+                                                <span>文字排列</span>
+                                                <Select
+                                                    titleShow
+                                                    list={textAlignList}
+                                                    value={css.textAlign || 'left'}
+                                                    onChange={this.onStyleChange.bind(this, 'textAlign')}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -683,7 +718,7 @@ class SideBar extends Component {
                                     </div>
                                 )}
                                 {/*------ 盒子模型 ------*/}
-                                {!utils.has(['Root', 'Dialog'], activeEle.element) && (
+                                {!utils.has(['Dialog'], activeEle.element) && (
                                     <Box css={css} activeEle={activeEle} onChange={this.onStyleChange.bind(this)} />
                                 )}
                                 {/*------ 扩展 ------*/}

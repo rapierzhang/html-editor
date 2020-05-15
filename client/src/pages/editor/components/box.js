@@ -70,7 +70,7 @@ class Box extends Component {
                                                 onChange={this.onStyleChange.bind(this, 'paddingTop')}
                                                 value={css.paddingTop}
                                             />
-                                            {!utils.has(['Text', 'Link', 'Radio', 'Checkbox'], activeEle.element) ? (
+                                            {!utils.has(['Link', 'Radio', 'Checkbox'], activeEle.element) ? (
                                                 <div className='entity'>
                                                     <input
                                                         className='entity-input'
