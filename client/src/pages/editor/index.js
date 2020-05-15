@@ -22,9 +22,9 @@ import {
     activeIdSet,
     isEditSet,
     listPreviewSave,
-    htmlDelete, iconListSet,
+    htmlDelete,
+    iconListSet,
 } from './actions';
-
 
 class Editor extends Component {
     constructor(props) {
@@ -238,7 +238,6 @@ class Editor extends Component {
         const { pid } = this.props.editorInfo;
         utils.copy(pid);
     }
-
 
     render() {
         const {

@@ -132,7 +132,11 @@ class Element extends Component {
                     </span>
                 );
             case 'Select':
-                return <div id={id} className={classNames('element', 'select', id)} style={style}>请选择</div>;
+                return (
+                    <div id={id} className={classNames('element', 'select', id)} style={style}>
+                        请选择
+                    </div>
+                );
             case 'Upload':
                 return (
                     <div id={id} className={classNames('element', 'upload', id)} style={style}>

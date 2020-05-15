@@ -179,7 +179,7 @@ export const dialogHandle = (id, state) => dispatch => {
 
 // 预览图保存
 export const listPreviewSave = formData =>
-    uploadFile({ url: 'http://localhost:3000/api/file/list_preview_save', formData })// ^^^^^^
+    uploadFile({ url: 'http://localhost:3000/api/file/list_preview_save', formData }) // ^^^^^^
         .then(res => res.data.url)
         .catch(() => '');
 
@@ -189,12 +189,12 @@ export const iconUpload = params => {
         method: 'POST',
         params,
     }).then(res => res.data);
-}
+};
 
 export const iconListSet = (iconfontUrl, iconList) => dispatch => {
     dispatch({
         type: ICON_LIST_SET,
         iconfontUrl,
-        iconList
+        iconList,
     });
-}
+};

@@ -435,17 +435,23 @@ class SideBar extends Component {
                                                         value={iconfontUrl}
                                                         onChange={this.onIconChange.bind(this)}
                                                     />
-                                                    <div className='button primary' onClick={this.uploadIcon.bind(this)}>
+                                                    <div
+                                                        className='button primary'
+                                                        onClick={this.uploadIcon.bind(this)}
+                                                    >
                                                         上传
                                                     </div>
                                                 </div>
                                                 <div className='icon-box'>
                                                     {iconList.map((icon, idx) => (
-                                                        <div key={`icon-${idx}`} className="icon-item" onClick={this.iconSelect.bind(this, icon)}>
+                                                        <div
+                                                            key={`icon-${idx}`}
+                                                            className='icon-item'
+                                                            onClick={this.iconSelect.bind(this, icon)}
+                                                        >
                                                             <i className={classNames('iconfont', icon)} />
                                                         </div>
-                                                        )
-                                                    )}
+                                                    ))}
                                                 </div>
                                             </div>
                                         )}
@@ -615,7 +621,10 @@ class SideBar extends Component {
                                     </div>
                                 )}
                                 {/*------ 字体 ------*/}
-                                {utils.has(['Root', 'Text', 'Input', 'Textarea', 'Submit', 'Icon'], activeEle.element) && (
+                                {utils.has(
+                                    ['Root', 'Text', 'Input', 'Textarea', 'Submit', 'Icon'],
+                                    activeEle.element,
+                                ) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>字体</div>
                                         <div className='card-content'>
