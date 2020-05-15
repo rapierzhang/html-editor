@@ -10,9 +10,9 @@ exports.mkdirImage = dirPath => {
 
 // 写入HTML
 exports.writeHtml = (dirPath, data) => {
-    const { pid, title, htmlTree } = data;
+    const { pid, title, htmlTree, iconfontUrl } = data;
     let html = renderHtml(htmlTree);
-    const htmlContext = defaultHtml(pid, title, html);
+    const htmlContext = defaultHtml({ pid, title, html, iconfontUrl });
     fs.writeFileSync(`${dirPath}/index.html`, htmlContext);
 };
 
@@ -25,8 +25,9 @@ const renderHtml = htmlTree => {
     return html;
 };
 
+// 渲染元素
 const renderElement = data => {
-    const { id, element, children, name, label } = data;
+    const { id, element, children, name, label, extClass } = data;
     switch (element) {
         case 'Root':
             return `
@@ -77,7 +78,7 @@ const renderElement = data => {
                     ${data.text}
                 </span>`;
         case 'Icon':
-            return `<i id='${id}' class='element icon ${id}'>${data.text}</i>`;
+            return `<i id='${id}' class='element icon ${id} ${extClass}'></i>`;
 
         case 'Form':
             return `
@@ -174,7 +175,8 @@ const renderAttribute = data => {
 };
 
 // 默认html
-const defaultHtml = (pid, title = '', text = '') => {
+const defaultHtml = data => {
+    const { pid, title = '', html = '', iconfontUrl } = data;
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -189,6 +191,7 @@ const defaultHtml = (pid, title = '', text = '') => {
         <title>${title}</title>
         <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/Swiper/5.3.8/css/swiper.min.css">
         <link rel="stylesheet" href="./${pid}/css/index.min.css" />
+        ${iconfontUrl ? `<link rel="stylesheet" href="${iconfontUrl}" />` : ''}
         <script>
             !(function(x) {
                 function w() {
@@ -219,7 +222,7 @@ const defaultHtml = (pid, title = '', text = '') => {
     </head>
     <body>
         <div class="container">
-            ${text}
+            ${html}
         </div>
         <div id="toast" class="toast"></div>
         <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -341,7 +344,15 @@ body {
 }
 
 .icon {
-    display: inline-block;
+    font-family: 'iconfont' !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .textarea {
@@ -475,6 +486,7 @@ exports.writeJs = (dirPath, htmlTree) => {
     fs.writeFileSync(`${jsDirPath}/index.js`, jsContext);
 };
 
+// 元素默认的js
 const eleDefaultJs = (element, id, data) => {
     const underLineId = utils.lineToUnderLine(id);
     let js = '';

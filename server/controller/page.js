@@ -6,8 +6,6 @@ const ListModule = require('../module/list');
 const process = require('child_process');
 const io = require('./io-handle');
 const axios = require('axios');
-const http = require('http');
-const https = require('https');
 // 页面信息获取
 exports.pageGet = async (ctx, next) => {
     let { pid } = ctx.request.body;
