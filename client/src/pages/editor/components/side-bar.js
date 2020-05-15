@@ -131,6 +131,8 @@ class SideBar extends Component {
             movingX: 0,
             movingY: 0,
 
+            iconfontUrl: '',
+
             activeId: '',
             activeEle: {},
         };
@@ -149,7 +151,7 @@ class SideBar extends Component {
         if (JSON.stringify(activeEle) != JSON.stringify(state.activeEle)) {
             // backgroundImage需要特殊处理url()
             const { css = {} } = activeEle;
-            if (css.backgroundImage && (css.backgroundImage != state.activeEle.css.backgroundImage)) return null;
+            if (css.backgroundImage && css.backgroundImage != state.activeEle.css.backgroundImage) return null;
 
             return {
                 activeId,
@@ -325,9 +327,18 @@ class SideBar extends Component {
         this.onStyleChange('backgroundImage', backgroundImage);
     }
 
+    onIconChange(e) {
+        this.setState({ iconfontUrl: e.target.value })
+    }
+
+    // iconfont上传
+    uploadIcon() {
+
+    }
+
     render() {
         const { pid, elements, isEdit, dialogMap } = this.props.editorInfo;
-        const { navIndex, movingX, movingY, hoverId, activeId, activeEle } = this.state;
+        const { navIndex, movingX, movingY, hoverId, activeId, activeEle, iconfontUrl } = this.state;
         const { css = {} } = activeEle;
         const dialogStatus = dialogMap[activeId];
 
@@ -380,6 +391,12 @@ class SideBar extends Component {
                                                     onChange={this.dialogHandle.bind(this, activeEle)}
                                                     value={dialogStatus}
                                                 />
+                                            </div>
+                                        )}
+                                        {activeEle.element === 'Icon' && (
+                                            <div className='row'>
+                                                <input className='icon-input' type='text' value={iconfontUrl} onChange={this.onIconChange.bind(this)} />
+                                                <div className='button primary' onClick={this.uploadIcon.bind(this)}>上传</div>
                                             </div>
                                         )}
                                         {/*------ 属性列表 ------*/}

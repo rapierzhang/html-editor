@@ -5,7 +5,9 @@ const PageModule = require('../module/page');
 const ListModule = require('../module/list');
 const process = require('child_process');
 const io = require('./io-handle');
-
+const axios = require('axios');
+const http = require('http');
+const https = require('https');
 // 页面信息获取
 exports.pageGet = async (ctx, next) => {
     let { pid } = ctx.request.body;
@@ -156,4 +158,22 @@ exports.pageRelease = async (ctx, next) => {
     } else {
         ctx.body = utils.res(500, '无此页面，请先生成后再发布', {});
     }
+};
+// 处理iconfont
+exports.iconSave = async (ctx, next) => {
+    let { pid, iconfontUrl } = ctx.request.body;
+    iconfontUrl = iconfontUrl.replace(/.*\/\//, 'https://');
+    let cssList = [];
+
+    await axios
+        .get(iconfontUrl)
+        .then(res => {
+            const str = res.data;
+            let cssMap = [...(str.match(/icon(.*)\:before/g) || [])];
+            cssMap.forEach(item => cssList.push(item.replace(':before', '')));
+            ctx.body = utils.res(200, 'ok', { pid, cssList });
+        })
+        .catch(err => {
+            ctx.body = utils.res(500, 'fetch err', err);
+        });
 };

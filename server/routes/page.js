@@ -15,6 +15,8 @@ router.post('/delete', controller.pageDelete);
 
 router.post('/release', controller.pageRelease);
 
+router.post('/icon_save', controller.iconSave)
+
 const test = async (ctx, next) => {
     console.log('-------------');
     console.log('ctx.header: ', ctx.header);
