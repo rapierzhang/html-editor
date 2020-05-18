@@ -123,19 +123,19 @@ const bgRepeatList = [
 const textAlignList = [
     {
         title: '居左',
-        value: 'left'
+        value: 'left',
     },
     {
         title: '居右',
-        value: 'right'
+        value: 'right',
     },
     {
         title: '居中',
-        value: 'center'
+        value: 'center',
     },
     {
         title: '两端',
-        value: 'justify'
+        value: 'justify',
     },
 ];
 
@@ -436,12 +436,17 @@ class SideBar extends Component {
                             <div className='attr-box'>
                                 <div className='attr-card'>
                                     <div className='card-content'>
-                                        <div className='row'>id: <span className='pid' onClick={this.copyActiveId.bind(this, activeId)}>{activeId} (点击复制)</span></div>
+                                        <div className='row'>
+                                            id:{' '}
+                                            <span className='pid' onClick={this.copyActiveId.bind(this, activeId)}>
+                                                {activeId} (点击复制)
+                                            </span>
+                                        </div>
                                         {activeEle.element === 'Dialog' && (
                                             <div className='row'>
                                                 <span>展示</span>
                                                 <Switch
-                                                    onChange={this.dialogHandle.bind(this, activeEle)}
+                                                    onChange={this.dialogHandle.bind(this, activeId)}
                                                     value={dialogStatus}
                                                 />
                                             </div>

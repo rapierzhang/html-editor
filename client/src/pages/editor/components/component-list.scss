@@ -4,11 +4,12 @@
     height: 100%;
     border-right: 1px solid #d8d8d8;
     overflow-y: scroll;
+    padding-bottom: 50px;
+    background: #f5f5f5;
 
     .list-label {
         height: 50px;
         padding-left: 10px;
-        background: #f5f5f5;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
@@ -24,6 +25,7 @@
         align-items: center;
         cursor: pointer;
         font-size: 16px;
+        background: #fff;
 
         &:hover {
             color: #ea413c;

@@ -256,7 +256,7 @@ class Editor extends Component {
 
     render() {
         const {
-            editorInfo: { pid, title, desc, elements },
+            editorInfo: { pid, title, desc, elements, dialogMap },
         } = this.props;
         const { deleteShow, deletePid } = this.state;
 
