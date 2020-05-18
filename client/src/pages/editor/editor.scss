@@ -78,7 +78,7 @@
             height: 100%;
             position: relative;
             padding-bottom: 1px;
-            float: left;
+            border: 1px solid transparent;
 
             &.active {
                 z-index: 9999;

@@ -254,6 +254,11 @@ class SideBar extends Component {
         this.setState({ hoverId: '' });
         const { activeId, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(ele.id, activeId, elements));
+        // 展示元素位置
+        const eleTop = document.getElementById(ele.id).getBoundingClientRect().top;
+        const table = document.getElementById('table');
+        const tableTop = table.scrollTop;
+        table.scrollTop = tableTop + eleTop - 200;
     }
 
     // 展示菜单

@@ -304,7 +304,7 @@ class Editor extends Component {
                     {/*------ 元素列表 ------*/}
                     <ComponentList />
                     {/*------ 画布 ------*/}
-                    <div className='table' onClick={this.unSelect.bind(this)}>
+                    <div id='table' className='table' onClick={this.unSelect.bind(this)}>
                         <div id='context' className='context' ref='ctx'>
                             {this.renderElements(elements)}
                         </div>

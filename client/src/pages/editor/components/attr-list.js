@@ -25,9 +25,7 @@ class AttrList extends Component {
             };
         }
         if (JSON.stringify(props.activeEle) !== JSON.stringify(state)) {
-            return {
-                activeEle,
-            };
+            return { activeEle };
         }
     }
 
