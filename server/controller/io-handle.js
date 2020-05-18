@@ -463,17 +463,16 @@ exports.writeJs = (dirPath, htmlTree) => {
             jsContext += initJs;
         }
 
+        // 组件默认js
         let defaultJs = eleDefaultJs(element, id, { formId, onSucc, onErr, imageList, keyValList });
-        if (element === 'Submit') {
-            const formData = utils.deepSearch(htmlTree, formId);
-            const { onSucc, onErr } = formData;
-            const submitJs = defaultJs.replace(/FORM_SUCC/g, onSucc).replace(/FORM_ERR/g, onErr);
-            jsContext += submitJs;
-        } else {
-            // 默认组件js
-            if (defaultJs) {
-                jsContext += defaultJs;
+        if (defaultJs) {
+            if (element === 'Submit') {
+                const formData = utils.deepSearch(htmlTree, formId);
+                const { onSucc = '', onErr = '' } = formData;
+                defaultJs = defaultJs.replace(/FORM_SUCC/g, onSucc).replace(/FORM_ERR/g, onErr);
+                console.error(defaultJs)
             }
+            jsContext += defaultJs;
         }
         // 绑定事件
         if (bindJs) {
@@ -536,10 +535,10 @@ const eleDefaultJs = (element, id, data) => {
                     })
                         .then(res => {
                             $${underLineId}_url.val(res.data.url);
-                            ${data.onSucc}
+                            ${data.onSucc || ''}
                         })
                         .catch(err => {
-                            ${data.onErr}
+                            ${data.onErr || ''}
                         });
                 });
             `;
