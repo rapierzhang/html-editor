@@ -112,9 +112,8 @@ class ComponentList extends Component {
     constructor() {
         super(...arguments);
         this.state = {
-            movingX: 0,
-            movingY: 0,
-            activeComponent: '',
+            menuX: 0,
+            menuY: 0,
         };
     }
 
@@ -129,12 +128,12 @@ class ComponentList extends Component {
     }
 
     // 右击
-    msDown(activeComponent, e) {
+    menuShow(activeComponent, e) {
         const { button, pageX, pageY } = e;
         if (button == 2) {
             this.setState({
-                movingX: pageX,
-                movingY: pageY,
+                menuX: pageX,
+                menuY: pageY,
             });
             this.props.dispatch(componentSelect(activeComponent));
         } else {
@@ -143,15 +142,12 @@ class ComponentList extends Component {
     }
 
     eleInsert() {
-        this.setSucc(this.state.activeComponent);
-        this.setState({
-            activeComponent: '',
-        });
+        this.setSucc();
     }
 
     // 设置元素成功
-    setSucc(element) {
-        const { elements, index, activeId, activeEle } = this.props.editorInfo;
+    setSucc() {
+        const { elements, index, activeId, activeEle, activeComponent: element } = this.props.editorInfo;
         const id = this.uniqueKey(index);
         let newElements;
         const defaultEle = {
@@ -179,7 +175,8 @@ class ComponentList extends Component {
         }
         this.props.dispatch(indexIncrement()); // 索引自增
         this.props.dispatch(elementsUpdate(newElements)); // 元素更新
-        this.props.dispatch(elementSelect(id, activeId, this.props.editorInfo.elements)); // 选中元素 后面element得取更新过后的
+        this.onNodeSelect(id);
+        this.props.dispatch(componentSelect(''));
         console.error('set success!!!');
     }
 
@@ -190,7 +187,7 @@ class ComponentList extends Component {
     }
 
     render() {
-        const { isDown, dragName, movingX, movingY } = this.state;
+        const { menuX, menuY } = this.state;
         const { activeEle, activeComponent } = this.props.editorInfo;
 
         return (
@@ -203,22 +200,15 @@ class ComponentList extends Component {
                                 key={`row-${i}`}
                                 className='ele-item'
                                 title={row.title}
-                                onMouseDown={this.msDown.bind(this, row.component)}
+                                onMouseDown={this.menuShow.bind(this, row.component)}
                             >
                                 {row.component} {row.title}
                             </div>
                         ))}
                     </div>
                 ))}
-                {/*------ 拖拽虚拟元素 ------*/}
-                <div
-                    className={classNames('shadow-ele', { show: isDown })}
-                    style={{ left: `${movingX}px`, top: `${movingY}px` }}
-                >
-                    {dragName}
-                </div>
                 {activeComponent &&(!activeEle.element || utils.has(containerElement, activeEle.element))  && (
-                    <div className='ele-menu' style={{ left: movingX, top: movingY }}>
+                    <div className='ele-menu' style={{ left: menuX, top: menuY }}>
                         <div className='row' onClick={this.eleInsert.bind(this)}>
                             插入到{activeEle.element || 'Root'}
                         </div>
