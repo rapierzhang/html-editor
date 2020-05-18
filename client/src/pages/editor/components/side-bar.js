@@ -120,33 +120,106 @@ const bgRepeatList = [
         value: 'no-repeat',
     },
 ];
-const cssMarginList = [
+const cssSizeList = [
     {
-        title: 'margin',
-        value: 'margin',
-        placeholder: '上 右 下 左',
+        title: '宽',
+        value: 'width',
+        placeholder: '**px, **%',
     },
     {
-        title: 'margin-top',
+        title: '高',
+        value: 'height',
+        placeholder: '**px, **%',
+    }
+];
+const cssMarginList = [
+    {
+        title: '上',
         value: 'marginTop',
         placeholder: '**px',
     },
     {
-        title: 'margin-right',
+        title: '右',
         value: 'marginRight',
         placeholder: '**px',
     },
     {
-        title: 'margin-bottom',
+        title: '下',
         value: 'marginBottom',
         placeholder: '**px',
     },
     {
-        title: 'margin-left',
+        title: '左',
         value: 'marginLeft',
         placeholder: '**px',
     },
 ];
+const cssPaddingList = [
+    {
+        title: '上',
+        value: 'paddingTop',
+        placeholder: '**px',
+    },
+    {
+        title: '右',
+        value: 'paddingRight',
+        placeholder: '**px',
+    },
+    {
+        title: '下',
+        value: 'paddingBottom',
+        placeholder: '**px',
+    },
+    {
+        title: '左',
+        value: 'paddingLeft',
+        placeholder: '**px',
+    },
+];
+const cssBorderList = [
+    {
+        title: '上',
+        value: 'borderTop',
+        placeholder: '**px type color',
+    },
+    {
+        title: '右',
+        value: 'borderRight',
+        placeholder: '**px type color',
+    },
+    {
+        title: '下',
+        value: 'borderBottom',
+        placeholder: '**px type color',
+    },
+    {
+        title: '左',
+        value: 'borderLeft',
+        placeholder: '**px type color',
+    },
+];
+const cssBorderStyleList = [
+    {
+        title: '无',
+        value: 'none',
+    },
+    {
+        title: '实线',
+        value: 'solid',
+    },
+    {
+        title: '点线',
+        value: 'dotted',
+    },
+    {
+        title: '虚线',
+        value: 'dashed',
+    },
+    {
+        title: '双实线',
+        value: 'none',
+    },
+]
 
 class SideBar extends Component {
     constructor() {
@@ -439,25 +512,6 @@ class SideBar extends Component {
 
         return (
             <div id='side-bar' className='side-bar' onClick={this.hideMenu.bind(this)}>
-                {/*------ 菜单 必须有选中才展示 ------*/}
-                {activeId && hoverId && activeId != hoverId && (
-                    <div className='attr-menu' style={{ left: movingX, top: movingY }}>
-                        <div className='row' onClick={this.changeTree.bind(this, 'before')}>
-                            移动到选中元素前
-                        </div>
-                        {utils.has(
-                            ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Link', 'Dialog'],
-                            activeEle.element,
-                        ) && (
-                            <div className='row' onClick={this.changeTree.bind(this, 'in')}>
-                                移动到选中元素内
-                            </div>
-                        )}
-                        <div className='row' onClick={this.changeTree.bind(this, 'after')}>
-                            移动到选中元素后
-                        </div>
-                    </div>
-                )}
                 {isEdit ? (
                     <div className='attr-list'>
                         {/*------ nav ------*/}
@@ -550,12 +604,12 @@ class SideBar extends Component {
                         {/*------ 样式 ------*/}
                         {navIndex === 1 && (
                             <div className='style-box'>
-                                {/*------ 盒子 ------*/}
-                                {!utils.has(['Dialog'], activeEle.element) && (
+                                {/*------ 宽高 ------*/}
+                                {!utils.has(['Link', 'Radio', 'Checkbox'], activeEle.element) && (
                                     <div className='attr-card'>
-                                        <div className='card-title'>外边距</div>
+                                        <div className='card-title'>宽高</div>
                                         <div className='card-content'>
-                                            {cssMarginList.map((row, idx) => (
+                                            {cssSizeList.map((row, idx) => (
                                                 <div key={`row-${idx}`} className='row'>
                                                     <span>{row.title}: </span>
                                                     <input
@@ -566,6 +620,109 @@ class SideBar extends Component {
                                                     />
                                                 </div>
                                             ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {/*------ margin ------*/}
+                                {!utils.has(['Dialog'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>外边距</div>
+                                        <div className='card-content'>
+                                            <div className="row margin">
+                                                {cssMarginList.map((row, idx) => (
+                                                    <div key={`row-${idx}`} >
+                                                        <span>{row.title}: </span>
+                                                        <input
+                                                            type='text'
+                                                            value={css[row.value]}
+                                                            placeholder={row.placeholder}
+                                                            onChange={this.onStyleChange.bind(this, row.value)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="row">
+                                                <span>margin: </span>
+                                                <input
+                                                    type='text'
+                                                    value={css.margin}
+                                                    placeholder='上 右 下 左'
+                                                    onChange={this.onStyleChange.bind(this, 'margin')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {/*------ padding ------*/}
+                                {!utils.has(['Dialog'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>内边距</div>
+                                        <div className='card-content'>
+                                            <div className="row padding">
+                                                {cssPaddingList.map((row, idx) => (
+                                                    <div key={`row-${idx}`} >
+                                                        <span>{row.title}: </span>
+                                                        <input
+                                                            type='text'
+                                                            value={css[row.value]}
+                                                            placeholder={row.placeholder}
+                                                            onChange={this.onStyleChange.bind(this, row.value)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="row">
+                                                <span>pdding: </span>
+                                                <input
+                                                    type='text'
+                                                    value={css.margin}
+                                                    placeholder='上 右 下 左'
+                                                    onChange={this.onStyleChange.bind(this, 'padding')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {/*------ border ------*/}
+                                {!utils.has(['Dialog'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>边框</div>
+                                        <div className='card-content'>
+                                            <div className='row border'>
+                                                {cssBorderList.map((row, idx) => (
+                                                    <div key={`row-${idx}`}>
+                                                        <span>{row.title}: </span>
+                                                        <input
+                                                            type='text'
+                                                            value={css[row.value]}
+                                                            placeholder={row.placeholder}
+                                                            onChange={this.onStyleChange.bind(this, row.value)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="row border">
+                                                <span>线宽:</span>
+                                                <input
+                                                    type='text'
+                                                    value={css.borderWidth}
+                                                    placeholder='**px'
+                                                    onChange={this.onStyleChange.bind(this, 'borderWidth')}
+                                                />
+                                                <Select
+                                                    className='border-select'
+                                                    list={cssBorderStyleList}
+                                                    value={css.borderStyle || 'none'}
+                                                    titleShow
+                                                    onChange={this.onStyleChange.bind(this, 'borderStyle')}
+                                                />
+                                                <input
+                                                    type='text'
+                                                    value={css.borderColor}
+                                                    placeholder='颜色'
+                                                    onChange={this.onStyleChange.bind(this, 'borderColor')}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -806,6 +963,25 @@ class SideBar extends Component {
                 ) : (
                     <div className='tree' ref='tree'>
                         {this.renderTree(elements, activeId)}
+                    </div>
+                )}
+                {/*------ 菜单 必须有选中才展示 ------*/}
+                {activeId && hoverId && activeId != hoverId && (
+                    <div className='attr-menu' style={{ left: movingX, top: movingY }}>
+                        <div className='row' onClick={this.changeTree.bind(this, 'before')}>
+                            移动到选中元素前
+                        </div>
+                        {utils.has(
+                            ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Link', 'Dialog'],
+                            activeEle.element,
+                        ) && (
+                            <div className='row' onClick={this.changeTree.bind(this, 'in')}>
+                                移动到选中元素内
+                            </div>
+                        )}
+                        <div className='row' onClick={this.changeTree.bind(this, 'after')}>
+                            移动到选中元素后
+                        </div>
                     </div>
                 )}
             </div>

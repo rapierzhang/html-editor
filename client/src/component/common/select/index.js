@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import './select.scss';
 
 /*
@@ -41,11 +42,11 @@ class Select extends Component {
     }
 
     render() {
-        const { list, titleShow } = this.props;
+        const { list, titleShow, className } = this.props;
         const { listOpen, activeVal } = this.state;
 
         return (
-            <div className='select'>
+            <div className={classNames('select', className)}>
                 <div className='active-option' onClick={this.openList.bind(this)}>
                     {activeVal || '请选择'}
                 </div>

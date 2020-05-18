@@ -180,6 +180,17 @@
                 }
             }
 
+            .margin, .padding, .border {
+                input {
+                    width: 50px;
+                    margin: 0 10px;
+                }
+            }
+
+            .border-select {
+                width: 100px;
+            }
+
             .extra {
                 width: 360px;
                 height: 200px;
