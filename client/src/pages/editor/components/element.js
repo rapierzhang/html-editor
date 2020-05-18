@@ -38,6 +38,12 @@ class Element extends Component {
         e.stopPropagation();
         const { activeId, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(id, activeId, elements));
+
+        // 展示元素位置
+        const eleTop = document.getElementById(`tree-${id}`).getBoundingClientRect().top;
+        const table = document.getElementById('side-bar');
+        const tableTop = table.scrollTop;
+        table.scrollTop = tableTop + eleTop - 200;
     }
 
     renderElement(item) {

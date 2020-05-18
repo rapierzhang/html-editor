@@ -170,7 +170,7 @@ const renderAttribute = data => {
             // 需要过滤的属性
             [
                 ...['id', 'key', 'element', 'children', 'css', 'style', 'text', 'label', 'imageList', 'keyValList'],
-                ...['initJs', 'bindJs', 'bindType', 'defaultJs', 'extraJs', 'onSucc', 'onErr'],
+                ...['initJs', 'bindJs', 'bindType', 'defaultJs', 'extraJs', 'onSucc', 'onErr', 'nodeClose'],
             ].indexOf(k) > -1
         ) {
             continue;

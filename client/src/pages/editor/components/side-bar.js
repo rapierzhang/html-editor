@@ -158,7 +158,7 @@ class SideBar extends Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        const { activeId, activeEle, iconfontUrl } = props.editorInfo;
+        const { activeId, activeEle } = props.editorInfo;
         // 选中元素
         if (activeId != state.activeId) {
             return {
@@ -178,7 +178,7 @@ class SideBar extends Component {
             };
         }
 
-        // if (iconfontUrl != state.iconfontUrl) {
+        // if (iconfontUrl != state.iconfontUrl) { ^^^^^^
         //     return {
         //         iconfontUrl
         //     }
@@ -234,8 +234,9 @@ class SideBar extends Component {
             const row = (
                 <div
                     key={key}
+                    id={`tree-${id}`}
                     className='tree-item'
-                    onClick={this.selectNode.bind(this, ele)}
+                    onClick={this.selectNode.bind(this, id)}
                     onMouseDown={this.showMenu.bind(this, id)}
                 >
                     <div
@@ -271,13 +272,13 @@ class SideBar extends Component {
     }
 
     // 选择节点
-    selectNode(ele, e) {
+    selectNode(id, e) {
         e.stopPropagation();
         this.setState({ hoverId: '' });
         const { activeId, elements } = this.props.editorInfo;
-        this.props.dispatch(elementSelect(ele.id, activeId, elements));
+        this.props.dispatch(elementSelect(id, activeId, elements));
         // 展示元素位置
-        const eleTop = document.getElementById(ele.id).getBoundingClientRect().top;
+        const eleTop = document.getElementById(id).getBoundingClientRect().top;
         const table = document.getElementById('table');
         const tableTop = table.scrollTop;
         table.scrollTop = tableTop + eleTop - 200;
@@ -425,7 +426,7 @@ class SideBar extends Component {
         const dialogStatus = dialogMap[activeId];
 
         return (
-            <div className='side-bar' onClick={this.hideMenu.bind(this)}>
+            <div id='side-bar' className='side-bar' onClick={this.hideMenu.bind(this)}>
                 {/*------ 菜单 必须有选中才展示 ------*/}
                 {activeId && hoverId && activeId != hoverId && (
                     <div className='attr-menu' style={{ left: movingX, top: movingY }}>
