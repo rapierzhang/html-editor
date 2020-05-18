@@ -403,9 +403,14 @@ class SideBar extends Component {
                         <div className='row' onClick={this.changeTree.bind(this, 'before')}>
                             移动到选中元素前
                         </div>
-                        <div className='row' onClick={this.changeTree.bind(this, 'in')}>
-                            移动到选中元素内
-                        </div>
+                        {utils.has(
+                            ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Link', 'Dialog'],
+                            activeEle.element,
+                        ) && (
+                            <div className='row' onClick={this.changeTree.bind(this, 'in')}>
+                                移动到选中元素内
+                            </div>
+                        )}
                         <div className='row' onClick={this.changeTree.bind(this, 'after')}>
                             移动到选中元素后
                         </div>
