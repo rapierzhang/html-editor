@@ -11,7 +11,9 @@ import {
     TITLE_SET,
     DESC_SET,
     DIALOG_HANDLE,
-    ICON_LIST_SET, COMPONENT_SELECT,
+    ICON_LIST_SET,
+    COMPONENT_SELECT,
+    ALT_DOWN,
 } from './action-types';
 import { fetch } from '../../common';
 import utils from '../../common/utils';
@@ -202,6 +204,13 @@ export const iconListSet = (iconfontUrl, iconList) => dispatch => {
 export const componentSelect = activeComponent => dispatch => {
     dispatch({
         type: COMPONENT_SELECT,
-        activeComponent
-    })
-}
+        activeComponent,
+    });
+};
+
+export const ctrlListen = altDown => dispatch => {
+    dispatch({
+        type: ALT_DOWN,
+        altDown,
+    });
+};

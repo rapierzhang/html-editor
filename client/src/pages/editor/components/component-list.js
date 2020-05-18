@@ -147,7 +147,7 @@ class ComponentList extends Component {
 
     // 设置元素成功
     setSucc() {
-        const { elements, index, activeId, activeEle, activeComponent: element } = this.props.editorInfo;
+        const { elements, index, activeId, activeEle, activeComponent: element, altDown } = this.props.editorInfo;
         const id = this.uniqueKey(index);
         let newElements;
         const defaultEle = {
@@ -175,8 +175,8 @@ class ComponentList extends Component {
         }
         this.props.dispatch(indexIncrement()); // 索引自增
         this.props.dispatch(elementsUpdate(newElements)); // 元素更新
-        this.onNodeSelect(id);
         this.props.dispatch(componentSelect(''));
+        if (!altDown) this.onNodeSelect(id); // 按住alt不选择
         console.error('set success!!!');
     }
 

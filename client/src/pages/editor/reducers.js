@@ -11,7 +11,9 @@ import {
     TITLE_SET,
     DESC_SET,
     DIALOG_HANDLE,
-    ICON_LIST_SET, COMPONENT_SELECT,
+    ICON_LIST_SET,
+    COMPONENT_SELECT,
+    ALT_DOWN,
 } from './action-types';
 
 const editorInfo = {
@@ -45,10 +47,10 @@ const editorInfo = {
     iconfontUrl: '',
     iconList: [],
     activeComponent: '', // 选中的模板
+    altDown: false, // alt按住状态
 };
 
 export default (state = editorInfo, action) => {
-    // console.error(action)
     switch (action.type) {
         case PID_SET:
             return { ...state, pid: action.pid };
@@ -85,6 +87,8 @@ export default (state = editorInfo, action) => {
             return { ...state, iconfontUrl: action.iconfontUrl, iconList: action.iconList };
         case COMPONENT_SELECT:
             return { ...state, activeComponent: action.activeComponent };
+        case ALT_DOWN:
+            return { ...state, altDown: action.altDown };
         default:
             return state;
     }

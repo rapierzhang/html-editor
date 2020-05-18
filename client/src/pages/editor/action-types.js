@@ -12,3 +12,4 @@ export const DESC_SET = 'desc/set';
 export const DIALOG_HANDLE = 'dialog/handle';
 export const ICON_LIST_SET = 'icon/list/set';
 export const COMPONENT_SELECT = 'component/select';
+export const ALT_DOWN = 'alt/down';

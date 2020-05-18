@@ -25,7 +25,7 @@ import {
     htmlDelete,
     iconListSet,
     attributeUpdate,
-    componentSelect,
+    componentSelect, ctrlListen,
 } from './actions';
 
 class Editor extends Component {
@@ -36,6 +36,8 @@ class Editor extends Component {
 
             deleteShow: false,
             deletePid: '',
+
+            ctrlPress: false,
         };
     }
 
@@ -47,7 +49,7 @@ class Editor extends Component {
         document.oncontextmenu = () => false;
 
         //禁止鼠标选中文本
-        document.onselectstart = () => false;
+        // document.onselectstart = () => false;
 
         // ^^^^^^ 鼠标右击
         /*document.onmousedown = e => {
@@ -56,6 +58,14 @@ class Editor extends Component {
                 console.error(111, e)
             }
         };*/
+        document.onkeydown = event => {
+            const e = event || window.event;
+            if (e.keyCode === 18) this.props.dispatch(ctrlListen(true));
+        };
+        document.onkeyup = event => {
+            const e = event || window.event;
+            if (e.keyCode === 18) this.props.dispatch(ctrlListen(false));
+        };
     }
 
     // 初始化
