@@ -462,7 +462,6 @@ exports.writeJs = (dirPath, htmlTree) => {
         if (initJs) {
             jsContext += initJs;
         }
-
         // 组件默认js
         let defaultJs = eleDefaultJs(element, id, { formId, onSucc, onErr, imageList, keyValList });
         if (defaultJs) {
@@ -470,7 +469,6 @@ exports.writeJs = (dirPath, htmlTree) => {
                 const formData = utils.deepSearch(htmlTree, formId);
                 const { onSucc = '', onErr = '' } = formData;
                 defaultJs = defaultJs.replace(/FORM_SUCC/g, onSucc).replace(/FORM_ERR/g, onErr);
-                console.error(defaultJs)
             }
             jsContext += defaultJs;
         }
