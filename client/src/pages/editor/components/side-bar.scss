@@ -16,9 +16,6 @@
         min-height: 30px;
         line-height: 30px;
         display: flex;
-        /*flex-direction: row;
-        justify-content: space-between;
-        align-items: center;*/
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
@@ -40,6 +37,7 @@
             }
 
             .arrow {
+                color: #262626 !important;
                 font-size: 14px;
                 display: inline-block;
                 width: 20px;
@@ -49,6 +47,7 @@
                 background: #d9d9d9;
                 border-radius: 10px;
                 cursor: pointer;
+                margin-right: 10px;
 
                 &:hover {
                     background: #8c8c8c;
@@ -56,10 +55,6 @@
             }
 
         }
-
-        /*&:hover {
-            color: #ea413c;
-        }*/
     }
 }
 

@@ -229,56 +229,35 @@ class SideBar extends Component {
     renderTree(elements, activeId, floor = 0) {
         const arr = Object.values(elements);
         return arr.map((ele, idx) => {
-            const key = `${idx}-${parseInt(Math.random() * 1e5)}`;
-            const row = (
-                <div
-                    key={key}
-                    className={classNames('tree-item', { active: ele.id === activeId })}
-                    style={{ paddingLeft: `${floor * 10}px` }}
-                    onClick={this.selectNode.bind(this, ele)}
-                    onMouseDown={this.showMenu.bind(this, ele.id)}
-                >
-                    <span>|- {ele.element}</span>
-                </div>
-            );
-            if (ele.children) {
-                return [row, this.renderTree(ele.children, activeId, floor + 1)];
-            } else {
-                return row;
-            }
-        });
-    }
-
-    newTree(elements, activeId, floor = 0) {
-        const arr = Object.values(elements);
-        return arr.map((ele, idx) => {
+            const { id, element, children, nodeClose } = ele;
             const key = `${idx}-${parseInt(Math.random() * 1e5)}`;
             const row = (
                 <div
                     key={key}
                     className='tree-item'
                     onClick={this.selectNode.bind(this, ele)}
-                    onMouseDown={this.showMenu.bind(this, ele.id)}
+                    onMouseDown={this.showMenu.bind(this, id)}
                 >
                     <div
-                        className={classNames('tree-row', { active: ele.id === activeId })}
+                        className={classNames('tree-row', { active: id === activeId })}
                         style={{ paddingLeft: `${floor * 10}px` }}
                     >
                         <span className='text'>
-                            |- {ele.element}
+                            |- {element}
                         </span>
-                        {ele.children && <span className='arrow up' onClick={this.nodeSwitch.bind(this, ele.id)}>
-                            {ele.nodeClose ? '↑' : '↓'}
+                        {children && <span className='arrow' onClick={this.statusSwitch.bind(this, id)}>
+                            {nodeClose ? '↑' : '↓'}
                         </span>}
                     </div>
-                    {ele.children && ele.nodeClose && this.newTree(ele.children, activeId, floor + 1)}
+                    {children && !nodeClose && this.renderTree(children, activeId, floor + 1)}
                 </div>
             );
             return row;
         });
     }
 
-    nodeSwitch(activeId, e) {
+    // 切换展开状态
+    statusSwitch(activeId, e) {
         e.stopPropagation();
         const { elements } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeId)
@@ -809,8 +788,7 @@ class SideBar extends Component {
                     </div>
                 ) : (
                     <div className='tree' ref='tree'>
-                        {/*{this.renderTree(elements, activeId)}*/}
-                        {this.newTree(elements, activeId)}
+                        {this.renderTree(elements, activeId)}
                     </div>
                 )}
             </div>
