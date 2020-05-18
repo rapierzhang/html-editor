@@ -249,8 +249,51 @@ class SideBar extends Component {
         });
     }
 
+    newTree(elements, activeId, floor = 0) {
+        const arr = Object.values(elements);
+        return arr.map((ele, idx) => {
+            const key = `${idx}-${parseInt(Math.random() * 1e5)}`;
+            const row = (
+                <div
+                    key={key}
+                    className='tree-item'
+                    onClick={this.selectNode.bind(this, ele)}
+                    onMouseDown={this.showMenu.bind(this, ele.id)}
+                >
+                    <div
+                        className={classNames('tree-row', { active: ele.id === activeId })}
+                        style={{ paddingLeft: `${floor * 10}px` }}
+                    >
+                        <span className='text'>
+                            |- {ele.element}
+                        </span>
+                        {ele.children && <span className='arrow up' onClick={this.nodeSwitch.bind(this, ele.id)}>
+                            {ele.nodeClose ? '↑' : '↓'}
+                        </span>}
+                    </div>
+                    {ele.children && ele.nodeClose && this.newTree(ele.children, activeId, floor + 1)}
+                </div>
+            );
+            return row;
+        });
+    }
+
+    nodeSwitch(activeId, e) {
+        e.stopPropagation();
+        const { elements } = this.props.editorInfo;
+        const thisNode = utils.deepSearch(elements, activeId)
+        const newNode = {
+            ...thisNode,
+            nodeClose: !thisNode.nodeClose,
+        };
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
+        this.props.dispatch(elementsUpdate(newElements));
+        this.props.dispatch(attributeUpdate(newNode));
+    }
+
     // 选择节点
-    selectNode(ele) {
+    selectNode(ele, e) {
+        e.stopPropagation();
         this.setState({ hoverId: '' });
         const { activeId, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(ele.id, activeId, elements));
@@ -263,6 +306,7 @@ class SideBar extends Component {
 
     // 展示菜单
     showMenu(hoverId, e) {
+        e.stopPropagation();
         const { button, pageX, pageY } = e;
         if (button == 2) {
             const { elements, activeId } = this.props.editorInfo;
@@ -390,6 +434,7 @@ class SideBar extends Component {
         this.props.dispatch(attributeUpdate(newNode));
     }
 
+    // 复制id
     copyActiveId(pid) {
         utils.copy(pid);
     }
@@ -764,7 +809,8 @@ class SideBar extends Component {
                     </div>
                 ) : (
                     <div className='tree' ref='tree'>
-                        {this.renderTree(elements, activeId)}
+                        {/*{this.renderTree(elements, activeId)}*/}
+                        {this.newTree(elements, activeId)}
                     </div>
                 )}
             </div>
