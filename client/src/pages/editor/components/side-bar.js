@@ -4,10 +4,8 @@ import utils from '../../../common/utils';
 import classNames from 'classnames';
 import { Select, Switch } from '../../../component';
 import { AttrList, Box } from './index';
-import './side-bar.scss';
 import {
     activeIdSet,
-    attributeLoad,
     attributeUpdate,
     elementSelect,
     elementsUpdate,
@@ -17,6 +15,7 @@ import {
     iconListSet,
 } from '../actions';
 import Upload from '../../../component/common/upload';
+import './side-bar.scss';
 
 const positionList = [
     {
@@ -386,6 +385,10 @@ class SideBar extends Component {
         this.props.dispatch(attributeUpdate(newNode));
     }
 
+    copyActiveId(pid) {
+        utils.copy(pid);
+    }
+
     render() {
         const { pid, elements, isEdit, dialogMap, iconList = [], iconfontUrl: defaultIconUrl } = this.props.editorInfo;
         const { navIndex, movingX, movingY, hoverId, activeId, activeEle, iconfontUrl } = this.state;
@@ -433,7 +436,7 @@ class SideBar extends Component {
                             <div className='attr-box'>
                                 <div className='attr-card'>
                                     <div className='card-content'>
-                                        <div className='row'>id: {activeId}</div>
+                                        <div className='row'>id: <span className='pid' onClick={this.copyActiveId.bind(this, activeId)}>{activeId} (点击复制)</span></div>
                                         {activeEle.element === 'Dialog' && (
                                             <div className='row'>
                                                 <span>展示</span>

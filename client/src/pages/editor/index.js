@@ -23,7 +23,9 @@ import {
     isEditSet,
     listPreviewSave,
     htmlDelete,
-    iconListSet, attributeUpdate, componentSelect,
+    iconListSet,
+    attributeUpdate,
+    componentSelect,
 } from './actions';
 
 class Editor extends Component {
@@ -121,10 +123,11 @@ class Editor extends Component {
     // 取消选中
     unSelect(e) {
         e.stopPropagation();
-        this.props.dispatch(activeIdSet(false));
         this.props.dispatch(attributeUpdate({}));
         this.props.dispatch(isEditSet(false));
         this.props.dispatch(componentSelect(''));
+        // 双击取消选择元素
+        if (!this.props.editorInfo.isEdit) this.props.dispatch(activeIdSet(false));
     }
 
     // 渲染画布中元素
