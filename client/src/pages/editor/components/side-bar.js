@@ -638,33 +638,40 @@ class SideBar extends Component {
                                                     </Upload>
                                                 </div>
                                             </div>
-                                            <div className='row'>
-                                                <span>背景位置: </span>
-                                                <input
-                                                    type='text'
-                                                    placeholder='**px **px'
-                                                    onChange={this.onStyleChange.bind(this, 'backgroundPosition')}
-                                                    value={css.backgroundPosition}
-                                                />
-                                            </div>
-                                            <div className='row'>
-                                                <span>背景大小: </span>
-                                                <input
-                                                    type='text'
-                                                    placeholder='xx% xx%'
-                                                    onChange={this.onStyleChange.bind(this, 'backgroundSize')}
-                                                    value={css.backgroundPosition}
-                                                />
-                                            </div>
-                                            <div className='row'>
-                                                <span>背景重复: </span>
-                                                <Select
-                                                    list={bgRepeatList}
-                                                    value={css.backgroundRepeat || 'repeat'}
-                                                    titleShow
-                                                    onChange={this.onStyleChange.bind(this, 'backgroundRepeat')}
-                                                />
-                                            </div>
+                                            {css.backgroundImage && (
+                                                <div>
+                                                    <div className='row'>
+                                                        <span>背景位置: </span>
+                                                        <input
+                                                            type='text'
+                                                            placeholder='**px **px'
+                                                            onChange={this.onStyleChange.bind(
+                                                                this,
+                                                                'backgroundPosition',
+                                                            )}
+                                                            value={css.backgroundPosition}
+                                                        />
+                                                    </div>
+                                                    <div className='row'>
+                                                        <span>背景大小: </span>
+                                                        <input
+                                                            type='text'
+                                                            placeholder='xx% xx%'
+                                                            onChange={this.onStyleChange.bind(this, 'backgroundSize')}
+                                                            value={css.backgroundPosition}
+                                                        />
+                                                    </div>
+                                                    <div className='row'>
+                                                        <span>背景重复: </span>
+                                                        <Select
+                                                            list={bgRepeatList}
+                                                            value={css.backgroundRepeat || 'repeat'}
+                                                            titleShow
+                                                            onChange={this.onStyleChange.bind(this, 'backgroundRepeat')}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 )}
