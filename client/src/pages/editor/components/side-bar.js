@@ -40,7 +40,7 @@ const positionList = [
         value: 'relative',
     },
 ];
-const directionList = ['z-index', 'top', 'right', 'bottom', 'left'];
+const directionList = ['zIndex', 'top', 'right', 'bottom', 'left'];
 const flexDirectionList = [
     {
         title: '横向',
@@ -522,7 +522,7 @@ class SideBar extends Component {
                                     </div>
                                 )}
                                 {/*------ 排列 ------*/}
-                                {utils.has(['View', 'ScrollView', 'Form', 'Upload'], activeEle.element) && (
+                                {utils.has(['View', 'ScrollView', 'Form', 'Upload', 'Text'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>flex布局</div>
                                         <div className='card-content'>
@@ -567,8 +567,8 @@ class SideBar extends Component {
                                         </div>
                                     </div>
                                 )}
-                                {/*------ 文字排列 ------*/}
-                                {utils.has(['Text'], activeEle.element) && (
+                                {/*------ 文字排列 ^^^^^^------*/}
+                                {/*{utils.has(['Text'], activeEle.element) && (
                                     <div className='attr-card'>
                                         <div className='card-title'>文字布局</div>
                                         <div className='card-content'>
@@ -583,7 +583,7 @@ class SideBar extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                )}
+                                )}*/}
                                 {/*------ 背景 ------*/}
                                 {utils.has(
                                     ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Submit'],

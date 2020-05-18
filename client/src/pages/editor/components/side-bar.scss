@@ -14,11 +14,14 @@
         cursor: pointer;
         height: 30px;
         line-height: 30px;
-        font-size: 20px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+
+        span {
+            font-size: 20px;
+        }
 
         &:hover {
             color: #ea413c;
@@ -44,6 +47,7 @@
         align-items: center;
 
         .nav-item {
+            font-size: 16px;
             cursor: pointer;
         }
 
@@ -93,6 +97,7 @@
                 flex-direction: row;
                 justify-content: flex-start;
                 align-items: center;
+                font-size: 16px;
 
                 >span {
                     display: inline-block;

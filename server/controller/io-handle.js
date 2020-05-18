@@ -70,13 +70,24 @@ const renderElement = data => {
                 `;
         case 'Text':
             const textList = data.text.split('\n');
-            return textList.length > 1
-                ? `<span id='${id}' class='element text ${id}'>
-                    ${textList.map((row, idx) => `<span class='text-row'>${row}</span>`).join('')}
-                </span>`
-                : `<span id='${id}' class='element text ${id}'>
-                    ${data.text}
-                </span>`;
+            if (textList.length > 1) {
+                const ele = `<span id='${id}' class='element text ${id}'>
+                    ${textList
+                        .map(row => {
+                            const strArr = row.split('');
+                            return `<span class='text-row'>
+                            ${strArr.map(item => `<span>${item}</span>`).join('')}
+                        </span>`;
+                        })
+                        .join('')}
+                    </span>`;
+                return ele;
+            } else {
+                const arr = data.text.split('');
+                return `<span id='${id}' class='element text ${id}'>
+                        ${arr.map(item => `<span>${item}</span>`).join('')}
+                    </span>`;
+            }
         case 'Icon':
             return `<i id='${id}' class='element icon ${id} ${extClass}'></i>`;
 

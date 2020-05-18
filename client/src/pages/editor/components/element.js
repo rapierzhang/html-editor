@@ -84,15 +84,18 @@ class Element extends Component {
             case 'Text':
                 return (
                     <span id={id} className={classNames('element', 'text', id)} style={style}>
-                        {textList.map((row, idx) =>
-                            textList.length > 1 ? (
+                        {textList.map((row, idx) => {
+                            const arr = row.split('');
+                            return textList.length > 1 ? (
                                 <span key={`row-${idx}`} className='text-row'>
-                                    {row}
+                                    {arr.map((span, i) => (
+                                        <span key={`span-${i}`}>{span}</span>
+                                    ))}
                                 </span>
                             ) : (
-                                row
-                            ),
-                        )}
+                                arr.map((span, i) => <span key={`span-${i}`}>{span}</span>)
+                            );
+                        })}
                     </span>
                 );
             case 'Icon':
