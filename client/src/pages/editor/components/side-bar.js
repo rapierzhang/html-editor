@@ -120,22 +120,31 @@ const bgRepeatList = [
         value: 'no-repeat',
     },
 ];
-const textAlignList = [
+const cssMarginList = [
     {
-        title: '居左',
-        value: 'left',
+        title: 'margin',
+        value: 'margin',
+        placeholder: '上 右 下 左',
     },
     {
-        title: '居右',
-        value: 'right',
+        title: 'margin-top',
+        value: 'marginTop',
+        placeholder: '**px',
     },
     {
-        title: '居中',
-        value: 'center',
+        title: 'margin-right',
+        value: 'marginRight',
+        placeholder: '**px',
     },
     {
-        title: '两端',
-        value: 'justify',
+        title: 'margin-bottom',
+        value: 'marginBottom',
+        placeholder: '**px',
+    },
+    {
+        title: 'margin-left',
+        value: 'marginLeft',
+        placeholder: '**px',
     },
 ];
 
@@ -243,12 +252,12 @@ class SideBar extends Component {
                         className={classNames('tree-row', { active: id === activeId })}
                         style={{ paddingLeft: `${floor * 10}px` }}
                     >
-                        <span className='text'>
-                            |- {element}
-                        </span>
-                        {children && <span className='arrow' onClick={this.statusSwitch.bind(this, id)}>
-                            {nodeClose ? '↑' : '↓'}
-                        </span>}
+                        <span className='text'>|- {element}</span>
+                        {children && (
+                            <span className='arrow' onClick={this.statusSwitch.bind(this, id)}>
+                                {nodeClose ? '↑' : '↓'}
+                            </span>
+                        )}
                     </div>
                     {children && !nodeClose && this.renderTree(children, activeId, floor + 1)}
                 </div>
@@ -261,7 +270,7 @@ class SideBar extends Component {
     statusSwitch(activeId, e) {
         e.stopPropagation();
         const { elements } = this.props.editorInfo;
-        const thisNode = utils.deepSearch(elements, activeId)
+        const thisNode = utils.deepSearch(elements, activeId);
         const newNode = {
             ...thisNode,
             nodeClose: !thisNode.nodeClose,
@@ -274,8 +283,11 @@ class SideBar extends Component {
     // 选择节点
     selectNode(id, e) {
         e.stopPropagation();
-        this.setState({ hoverId: '' });
-        const { activeId, elements } = this.props.editorInfo;
+        const { activeId, elements, altDown } = this.props.editorInfo;
+        this.setState({
+            hoverId: '',
+            navIndex: altDown ? 1 : 0, // 按住alt直接跳转css
+        });
         this.props.dispatch(elementSelect(id, activeId, elements));
         // 展示元素位置
         const eleTop = document.getElementById(id).getBoundingClientRect().top;
@@ -463,7 +475,7 @@ class SideBar extends Component {
                                 样式
                             </span>
                             <button className='close' onClick={this.close.bind(this)}>
-                                X
+                                ×
                             </button>
                         </div>
                         {/*------ 属性 ------*/}
@@ -477,6 +489,7 @@ class SideBar extends Component {
                                                 {activeId} (点击复制)
                                             </span>
                                         </div>
+                                        {/*------ dialog ------*/}
                                         {activeEle.element === 'Dialog' && (
                                             <div className='row'>
                                                 <span>展示</span>
@@ -486,6 +499,7 @@ class SideBar extends Component {
                                                 />
                                             </div>
                                         )}
+                                        {/*------ Icon ------*/}
                                         {activeEle.element === 'Icon' && (
                                             <div>
                                                 <div className='row'>
@@ -536,6 +550,25 @@ class SideBar extends Component {
                         {/*------ 样式 ------*/}
                         {navIndex === 1 && (
                             <div className='style-box'>
+                                {/*------ 盒子 ------*/}
+                                {!utils.has(['Dialog'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>外边距</div>
+                                        <div className='card-content'>
+                                            {cssMarginList.map((row, idx) => (
+                                                <div key={`row-${idx}`} className='row'>
+                                                    <span>{row.title}: </span>
+                                                    <input
+                                                        type='text'
+                                                        value={css[row.value]}
+                                                        placeholder={row.placeholder}
+                                                        onChange={this.onStyleChange.bind(this, row.value)}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                                 {/*------ 定位 ------*/}
                                 {!utils.has(['Root', 'Dialog'], activeEle.element) && (
                                     <div className='attr-card'>
@@ -610,23 +643,6 @@ class SideBar extends Component {
                                         </div>
                                     </div>
                                 )}
-                                {/*------ 文字排列 ^^^^^^------*/}
-                                {/*{utils.has(['Text'], activeEle.element) && (
-                                    <div className='attr-card'>
-                                        <div className='card-title'>文字布局</div>
-                                        <div className='card-content'>
-                                            <div className='row'>
-                                                <span>文字排列</span>
-                                                <Select
-                                                    titleShow
-                                                    list={textAlignList}
-                                                    value={css.textAlign || 'left'}
-                                                    onChange={this.onStyleChange.bind(this, 'textAlign')}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}*/}
                                 {/*------ 背景 ------*/}
                                 {utils.has(
                                     ['Root', 'View', 'ScrollView', 'Form', 'Upload', 'Submit'],
