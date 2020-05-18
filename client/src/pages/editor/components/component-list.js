@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import './component-list.scss';
 import { connect } from 'react-redux';
-import { dialogHandle, elementSelect, elementsUpdate, indexIncrement } from '../actions';
-import utils from '../../../common/utils';
 import classNames from 'classnames';
+import { componentSelect, dialogHandle, elementSelect, elementsUpdate, indexIncrement } from '../actions';
+import utils from '../../../common/utils';
+import './component-list.scss';
 
 // 模板列表
 const componentList = [
@@ -112,10 +112,9 @@ class ComponentList extends Component {
     constructor() {
         super(...arguments);
         this.state = {
-            isDown: false,
-            dragName: '', // 移动中位置
             movingX: 0,
             movingY: 0,
+            activeComponent: '',
         };
     }
 
@@ -129,41 +128,25 @@ class ComponentList extends Component {
             .join('-');
     }
 
-    // 开始拖拽
-    msDown(ele, evt) {
-        this.setState({
-            isDown: true,
-            dragName: ele,
-            movingX: evt.clientX,
-            movingY: evt.clientY,
-        });
-
-        // 拖拽中
-        window.onmousemove = e => {
-            if (!this.state.isDown) return;
-            //获取x和y
+    // 右击
+    msDown(activeComponent, e) {
+        const { button, pageX, pageY } = e;
+        if (button == 2) {
             this.setState({
-                movingX: e.clientX,
-                movingY: e.clientY,
+                movingX: pageX,
+                movingY: pageY,
             });
-        };
-        // 拖拽结束
-        window.onmouseup = e => {
-            const { isDown } = this.state;
-            const {
-                canvasPosition: { ctxTop, ctxBottom, ctxLeft, ctxRight },
-            } = this.props.editorInfo;
-            if (!isDown) return;
-            this.setState({ isDown: false, movingX: 0, movingY: 0 });
-            const endX = e.clientX;
-            const endY = e.clientY;
-            // 判断是否在画布内
-            if (endX > ctxLeft && endX < ctxRight && endY > ctxTop && endY < ctxBottom) {
-                this.setSucc(ele);
-            } else {
-                this.setFail();
-            }
-        };
+            this.props.dispatch(componentSelect(activeComponent));
+        } else {
+            this.props.dispatch(componentSelect(''));
+        }
+    }
+
+    eleInsert() {
+        this.setSucc(this.state.activeComponent);
+        this.setState({
+            activeComponent: '',
+        });
     }
 
     // 设置元素成功
@@ -200,11 +183,6 @@ class ComponentList extends Component {
         console.error('set success!!!');
     }
 
-    // 设置元素失败
-    setFail() {
-        console.error('fail');
-    }
-
     // 选中元素 ^^^^^^
     onNodeSelect(id) {
         const { activeId, elements } = this.props.editorInfo;
@@ -213,6 +191,7 @@ class ComponentList extends Component {
 
     render() {
         const { isDown, dragName, movingX, movingY } = this.state;
+        const { activeEle, activeComponent } = this.props.editorInfo;
 
         return (
             <div className='ele-list'>
@@ -238,6 +217,13 @@ class ComponentList extends Component {
                 >
                     {dragName}
                 </div>
+                {activeComponent &&(!activeEle.element || utils.has(containerElement, activeEle.element))  && (
+                    <div className='ele-menu' style={{ left: movingX, top: movingY }}>
+                        <div className='row' onClick={this.eleInsert.bind(this)}>
+                            插入到{activeEle.element || 'Root'}
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

@@ -23,7 +23,7 @@ import {
     isEditSet,
     listPreviewSave,
     htmlDelete,
-    iconListSet,
+    iconListSet, attributeUpdate, componentSelect,
 } from './actions';
 
 class Editor extends Component {
@@ -122,7 +122,9 @@ class Editor extends Component {
     unSelect(e) {
         e.stopPropagation();
         this.props.dispatch(activeIdSet(false));
+        this.props.dispatch(attributeUpdate({}));
         this.props.dispatch(isEditSet(false));
+        this.props.dispatch(componentSelect(''));
     }
 
     // 渲染画布中元素

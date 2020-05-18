@@ -396,7 +396,7 @@ class SideBar extends Component {
             <div className='side-bar' onClick={this.hideMenu.bind(this)}>
                 {/*------ 菜单 必须有选中才展示 ------*/}
                 {activeId && hoverId && activeId != hoverId && (
-                    <div className='attr-phantom' style={{ left: movingX, top: movingY }}>
+                    <div className='attr-menu' style={{ left: movingX, top: movingY }}>
                         <div className='row' onClick={this.changeTree.bind(this, 'before')}>
                             移动到选中元素前
                         </div>

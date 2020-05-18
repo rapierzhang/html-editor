@@ -11,7 +11,7 @@ import {
     TITLE_SET,
     DESC_SET,
     DIALOG_HANDLE,
-    ICON_LIST_SET,
+    ICON_LIST_SET, COMPONENT_SELECT,
 } from './action-types';
 import { fetch } from '../../common';
 import utils from '../../common/utils';
@@ -198,3 +198,10 @@ export const iconListSet = (iconfontUrl, iconList) => dispatch => {
         iconList,
     });
 };
+
+export const componentSelect = activeComponent => dispatch => {
+    dispatch({
+        type: COMPONENT_SELECT,
+        activeComponent
+    })
+}

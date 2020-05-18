@@ -11,7 +11,7 @@ import {
     TITLE_SET,
     DESC_SET,
     DIALOG_HANDLE,
-    ICON_LIST_SET,
+    ICON_LIST_SET, COMPONENT_SELECT,
 } from './action-types';
 
 const editorInfo = {
@@ -44,6 +44,7 @@ const editorInfo = {
 
     iconfontUrl: '',
     iconList: [],
+    activeComponent: '', // 选中的模板
 };
 
 export default (state = editorInfo, action) => {
@@ -82,6 +83,8 @@ export default (state = editorInfo, action) => {
             return { ...state, dialogMap: { [action.id]: action.state } };
         case ICON_LIST_SET:
             return { ...state, iconfontUrl: action.iconfontUrl, iconList: action.iconList };
+        case COMPONENT_SELECT:
+            return { ...state, activeComponent: action.activeComponent };
         default:
             return state;
     }

@@ -77,7 +77,8 @@
             width: 375px;
             height: 100%;
             position: relative;
-            overflow: hidden;
+            //overflow: hidden;
+            padding-bottom: 1px;
 
             &.active {
                 z-index: 9999;
