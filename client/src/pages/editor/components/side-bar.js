@@ -623,109 +623,6 @@ class SideBar extends Component {
                                         </div>
                                     </div>
                                 )}
-                                {/*------ margin ------*/}
-                                {!utils.has(['Dialog'], activeEle.element) && (
-                                    <div className='attr-card'>
-                                        <div className='card-title'>外边距</div>
-                                        <div className='card-content'>
-                                            <div className="row margin">
-                                                {cssMarginList.map((row, idx) => (
-                                                    <div key={`row-${idx}`} >
-                                                        <span>{row.title}: </span>
-                                                        <input
-                                                            type='text'
-                                                            value={css[row.value]}
-                                                            placeholder={row.placeholder}
-                                                            onChange={this.onStyleChange.bind(this, row.value)}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="row">
-                                                <span>margin: </span>
-                                                <input
-                                                    type='text'
-                                                    value={css.margin}
-                                                    placeholder='上 右 下 左'
-                                                    onChange={this.onStyleChange.bind(this, 'margin')}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                {/*------ padding ------*/}
-                                {!utils.has(['Dialog'], activeEle.element) && (
-                                    <div className='attr-card'>
-                                        <div className='card-title'>内边距</div>
-                                        <div className='card-content'>
-                                            <div className="row padding">
-                                                {cssPaddingList.map((row, idx) => (
-                                                    <div key={`row-${idx}`} >
-                                                        <span>{row.title}: </span>
-                                                        <input
-                                                            type='text'
-                                                            value={css[row.value]}
-                                                            placeholder={row.placeholder}
-                                                            onChange={this.onStyleChange.bind(this, row.value)}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="row">
-                                                <span>pdding: </span>
-                                                <input
-                                                    type='text'
-                                                    value={css.margin}
-                                                    placeholder='上 右 下 左'
-                                                    onChange={this.onStyleChange.bind(this, 'padding')}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                {/*------ border ------*/}
-                                {!utils.has(['Dialog'], activeEle.element) && (
-                                    <div className='attr-card'>
-                                        <div className='card-title'>边框</div>
-                                        <div className='card-content'>
-                                            <div className='row border'>
-                                                {cssBorderList.map((row, idx) => (
-                                                    <div key={`row-${idx}`}>
-                                                        <span>{row.title}: </span>
-                                                        <input
-                                                            type='text'
-                                                            value={css[row.value]}
-                                                            placeholder={row.placeholder}
-                                                            onChange={this.onStyleChange.bind(this, row.value)}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="row border">
-                                                <span>线宽:</span>
-                                                <input
-                                                    type='text'
-                                                    value={css.borderWidth}
-                                                    placeholder='**px'
-                                                    onChange={this.onStyleChange.bind(this, 'borderWidth')}
-                                                />
-                                                <Select
-                                                    className='border-select'
-                                                    list={cssBorderStyleList}
-                                                    value={css.borderStyle || 'none'}
-                                                    titleShow
-                                                    onChange={this.onStyleChange.bind(this, 'borderStyle')}
-                                                />
-                                                <input
-                                                    type='text'
-                                                    value={css.borderColor}
-                                                    placeholder='颜色'
-                                                    onChange={this.onStyleChange.bind(this, 'borderColor')}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
                                 {/*------ 定位 ------*/}
                                 {!utils.has(['Root', 'Dialog'], activeEle.element) && (
                                     <div className='attr-card'>
@@ -917,6 +814,109 @@ class SideBar extends Component {
                                                     type='text'
                                                     value={css.fontFamily}
                                                     onChange={this.onStyleChange.bind(this, 'fontFamily')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {/*------ margin ------*/}
+                                {!utils.has(['Dialog'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>外边距</div>
+                                        <div className='card-content'>
+                                            <div className="row margin">
+                                                {cssMarginList.map((row, idx) => (
+                                                    <div key={`row-${idx}`} >
+                                                        <span>{row.title}: </span>
+                                                        <input
+                                                            type='text'
+                                                            value={css[row.value]}
+                                                            placeholder={row.placeholder}
+                                                            onChange={this.onStyleChange.bind(this, row.value)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="row">
+                                                <span>margin: </span>
+                                                <input
+                                                    type='text'
+                                                    value={css.margin}
+                                                    placeholder='上 右 下 左'
+                                                    onChange={this.onStyleChange.bind(this, 'margin')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {/*------ padding ------*/}
+                                {!utils.has(['Dialog'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>内边距</div>
+                                        <div className='card-content'>
+                                            <div className="row padding">
+                                                {cssPaddingList.map((row, idx) => (
+                                                    <div key={`row-${idx}`} >
+                                                        <span>{row.title}: </span>
+                                                        <input
+                                                            type='text'
+                                                            value={css[row.value]}
+                                                            placeholder={row.placeholder}
+                                                            onChange={this.onStyleChange.bind(this, row.value)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="row">
+                                                <span>pdding: </span>
+                                                <input
+                                                    type='text'
+                                                    value={css.margin}
+                                                    placeholder='上 右 下 左'
+                                                    onChange={this.onStyleChange.bind(this, 'padding')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {/*------ border ------*/}
+                                {!utils.has(['Dialog'], activeEle.element) && (
+                                    <div className='attr-card'>
+                                        <div className='card-title'>边框</div>
+                                        <div className='card-content'>
+                                            <div className='row border'>
+                                                {cssBorderList.map((row, idx) => (
+                                                    <div key={`row-${idx}`}>
+                                                        <span>{row.title}: </span>
+                                                        <input
+                                                            type='text'
+                                                            value={css[row.value]}
+                                                            placeholder={row.placeholder}
+                                                            onChange={this.onStyleChange.bind(this, row.value)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="row border">
+                                                <span>线宽:</span>
+                                                <input
+                                                    type='text'
+                                                    value={css.borderWidth}
+                                                    placeholder='**px'
+                                                    onChange={this.onStyleChange.bind(this, 'borderWidth')}
+                                                />
+                                                <Select
+                                                    className='border-select'
+                                                    list={cssBorderStyleList}
+                                                    value={css.borderStyle || 'none'}
+                                                    titleShow
+                                                    onChange={this.onStyleChange.bind(this, 'borderStyle')}
+                                                />
+                                                <input
+                                                    type='text'
+                                                    value={css.borderColor}
+                                                    placeholder='颜色'
+                                                    onChange={this.onStyleChange.bind(this, 'borderColor')}
                                                 />
                                             </div>
                                         </div>

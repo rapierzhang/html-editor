@@ -15,22 +15,22 @@
 
         > .ctrl-point {
             position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 3px;
-            border: 1px solid #ea413c;
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+            border: 2px solid #ea413c;
             background: #fff;
             z-index: 9999;
 
             &.right-botom {
-                bottom: -3px;
-                right: -3px;
+                bottom: -6px;
+                right: -6px;
                 cursor: se-resize;
             }
 
             &.center {
-                left: calc(50% - 3px);
-                top: calc(50% - 3px);
+                left: calc(50% - 6px);
+                top: calc(50% - 6px);
                 cursor: move;
             }
         }

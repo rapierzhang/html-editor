@@ -40,7 +40,8 @@ class Element extends Component {
         this.props.dispatch(elementSelect(id, activeId, elements));
 
         // 展示元素位置
-        const eleTop = document.getElementById(`tree-${id}`).getBoundingClientRect().top;
+        const treeId = document.getElementById(`tree-${id}`)
+        const eleTop = treeId && treeId.getBoundingClientRect().top;
         const table = document.getElementById('side-bar');
         const tableTop = table.scrollTop;
         table.scrollTop = tableTop + eleTop - 200;
@@ -187,12 +188,12 @@ class Element extends Component {
             const movingY = e.clientY;
 
             // 计算宽高
-            const height = boxHeight + movingY - startY;
-            const width = boxWidth + movingX - startX;
+            const height = boxHeight + (movingY - startY) * 2;
+            const width = boxWidth + (movingX - startX) * 2;
 
             // 超出最大宽度
-            if (width >= 375) {
-                this.onStyleChange({ width: '375px', height: `${height}px` });
+            if (width >= 750) {
+                this.onStyleChange({ width: '750px', height: `${height}px` });
             } else {
                 this.onStyleChange({ width: `${width}px`, height: `${height}px` });
             }
@@ -209,38 +210,42 @@ class Element extends Component {
     changePosition(evt) {
         this.setState({ isDown: true });
         const {
-            canvasPosition: { ctxTop, ctxRight, ctxBottom, ctxLeft },
+            canvasPosition: { ctxBottom },
         } = this.props.editorInfo;
         const boxEle = this.refs.box;
         const startX = evt.clientX;
         const startY = evt.clientY;
+        // 元素位置大小
         const { offsetTop: boxTop, offsetLeft: boxLeft, offsetWidth: boxWidth, offsetHeight: boxHeight } = boxEle;
-        const halfWidth = boxWidth / 2;
-        const halfHeight = boxHeight / 2;
 
         // 拖拽中
         window.onmousemove = e => {
             if (!this.state.isDown) return;
+            // 鼠标位置
             const movingX = e.clientX;
             const movingY = e.clientY;
-            const changeX = movingX - startX;
-            const changeY = movingY - startY;
-            const top = boxTop + changeY + 'px';
-            const left = boxLeft + changeX + 'px';
-            if (movingX - halfWidth < ctxLeft) {
+            // 改变值
+            const changeX = (movingX - startX) * 2;
+            const changeY = (movingY - startY) * 2;
+            // 元素四边位置
+            const top = boxTop + changeY;
+            const bottom = boxTop + boxHeight + changeY;
+            const left = boxLeft + changeX;
+            const right = boxLeft + boxWidth + changeX;
+            if (left < 0) {
                 // 超出左侧
-                this.onStyleChange({ top, left: 0 });
-            } else if (movingY - halfHeight < ctxTop) {
+                this.onStyleChange({ top: `${top}px`, left: 0 });
+            } else if (top < 0) {
                 // 超出上部
-                this.onStyleChange({ top: 0, left });
-            } else if (movingX + halfWidth > ctxRight) {
+                this.onStyleChange({ top: 0, left: `${left}px` });
+            } else if (right > 750) {
                 // 超出右侧
-                this.onStyleChange({ top, left: 375 - boxEle.offsetWidth });
-            } else if (movingY + halfHeight > ctxBottom) {
-                // 超出下册
-                this.onStyleChange({ top: null, bottom: 0, left });
+                this.onStyleChange({ top: `${top}px`, left: 750 - boxEle.offsetWidth });
+            } else if (bottom + 20 > ctxBottom) {
+                // 超出下侧
+                this.onStyleChange({ top: `${ctxBottom - boxHeight - 20}px`, left: `${left}px` });
             } else {
-                this.onStyleChange({ top, left });
+                this.onStyleChange({ top: `${top}px`, left: `${left}px` });
             }
         };
 
