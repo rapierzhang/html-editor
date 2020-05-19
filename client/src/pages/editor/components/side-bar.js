@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import utils from '../../../common/utils';
 import classNames from 'classnames';
 import { Select, Switch } from '../../../component';
-import { AttrList, Box } from './index';
+import { AttrList } from './index';
 import {
     activeIdSet,
     attributeUpdate,
@@ -17,7 +17,7 @@ import {
 import Upload from '../../../component/common/upload';
 import './side-bar.scss';
 
-const positionList = [
+const cssPositionList = [
     {
         title: '没有定位',
         value: 'static',
@@ -39,8 +39,8 @@ const positionList = [
         value: 'relative',
     },
 ];
-const directionList = ['zIndex', 'top', 'right', 'bottom', 'left'];
-const flexDirectionList = [
+const cssDirectionList = ['zIndex', 'top', 'right', 'bottom', 'left'];
+const cssFlexDirectionList = [
     {
         title: '横向',
         value: 'row',
@@ -58,7 +58,7 @@ const flexDirectionList = [
         value: 'column-reverse',
     },
 ];
-const justifyContentList = [
+const cssJustifyContentList = [
     {
         title: '头部对齐',
         value: 'flex-start',
@@ -80,7 +80,7 @@ const justifyContentList = [
         value: 'space-around',
     },
 ];
-const alignItemsList = [
+const cssAlignItemsList = [
     {
         title: '头部对齐',
         value: 'flex-start',
@@ -102,7 +102,7 @@ const alignItemsList = [
         value: 'stretch',
     },
 ];
-const bgRepeatList = [
+const cssBgRepeatList = [
     {
         title: '重复',
         value: 'repeat',
@@ -219,7 +219,10 @@ const cssBorderStyleList = [
         title: '双实线',
         value: 'none',
     },
-]
+];
+const extraPlaceholder = `key: value;
+key: value;
+`
 
 class SideBar extends Component {
     constructor() {
@@ -734,14 +737,14 @@ class SideBar extends Component {
                                             <div className='row'>
                                                 <span>定位: </span>
                                                 <Select
-                                                    list={positionList}
+                                                    list={cssPositionList}
                                                     value={css.position || 'static'}
                                                     titleShow
                                                     onChange={this.onStyleChange.bind(this, 'position')}
                                                 />
                                             </div>
                                             {utils.has(['absolute', 'fixed', 'relative'], css.position) &&
-                                                directionList.map((row, idx) => (
+                                                cssDirectionList.map((row, idx) => (
                                                     <div key={`row-${idx}`} className='row'>
                                                         <span>{row}: </span>
                                                         <input
@@ -772,7 +775,7 @@ class SideBar extends Component {
                                                         <span>主轴</span>
                                                         <Select
                                                             titleShow
-                                                            list={flexDirectionList}
+                                                            list={cssFlexDirectionList}
                                                             value={css.flexDirection || 'row'}
                                                             onChange={this.onStyleChange.bind(this, 'flexDirection')}
                                                         />
@@ -781,7 +784,7 @@ class SideBar extends Component {
                                                         <span>主轴对齐方式</span>
                                                         <Select
                                                             titleShow
-                                                            list={justifyContentList}
+                                                            list={cssJustifyContentList}
                                                             value={css.justifyContent || 'flex-start'}
                                                             onChange={this.onStyleChange.bind(this, 'justifyContent')}
                                                         />
@@ -790,7 +793,7 @@ class SideBar extends Component {
                                                         <span>交叉轴对齐方式</span>
                                                         <Select
                                                             titleShow
-                                                            list={alignItemsList}
+                                                            list={cssAlignItemsList}
                                                             value={css.alignItems || 'stretch'}
                                                             onChange={this.onStyleChange.bind(this, 'alignItems')}
                                                         />
@@ -867,7 +870,7 @@ class SideBar extends Component {
                                                     <div className='row'>
                                                         <span>背景重复: </span>
                                                         <Select
-                                                            list={bgRepeatList}
+                                                            list={cssBgRepeatList}
                                                             value={css.backgroundRepeat || 'repeat'}
                                                             titleShow
                                                             onChange={this.onStyleChange.bind(this, 'backgroundRepeat')}
@@ -940,10 +943,6 @@ class SideBar extends Component {
                                         </div>
                                     </div>
                                 )}
-                                {/*------ 盒子模型 ------*/}
-                                {!utils.has(['Dialog'], activeEle.element) && (
-                                    <Box css={css} activeEle={activeEle} onChange={this.onStyleChange.bind(this)} />
-                                )}
                                 {/*------ 扩展 ------*/}
                                 <div className='attr-card'>
                                     <div className='card-title'>扩展</div>
@@ -953,6 +952,7 @@ class SideBar extends Component {
                                             cols='50'
                                             rows='30'
                                             value={css.extra}
+                                            placeholder={extraPlaceholder}
                                             onChange={this.onStyleChange.bind(this, 'extra')}
                                         />
                                     </div>
