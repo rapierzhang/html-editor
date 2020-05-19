@@ -68,7 +68,7 @@ const utils = {
         });
     },
     // 去除空格
-    trim: str => str.replace(/ /g, ''),
+    trim: str => str.replace(/  /g, ''),
     // css字符串转obj
     cssStrToObj(text = '') {
         let obj = {};
