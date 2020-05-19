@@ -180,22 +180,22 @@ const cssBorderList = [
     {
         title: '上',
         value: 'borderTop',
-        placeholder: '**px type color',
+        placeholder: '*px type color',
     },
     {
         title: '右',
         value: 'borderRight',
-        placeholder: '**px type color',
+        placeholder: '*px type color',
     },
     {
         title: '下',
         value: 'borderBottom',
-        placeholder: '**px type color',
+        placeholder: '*px type color',
     },
     {
         title: '左',
         value: 'borderLeft',
-        placeholder: '**px type color',
+        placeholder: '*px type color',
     },
 ];
 const cssBorderStyleList = [

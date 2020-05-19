@@ -8,6 +8,7 @@ exports.mkdirImage = dirPath => {
     if (!jsDirExists) fs.mkdirSync(imgDirPath);
 };
 
+/*------ html 相关 ------*/
 // 写入HTML
 exports.writeHtml = (dirPath, data) => {
     const { pid, title, htmlTree, iconfontUrl } = data;
@@ -244,6 +245,7 @@ const defaultHtml = data => {
 </html>`;
 };
 
+/*------ css 相关 ------*/
 // 写入css
 exports.writeCss = (dirPath, htmlTree) => {
     const cssDirPath = `${dirPath}/css`;
@@ -263,11 +265,11 @@ exports.writeCss = (dirPath, htmlTree) => {
         if (cssLen > 0) {
             let cssRowIdx = 0;
             for (let key in css) {
-                cssContent += `${utils.toLine(key)}: ${css[key]};`;
-                cssRowIdx++;
-                if (cssRowIdx < cssLen) {
-                    cssContent += ``;
+                // 删除空值
+                if(css[key]) {
+                    cssContent += `${utils.toLine(key)}: ${css[key]};`;
                 }
+                cssRowIdx++;
             }
             // 末尾添加空行
             const cssItem = `.${id} {${cssContent}}
@@ -448,6 +450,7 @@ body {
 `;
 };
 
+/*------ js 相关 ------*/
 // 写入js
 exports.writeJs = (dirPath, htmlTree) => {
     const jsDirPath = `${dirPath}/js`;
