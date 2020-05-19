@@ -229,9 +229,9 @@ class Element extends Component {
             const changeY = (movingY - startY) * 2;
             // 元素四边位置
             const top = boxTop + changeY;
-            const bottom = boxTop + boxHeight + changeY;
+            const bottom = top + boxHeight;
             const left = boxLeft + changeX;
-            const right = boxLeft + boxWidth + changeX;
+            const right = left + boxWidth;
             if (left < 0) {
                 // 超出左侧
                 this.onStyleChange({ top: `${top}px`, left: 0 });
