@@ -15,6 +15,7 @@ import {
     iconListSet,
 } from '../actions';
 import Upload from '../../../component/common/upload';
+import CONFIG from '../../../config';
 import './side-bar.scss';
 
 const cssPositionList = [
@@ -255,7 +256,8 @@ class SideBar extends Component {
         if (JSON.stringify(activeEle) != JSON.stringify(state.activeEle)) {
             // backgroundImage需要特殊处理url()
             const { css = {} } = activeEle;
-            if (css.backgroundImage && css.backgroundImage != state.activeEle.css.backgroundImage) return null;
+            const { css: stateCss = {} } = state.activeEle
+            if (css.backgroundImage && css.backgroundImage != stateCss.backgroundImage) return null;
 
             return {
                 activeId,
@@ -263,11 +265,6 @@ class SideBar extends Component {
             };
         }
 
-        // if (iconfontUrl != state.iconfontUrl) { ^^^^^^
-        //     return {
-        //         iconfontUrl
-        //     }
-        // }
         return null;
     }
 
@@ -831,12 +828,11 @@ class SideBar extends Component {
                                                         onChange={this.bgImageChange.bind(this)}
                                                         onBlur={this.bgImageBlur.bind(this)}
                                                     />
-                                                    {/*^^^^^^*/}
                                                     <Upload
                                                         className='upload-btn'
-                                                        url={'http://localhost:3000/api/file/upload'}
+                                                        url={CONFIG.imageUploadUrl}
                                                         fileName='file'
-                                                        data={{ pid: '65d0cf96c6104d6a8b0dec6e3c6b3023' }}
+                                                        data={{ pid }}
                                                         onUploadSucc={this.onBgUploadSucc.bind(this)}
                                                         onUploadErr={this.onBgUploadErr.bind(this)}
                                                     >

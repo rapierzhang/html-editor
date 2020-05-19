@@ -2,7 +2,7 @@ import axios from 'axios';
 import CONFIG from '../config'
 
 const fetch = (opts = {}) => {
-    let url = CONFIG.domain + (typeof opts === 'string' ? opts : opts.url || '');
+    let url = CONFIG.serverDomain + (typeof opts === 'string' ? opts : opts.url || '');
     let method = (opts.method || 'GET').toLowerCase();
     let params = opts.params || {};
     let config = opts.config || {};

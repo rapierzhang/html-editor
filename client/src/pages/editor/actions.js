@@ -18,6 +18,7 @@ import {
 import { fetch } from '../../common';
 import utils from '../../common/utils';
 import uploadFile from '../../common/upload';
+import CONFIG from '../../config';
 
 // 设置pid
 export const pidSet = pid => dispatch => {
@@ -181,7 +182,7 @@ export const dialogHandle = (id, state) => dispatch => {
 
 // 预览图保存
 export const listPreviewSave = formData =>
-    uploadFile({ url: 'http://localhost:3000/api/file/list_preview_save', formData }) // ^^^^^^
+    uploadFile({ url: CONFIG.previewSaveUrl, formData })
         .then(res => res.data.url)
         .catch(() => '');
 

@@ -48,24 +48,7 @@ class Editor extends Component {
         // 禁止右击菜单
         document.oncontextmenu = () => false;
 
-        //禁止鼠标选中文本
-        // document.onselectstart = () => false;
-
-        // ^^^^^^ 鼠标右击
-        /*document.onmousedown = e => {
-            const event = e || window.event;
-            if (event.button == '2') {
-                console.error(111, e)
-            }
-        };*/
-        document.onkeydown = event => {
-            const e = event || window.event;
-            if (e.keyCode === 18) this.props.dispatch(ctrlListen(true));
-        };
-        document.onkeyup = event => {
-            const e = event || window.event;
-            if (e.keyCode === 18) this.props.dispatch(ctrlListen(false));
-        };
+        this.listenAlt();
     }
 
     // 初始化
@@ -91,6 +74,18 @@ class Editor extends Component {
             .catch(err => {
                 console.error(err);
             });
+    }
+
+    // 监听按住alt
+    listenAlt() {
+        document.onkeydown = event => {
+            const e = event || window.event;
+            if (e.keyCode === 18) this.props.dispatch(ctrlListen(true));
+        };
+        document.onkeyup = event => {
+            const e = event || window.event;
+            if (e.keyCode === 18) this.props.dispatch(ctrlListen(false));
+        };
     }
 
     // 控制标题

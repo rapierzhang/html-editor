@@ -180,7 +180,7 @@ class ComponentList extends Component {
         console.error('set success!!!');
     }
 
-    // 选中元素 ^^^^^^
+    // 选中元素
     onNodeSelect(id) {
         const { activeId, elements } = this.props.editorInfo;
         this.props.dispatch(elementSelect(id, activeId, elements));

@@ -22,7 +22,6 @@ class List extends Component {
         this.listGet();
     }
 
-    // ^^^^^^
     listGet(pn = 1, ps = defaultPageSize, text) {
         utils.fetchLoading(this, 'listData');
         listGet({ pn, ps, text })

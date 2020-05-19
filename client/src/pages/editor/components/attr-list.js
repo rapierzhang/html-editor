@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import utils from '../../../common/utils';
-import { connect } from 'react-redux';
 import { attrList } from './attr-map';
 import { Select, Switch, Upload } from '../../../component/common';
 import { attributeUpdate, elementsUpdate } from '../actions';
+import CONFIG from '../../../config'
 import './attr-list.scss';
 
 class AttrList extends Component {
@@ -29,7 +30,7 @@ class AttrList extends Component {
         }
     }
 
-    // 属性更改 {...item.func}中调用 ^^^^^^
+    // 属性更改 {...item.func}中调用
     onAttrChange(attrName, e) {
         // 判断是event传入的值还是组件传入的值
         const value = !!e.target ? e.target.value : e;
@@ -117,6 +118,7 @@ class AttrList extends Component {
         const onChange = {
             onChange: this.onAttrChange.bind(this, value),
         };
+        const { imageUploadUrl } = CONFIG;
         switch (type) {
             case 'input':
                 return <input type={inputType} value={eleVal} placeholder={placeholder} {...onChange} />;
@@ -130,10 +132,9 @@ class AttrList extends Component {
                 return (
                     <div className='upload-image'>
                         <input type='text' value={eleVal} {...onChange} />
-                        {/*^^^^^^*/}
                         <Upload
                             className='upload-btn'
-                            url={'http://localhost:3000/api/file/upload'}
+                            url={imageUploadUrl}
                             data={{ pid: this.props.editorInfo.pid }}
                             fileName='file'
                             onUploadSucc={this.onUploadSucc.bind(this)}
@@ -153,10 +154,9 @@ class AttrList extends Component {
                                     value={row}
                                     onChange={this.onListChange.bind(this, idx)}
                                 />
-                                {/*^^^^^^*/}
                                 <Upload
                                     className='upload-btn'
-                                    url={'http://localhost:3000/api/file/upload'}
+                                    url={imageUploadUrl}
                                     data={{ pid: this.props.editorInfo.pid }}
                                     fileName='file'
                                     onUploadSucc={this.onListUploadSucc.bind(this, idx)}
