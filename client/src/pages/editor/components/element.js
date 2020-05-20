@@ -19,6 +19,9 @@ class Element extends Component {
             // 移动中位置
             movingX: 0,
             movingY: 0,
+
+            top: 0,
+            left: 0,
         };
     }
 
@@ -40,7 +43,7 @@ class Element extends Component {
         this.props.dispatch(elementSelect(id, activeId, elements));
 
         // 展示元素位置
-        const treeId = document.getElementById(`tree-${id}`)
+        const treeId = document.getElementById(`tree-${id}`);
         const eleTop = treeId && treeId.getBoundingClientRect().top;
         const table = document.getElementById('side-bar');
         const tableTop = table.scrollTop;
@@ -228,30 +231,28 @@ class Element extends Component {
             const changeX = (movingX - startX) * 2;
             const changeY = (movingY - startY) * 2;
             // 元素四边位置
-            const top = boxTop + changeY;
-            const bottom = top + boxHeight;
-            const left = boxLeft + changeX;
-            const right = left + boxWidth;
-            if (left < 0) {
-                // 超出左侧
-                this.onStyleChange({ top: `${top}px`, left: 0 });
-            } else if (top < 0) {
-                // 超出上部
-                this.onStyleChange({ top: 0, left: `${left}px` });
-            } else if (right > 750) {
+            let top = Math.max(boxTop + changeY, 0);
+            const bottom = Math.max(top + boxHeight, ctxBottom - boxHeight);
+            let left = Math.max(boxLeft + changeX, 0);
+            const right = Math.max(left + boxWidth, 750);
+            if (right > 750) {
                 // 超出右侧
-                this.onStyleChange({ top: `${top}px`, left: 750 - boxEle.offsetWidth });
+                top = Math.min(top, ctxBottom - boxHeight - 20); // 超出下侧，限制top
+                this.setState({ top: `${top}px`, left: `${750 - boxEle.offsetWidth}PX` });
             } else if (bottom + 20 > ctxBottom) {
                 // 超出下侧
-                this.onStyleChange({ top: `${ctxBottom - boxHeight - 20}px`, left: `${left}px` });
+                left = Math.min(left, 750); // 超出右侧，限制left
+                this.setState({ top: `${ctxBottom - boxHeight - 20}px`, left: `${left}px` });
             } else {
-                this.onStyleChange({ top: `${top}px`, left: `${left}px` });
+                this.setState({ top: `${top}px`, left: `${left}px` });
             }
         };
 
         // 拖拽结束
         window.onmouseup = () => {
-            if (!this.state.isDown) return;
+            const { top, left, isDown } = this.state;
+            if (!isDown) return;
+            this.onStyleChange({ top, left });
             this.setState({ isDown: false });
         };
     }
@@ -277,11 +278,13 @@ class Element extends Component {
         const {
             item,
             editorInfo: {
+                elements,
                 activeId,
                 canvasPosition: { ctxWidth, ctxHeight },
                 dialogMap,
             },
         } = this.props;
+        const { top, left } = this.state;
         const { id, css = {}, element } = item;
         const active = id == activeId;
         // 元素可以更改大小
@@ -318,7 +321,7 @@ class Element extends Component {
                         className={classNames('ele-box', { active, 'can-resize': canResize })}
                         ref='box'
                         onClick={this.selectNode.bind(this, id)}
-                        style={utils.cssFilter(css, true)}
+                        style={{ ...utils.cssFilter(css, true), ...(top ? { top } : {}), ...(left ? { left } : {}) }}
                     >
                         {/*------ 缩放控制点 ------*/}
                         {canResize && (
