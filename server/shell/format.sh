@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # px转rem
-px2rem $1/css/index.css -u 23.4375
+px2rem $1/css/index.css -u 46.875
 # 代码格式化
 prettier --single-quote --write "$1/*.html"
 prettier --single-quote --write "$1/**/*.{js,css}"
