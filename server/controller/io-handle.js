@@ -176,9 +176,8 @@ const renderAttribute = data => {
         ) {
             continue;
         } else if (data[k] === true) {
-            str += utils.toLine(k);
+            str += ` ${ utils.toLine(k)}`;
         } else if (data[k] === false) {
-            continue;
         } else {
             str += `${utils.toLine(k)}='${data[k].replace(/'/g, '"')}'`;
         }

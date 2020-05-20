@@ -50,6 +50,14 @@ class AttrList extends Component {
         this.onAttrChange('src', url);
     }
 
+    onUploadErr(err) {
+        if (err.code === 3001){
+            utils.toast('请先生成此页面再上传！')
+        } else {
+            utils.toast('服务端错误，请重试');
+        }
+    }
+
     // 添加空行
     onListAdd(type, defaultRow) {
         const { activeEle: thisNode, activeId, elements } = this.props.editorInfo;
@@ -138,6 +146,7 @@ class AttrList extends Component {
                             data={{ pid: this.props.editorInfo.pid }}
                             fileName='file'
                             onUploadSucc={this.onUploadSucc.bind(this)}
+                            onUploadErr={this.onUploadErr.bind(this)}
                         >
                             <span>上传</span>
                         </Upload>

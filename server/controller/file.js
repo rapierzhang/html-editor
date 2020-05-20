@@ -11,7 +11,7 @@ exports.fileUpload = async (ctx, next) => {
     const dirExists = fs.existsSync(dirPath);
     // 判断之前是否生成过代码目录
     if (!dirExists) {
-        ctx.body = utils.res(403, 'no file');
+        ctx.body = utils.res(3001, 'no file');
         return;
     }
     const imageDirPath = `${dirPath}/image`;
@@ -19,7 +19,7 @@ exports.fileUpload = async (ctx, next) => {
     // 移动文件
     const err = await fs.renameSync(sourceFile, destFile);
     if (err) {
-        ctx.body = utils.res(403, 'move fail');
+        ctx.body = utils.res(3002, 'move fail');
     } else {
         ctx.body = utils.res(200, 'ok', {
             url: `http://localhost:3000/html/${pid}/image/${imageName}`,
