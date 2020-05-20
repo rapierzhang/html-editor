@@ -328,7 +328,7 @@ class SideBar extends Component {
                         <span className='text'>|- {element}</span>
                         {children && (
                             <span className='arrow' onClick={this.statusSwitch.bind(this, id)}>
-                                {nodeClose ? '↑' : '↓'}
+                                {nodeClose ? '↓' : '↑'}
                             </span>
                         )}
                     </div>

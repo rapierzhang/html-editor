@@ -337,6 +337,10 @@ body {
     height: 100%;
 }
 
+.scroll-view {
+    overflow-y: scroll;
+}
+
 .swiper-image {
     width: 100%;
     height: 100%;
