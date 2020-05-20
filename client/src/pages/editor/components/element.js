@@ -20,8 +20,10 @@ class Element extends Component {
             movingX: 0,
             movingY: 0,
 
-            top: 0,
-            left: 0,
+            width: '',
+            height: '',
+            top: '',
+            left: '',
         };
     }
 
@@ -50,13 +52,19 @@ class Element extends Component {
         table.scrollTop = tableTop + eleTop - 200;
     }
 
-    renderElement(item) {
+    // 元素渲染
+    renderElement(item, size) {
         const { id, css, text = '', imageList = [], label, name, extClass } = item;
+        const { width, height } = size;
         // 折行处理
         const textList = text.split('\n');
         let attr = utils.objKeyFilter(item, ['element', 'id', 'css', 'text', 'maxlength']);
         attr = utils.objValFilter(attr, ['false']);
-        const style = utils.cssFilter(css, false);
+        const style = {
+            ...utils.cssFilter(css, false),
+            ...(width && { width }),
+            ...(height && { height }),
+        };
         switch (item.element) {
             // 容器
             case 'View':
@@ -178,34 +186,30 @@ class Element extends Component {
     // 拖拽更改大小
     changeSize(evt) {
         this.setState({ isDown: true });
-        const startX = evt.clientX;
-        const startY = evt.clientY;
+        const { clientX: startX, clientY: startY } = evt;
         const boxEle = this.refs.box;
-        const boxWidth = boxEle.offsetWidth;
-        const boxHeight = boxEle.offsetHeight;
+        const { offsetWidth: boxWidth, offsetHeight: boxHeight } = boxEle;
 
         // 拖拽中
         window.onmousemove = e => {
             if (!this.state.isDown) return;
-            const movingX = e.clientX;
-            const movingY = e.clientY;
-
+            const { clientX: movingX, clientY: movingY } = e;
             // 计算宽高
             const height = boxHeight + (movingY - startY) * 2;
-            const width = boxWidth + (movingX - startX) * 2;
-
-            // 超出最大宽度
-            if (width >= 750) {
-                this.onStyleChange({ width: '750px', height: `${height}px` });
-            } else {
-                this.onStyleChange({ width: `${width}px`, height: `${height}px` });
-            }
+            const width = Math.min(boxWidth + (movingX - startX) * 2, 750);
+            this.setState({
+                width: `${width}px`,
+                height: `${height}px`,
+            });
         };
 
         // 拖拽结束
         window.onmouseup = () => {
-            if (!this.state.isDown) return;
+            const { width, height, isDown } = this.state;
+            if (!isDown) return;
             this.setState({ isDown: false });
+            // 结束时才更改树，要不会卡
+            this.onStyleChange({ width, height });
         };
     }
 
@@ -216,8 +220,7 @@ class Element extends Component {
             canvasPosition: { ctxBottom },
         } = this.props.editorInfo;
         const boxEle = this.refs.box;
-        const startX = evt.clientX;
-        const startY = evt.clientY;
+        const { clientX: startX, clientY: startY } = evt;
         // 元素位置大小
         const { offsetTop: boxTop, offsetLeft: boxLeft, offsetWidth: boxWidth, offsetHeight: boxHeight } = boxEle;
 
@@ -225,15 +228,14 @@ class Element extends Component {
         window.onmousemove = e => {
             if (!this.state.isDown) return;
             // 鼠标位置
-            const movingX = e.clientX;
-            const movingY = e.clientY;
+            const { clientX: movingX, clientY: movingY } = e;
             // 改变值
             const changeX = (movingX - startX) * 2;
             const changeY = (movingY - startY) * 2;
             // 元素四边位置
-            let top = Math.max(boxTop + changeY, 0);
+            let top = Math.max(boxTop + changeY, 0); // 限制上侧
             const bottom = Math.max(top + boxHeight, ctxBottom - boxHeight);
-            let left = Math.max(boxLeft + changeX, 0);
+            let left = Math.max(boxLeft + changeX, 0); // 限制左侧
             const right = Math.max(left + boxWidth, 750);
             if (right > 750) {
                 // 超出右侧
@@ -252,8 +254,9 @@ class Element extends Component {
         window.onmouseup = () => {
             const { top, left, isDown } = this.state;
             if (!isDown) return;
-            this.onStyleChange({ top, left });
             this.setState({ isDown: false });
+            // 结束时才更改树，要不会卡
+            this.onStyleChange({ top, left });
         };
     }
 
@@ -261,30 +264,24 @@ class Element extends Component {
     onStyleChange(data) {
         const { elements, activeId } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeId);
-        const thisCss = thisNode.css || {};
-        const newNode = {
-            ...thisNode,
-            css: { ...thisCss },
-        };
         for (let k in data) {
-            newNode.css[k] = data[k];
+            thisNode.css[k] = data[k];
         }
-        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
+        const newElements = utils.deepUpdate(elements, { [activeId]: thisNode });
         this.props.dispatch(elementsUpdate(newElements));
-        this.props.dispatch(attributeUpdate(newNode));
+        this.props.dispatch(attributeUpdate(thisNode));
     }
 
     render() {
+        const { width, height, top, left } = this.state;
         const {
             item,
             editorInfo: {
-                elements,
                 activeId,
                 canvasPosition: { ctxWidth, ctxHeight },
                 dialogMap,
             },
         } = this.props;
-        const { top, left } = this.state;
         const { id, css = {}, element } = item;
         const active = id == activeId;
         // 元素可以更改大小
@@ -321,7 +318,13 @@ class Element extends Component {
                         className={classNames('ele-box', { active, 'can-resize': canResize })}
                         ref='box'
                         onClick={this.selectNode.bind(this, id)}
-                        style={{ ...utils.cssFilter(css, true), ...(top ? { top } : {}), ...(left ? { left } : {}) }}
+                        style={{
+                            ...utils.cssFilter(css, true),
+                            ...(top && { top }),
+                            ...(left && { left }),
+                            ...(width && { width }),
+                            ...(height && { height }),
+                        }}
                     >
                         {/*------ 缩放控制点 ------*/}
                         {canResize && (
@@ -332,10 +335,10 @@ class Element extends Component {
                             <div className='ctrl-point center' onMouseDown={this.changePosition.bind(this)} />
                         )}
                         {/*------ 宽高数字显示 ------*/}
-                        {active && <div className='width-num'>{css.width}</div>}
-                        {active && <div className='height-num'>{css.height}</div>}
+                        {active && <div className='width-num'>{width || css.width}</div>}
+                        {active && <div className='height-num'>{height || css.height}</div>}
                         {/*------ 选中展示边框 ------*/}
-                        {this.renderElement(item)}
+                        {this.renderElement(item, { width, height })}
                     </div>
                 );
         }
