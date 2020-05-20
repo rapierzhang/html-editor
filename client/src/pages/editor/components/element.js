@@ -264,12 +264,16 @@ class Element extends Component {
     onStyleChange(data) {
         const { elements, activeId } = this.props.editorInfo;
         const thisNode = utils.deepSearch(elements, activeId);
-        for (let k in data) {
-            thisNode.css[k] = data[k];
+        const newNode = {
+            css: {},
+            ...thisNode,
         }
-        const newElements = utils.deepUpdate(elements, { [activeId]: thisNode });
+        for (let k in data) {
+            newNode.css[k] = data[k];
+        }
+        const newElements = utils.deepUpdate(elements, { [activeId]: newNode });
         this.props.dispatch(elementsUpdate(newElements));
-        this.props.dispatch(attributeUpdate(thisNode));
+        this.props.dispatch(attributeUpdate(newNode));
     }
 
     render() {

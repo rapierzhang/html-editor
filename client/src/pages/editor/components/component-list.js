@@ -141,12 +141,8 @@ class ComponentList extends Component {
         }
     }
 
-    eleInsert() {
-        this.setSucc();
-    }
-
     // 设置元素成功
-    setSucc() {
+    async eleInsert() {
         const { elements, index, activeId, activeEle, activeComponent: element, altDown } = this.props.editorInfo;
         const id = this.uniqueKey(index);
         let newElements;
@@ -174,8 +170,8 @@ class ComponentList extends Component {
             newElements = utils.deepInsert(elements, 'root', { [id]: defaultEle });
         }
         this.props.dispatch(indexIncrement()); // 索引自增
-        this.props.dispatch(elementsUpdate(newElements)); // 元素更新
         this.props.dispatch(componentSelect(''));
+        await this.props.dispatch(elementsUpdate(newElements)); // 元素更新 必须await，否则因为树没更新导致下面的方法获取不到新的树
         if (!altDown) this.onNodeSelect(id); // 按住alt不选择
         console.error('set success!!!');
     }
