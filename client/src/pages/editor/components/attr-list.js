@@ -51,7 +51,7 @@ class AttrList extends Component {
     }
 
     onUploadErr(err) {
-        if (err.code === 3001){
+        if (err.code === 3002){
             utils.toast('请先生成此页面再上传！')
         } else {
             utils.toast('服务端错误，请重试');

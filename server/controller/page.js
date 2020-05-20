@@ -93,7 +93,7 @@ exports.pageBuild = async (ctx, next) => {
     const { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid });
     if (!result) {
-        ctx.body = utils.res(500, 'no data', {});
+        ctx.body = utils.res(3001, 'no data', {});
         return;
     }
     const { htmlTree } = result;

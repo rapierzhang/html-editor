@@ -183,10 +183,16 @@ class Editor extends Component {
         const { pid } = this.props.editorInfo;
         htmlBuild({ pid })
             .then(res => {
+                console.error(111, res)
                 utils.toast(res.result ? '生成成功' : '生成失败');
             })
             .catch(err => {
-                utils.toast('生成失败');
+                console.error(err)
+                if (err.code == 3001) {
+                    utils.toast('请先保存数据');
+                } else {
+                    utils.toast('生成失败');
+                }
             });
     }
 

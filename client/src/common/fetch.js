@@ -15,20 +15,16 @@ const fetch = (opts = {}) => {
     return new Promise((resolve, reject) => {
         axios[method](url, params, config)
             .then(res => {
-                if (res.status === 200) {
+                if (res.status === 200 && res.data.code === 200) {
                     resolve(res.data);
                 } else {
-                    reject({
-                        code: res.status,
-                        data: res.data,
-                        msg: res.errMsg || '系统错误，请稍后重试！',
-                    });
+                    reject(res.data);
                 }
             })
             .catch(res => {
                 reject({
                     code: 500,
-                    data: res,
+                    data: res.data,
                     msg: 'network error',
                 });
             });
