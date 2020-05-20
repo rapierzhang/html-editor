@@ -5,7 +5,7 @@ import { utils } from '../../common';
 import { Page } from '../../component/common';
 import './list.scss';
 
-const defaultPageSize = 6;
+const defaultPageSize = 12;
 
 class List extends Component {
     constructor(props) {
