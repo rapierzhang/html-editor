@@ -6,6 +6,10 @@
     font-size: 12px;
 }
 
+p {
+    margin-bottom: 0;
+}
+
 html,
 body,
 #page-root {
@@ -15,14 +19,21 @@ body,
 
 /*------ 按钮 ------*/
 .button {
-    height: 30px;
+    height: 40px;
     padding: 0 20px;
+    font-size: 16px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     color: #fff;
+    transition: background 0.4s;
+    white-space: nowrap;
+
+    svg {
+        font-size: 16px;
+    }
 
     &.blank {
         border: 1px solid #d9d9d9;
@@ -30,15 +41,24 @@ body,
     }
 
     &.primary {
-        background: #007bff;
+        background: #1890ff;
+        &:hover {
+            background: #40a9ff;
+        }
     }
 
     &.secondary {
         background: #6c757d;
+        &:hover {
+            background: #7A848D;
+        }
     }
 
     &.success {
         background: #28a745;
+        &:hover {
+            background: #2AB64F;
+        }
     }
 
     &.info {
@@ -47,10 +67,13 @@ body,
 
     &.warrning {
         background: #ffc107;
+        &:hover {
+            background: #FAD157;
+        }
     }
 
     &.danger {
-        background: #dc3545;
+        background: #ff4d4f;
     }
 }
 
@@ -59,4 +82,10 @@ body,
     display: inline-block;
     width: 15px;
     height: 15px;
+}
+
+/*------ swiper ------*/
+.swiper-pagination-bullet {
+    width: 16px;
+    height: 16px;
 }

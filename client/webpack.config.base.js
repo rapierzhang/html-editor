@@ -1,17 +1,16 @@
 const path = require('path');
-const DIST_PATH = path.resolve(__dirname, 'dist');
-const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const copyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const DIST_PATH = path.resolve(__dirname, 'dist');
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
     output: {
         path: DIST_PATH,
-        publicPath: "",
-        chunkFilename: "[name].js",
-        filename: "[name].js"
+        publicPath: '',
+        chunkFilename: '[name].js',
+        filename: '[name].js',
     },
     externals: {}, //引入三方包
     optimization: {
@@ -29,64 +28,39 @@ module.exports = {
                     loader: 'babel-loader',
                 },
             },
-            //图片
+            {
+                test: /\.(scss|css)$/, //css打包 路径在plugins里
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader', options: { sourceMap: true } },
+                    { loader: 'sass-loader', options: { sourceMap: true } },
+                ],
+                exclude: /node_modules/,
+            },
+            {
+                //antd样式处理
+                test: /\.css$/,
+                exclude: /src/,
+                use: [
+                    { loader: 'style-loader' },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                        },
+                    },
+                ],
+            },
             {
                 test: /\.(png|jpg|gif|svg|ico)$/i, //i不区分大小写
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
-                            outputPath: './static/img/', //图片输出位置
-                        },
-                    },
-                    'image-webpack-loader', //图片压缩工具
-                ],
-            },
-            //字体图标
-            {
-                test: /\.(eot|woff|woff2|ttf)$/i,
-                // include: path.resolve(__dirname, 'node_modules'),
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        limit: 30000,
-                        outputPath: './static/font/', //图片输出位置
-                    },
-                },
-            },
-            //数据
-            {
-                test: [/\.json$/i], //i不区分大小写
-                exclude: /(node_modules|bower_components)/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            outputPath: './static/data/', //图片输出位置
+                            outputPath: './assert/', //图片输出位置
                         },
                     },
                 ],
-            },
-            //音乐
-            {
-                test: [/\.mp3$/i], //i不区分大小写
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            outputPath: './static/music/', //图片输出位置
-                        },
-                    },
-                ],
-            },
-            {
-                test: /\.(scss|css)$/, //css打包 路径在plugins里
-                use: [
-                    {loader: "style-loader"},
-                    { loader: "css-loader", options: { url: false, sourceMap: true } },
-                    { loader: "sass-loader", options: { sourceMap: true } }
-                ],
-                exclude: /node_modules/,
             },
         ],
     },
@@ -104,6 +78,12 @@ module.exports = {
                 collapseWhitespace: true, //删除空白符与换行符
             },
             chunksSortMode: 'none', //如果使用webpack4将该配置项设置为'none'
+        }),
+        // 设置环境变量信息
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+            },
         }),
     ],
 };

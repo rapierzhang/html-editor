@@ -1,14 +1,10 @@
-const utils = require('../utils/index');
-const ListModule = require('../module/list');
+import utils from '../utils/index';
+import { ListModule } from '../model'
 
-exports.listGet = async (ctx, next) => {
+export const listGet = async (ctx, next) => {
     let { pn = 0, ps = 1, text = '' } = ctx.request.body;
-    if (typeof pn !== 'number') {
-        pn = parseInt(pn);
-    }
-    if (typeof ps !== 'number') {
-        ps = parseInt(ps);
-    }
+    if (typeof pn !== 'number') pn = parseInt(pn);
+    if (typeof ps !== 'number') ps = parseInt(ps);
     pn = pn - 1;
     const regexp = new RegExp(text);
     const condition = text

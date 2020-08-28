@@ -1,8 +1,6 @@
 import {
     PID_SET,
-    ELEMENTS_UPDATE,
-    INDEX_SET,
-    INDEX_INCREMENT,
+    HTML_TREE_UPDATE,
     ACTIVE_KEY_SET,
     EDIT_STATUS_SET,
     ATTRIBUTE_LOAD,
@@ -10,15 +8,15 @@ import {
     CANVAS_POSITION_SET,
     TITLE_SET,
     DESC_SET,
+    DIRNAME_SET,
     DIALOG_HANDLE,
     ICON_LIST_SET,
-    COMPONENT_SELECT,
     ALT_DOWN,
+    NAV_HANDLE,
 } from './action-types';
 import { fetch } from '../../common';
 import utils from '../../common/utils';
 import uploadFile from '../../common/upload';
-import CONFIG from '../../config';
 
 // 设置pid
 export const pidSet = pid => dispatch => {
@@ -28,26 +26,11 @@ export const pidSet = pid => dispatch => {
     });
 };
 
-// 初始化设置index
-export const indexSet = index => dispatch => {
-    dispatch({
-        type: INDEX_SET,
-        index,
-    });
-};
-
-// index自增
-export const indexIncrement = () => dispatch => {
-    dispatch({
-        type: INDEX_INCREMENT,
-    });
-};
-
 // 设置元素
-export const elementsUpdate = elements => dispatch => {
+export const htmlTreeUpdate = htmlTree => dispatch => {
     dispatch({
-        type: ELEMENTS_UPDATE,
-        elements,
+        type: HTML_TREE_UPDATE,
+        htmlTree,
     });
 };
 
@@ -68,8 +51,8 @@ export const isEditSet = isEdit => dispatch => {
 };
 
 // 设置选中元素的属性
-export const attributeLoad = (elements, activeId) => dispatch => {
-    const activeEle = utils.deepSearch(elements, activeId);
+export const attributeLoad = (htmlTree, activeId) => dispatch => {
+    const activeEle = utils.deepSearch(htmlTree, activeId);
     dispatch({
         type: ATTRIBUTE_LOAD,
         activeEle,
@@ -85,9 +68,9 @@ export const attributeUpdate = activeEle => dispatch => {
 };
 
 // 选择编辑
-export const elementSelect = (id, activeId, elements, confirm) => dispatch => {
+export const elementSelect = (id, activeId, htmlTree, confirm) => dispatch => {
     dispatch(activeIdSet(id));
-    dispatch(attributeLoad(elements, id));
+    dispatch(attributeLoad(htmlTree, id));
     if (id == activeId || confirm) {
         dispatch(isEditSet(true));
     } else {
@@ -103,6 +86,7 @@ export const canvasPositionSet = canvasPosition => dispatch => {
     });
 };
 
+// 更改title
 export const titleSet = title => dispatch => {
     dispatch({
         type: TITLE_SET,
@@ -110,10 +94,27 @@ export const titleSet = title => dispatch => {
     });
 };
 
+// 更改desc
 export const descSet = desc => dispatch => {
     dispatch({
         type: DESC_SET,
         desc,
+    });
+};
+
+// 更改dirName
+export const dirNameSet = dirName => dispatch => {
+    dispatch({
+        type: DIRNAME_SET,
+        dirName,
+    });
+};
+
+// sidebar控制
+export const navHandle = navIndex => dispatch => {
+    dispatch({
+        type: NAV_HANDLE,
+        navIndex,
     });
 };
 
@@ -162,6 +163,14 @@ export const htmlRelease = params => {
     }).then(res => res.data);
 };
 
+export const htmlDownload = params => {
+    return fetch({
+        url: '/api/page/download',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
+};
+
 // 删除页面
 export const htmlDelete = params => {
     return fetch({
@@ -182,10 +191,11 @@ export const dialogHandle = (id, state) => dispatch => {
 
 // 预览图保存
 export const listPreviewSave = formData =>
-    uploadFile({ url: CONFIG.previewSaveUrl, formData })
+    uploadFile({ url: '/api/file/list_preview_save', formData })
         .then(res => res.data.url)
         .catch(() => '');
 
+// 上传icon
 export const iconUpload = params => {
     return fetch({
         url: '/api/page/icon_save',
@@ -194,6 +204,7 @@ export const iconUpload = params => {
     }).then(res => res.data);
 };
 
+// 设置icon列表
 export const iconListSet = (iconfontUrl, iconList) => dispatch => {
     dispatch({
         type: ICON_LIST_SET,
@@ -202,16 +213,39 @@ export const iconListSet = (iconfontUrl, iconList) => dispatch => {
     });
 };
 
-export const componentSelect = activeComponent => dispatch => {
-    dispatch({
-        type: COMPONENT_SELECT,
-        activeComponent,
-    });
+// 保存文件目录
+export const dirNameSave = params => {
+    return fetch({
+        url: '/api/page/dirname_save',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
 };
 
+/*---------------------- 模板相关 ----------------------*/
+
+// 监听ALT按键
 export const ctrlListen = altDown => dispatch => {
     dispatch({
         type: ALT_DOWN,
         altDown,
     });
+};
+
+// 模板页面初始化请求
+export const componentGet = params => {
+    return fetch({
+        url: '/api/component/get',
+        method: 'post',
+        params,
+    }).then(res => res.data);
+};
+
+// 模板保存数据
+export const componentSave = params => {
+    return fetch({
+        url: '/api/component/save',
+        method: 'POST',
+        params,
+    }).then(res => res.data);
 };

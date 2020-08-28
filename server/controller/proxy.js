@@ -1,6 +1,9 @@
-const axios = require('axios');
+import axios from 'axios';
+import FormData from 'form-data';
+import path from 'path';
+import fs from 'fs';
 
-exports.getProxy = async (ctx, next) => {
+export const getProxy = async (ctx, next) => {
     const { proxyUrl } = ctx.query;
     let data = {
         params: { ...ctx.query, proxyUrl: null },
@@ -15,17 +18,42 @@ exports.getProxy = async (ctx, next) => {
         });
 };
 
-exports.postProxy = async (ctx, next) => {
-    const { proxyUrl } = ctx.request.body;
-    let data = { ...ctx.request.body };
-    delete data.proxyUrl;
+// TODO 图片转发有问题
+export const postProxy = async (ctx, next) => {
+    const { files, body, headers } = ctx.request;
+    const { proxyUrl } = body;
+    let data;
+    let config = {
+        headers,
+    };
+    console.log('-------------------------------------------------')
+
+    if (files) {
+        let formData = new FormData();
+        for (let key in body) {
+            formData.append(key, body[key]);
+        }
+
+        for (let key in files) {
+            const item = files[key];
+            const { path } = item;
+            const file = fs.createReadStream(path);
+            formData.append(key, file)
+        }
+
+        data = formData;
+    } else {
+        data = body;
+        delete data.proxyUrl;
+    }
 
     await axios
-        .post(proxyUrl, data)
+        .post(proxyUrl, data, config)
         .then(res => {
             ctx.body = res.data;
         })
         .catch(err => {
             ctx.body = err.data;
         });
+
 };

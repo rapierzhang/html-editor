@@ -5,20 +5,26 @@
 
     .page-item {
         float: left;
-        width: 28px;
-        height: 28px;
-        line-height: 28px;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
         text-align: center;
         border-radius: 2px;
         border: 1px solid #e8e8e8;
         background: #fff;
-        font-size: 14px;
+        font-size: 18px;
         color: #595959;
         margin: 0 4px;
         cursor: pointer;
+        transition: border,color .5s;
+
+        &:hover {
+            border: 1px solid #007aff;
+            color: #007aff;
+        }
 
         &.active {
-            background: #007aff;
+            background: #1890ff;
             border: 1px solid #007aff;
             color: #fff;
         }
@@ -27,20 +33,27 @@
     .page-btn {
         float: left;
         width: 58px;
-        height: 28px;
-        line-height: 28px;
+        height: 35px;
+        line-height: 35px;
         border: 1px solid #e8e8e8;
         border-radius: 2px;
         background: #fff;
         text-align: center;
         font-size: 14px;
-        color: #595959;
+        color: #262626;
         margin: 0 4px;
         cursor: pointer;
+        transition: border,color .5s;
+
+        &:hover {
+            border: 1px solid #007aff;
+            color: #007aff;
+        }
 
         &.disable {
             color: #bfbfbf;
             cursor: default;
+            border: 1px solid #e8e8e8;
         }
     }
 

@@ -1,0 +1,69 @@
+.component-list {
+    .header {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 0 20px;
+        box-shadow: 0 2px 8px #f0f1f2;
+        background: #001529;
+
+        .title {
+            font-size: 22px;
+            color: #fff;
+        }
+
+        .btn-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            .search {
+                margin-right: 10px;
+            }
+
+            .new {
+                span {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .search {
+            span {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .content {
+        width: 1366px;
+        min-height: 660px;
+        max-height: 1260px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 30px 50px;
+        margin: 0 auto;
+    }
+
+    .footer {
+        width: 1366px;
+        height: 80px;
+        margin: 20px auto 0 auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+
+        .list-page {
+
+        }
+    }
+}

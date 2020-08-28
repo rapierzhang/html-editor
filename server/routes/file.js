@@ -1,12 +1,15 @@
-const router = require('koa-router')();
-const controller = require('../controller/file');
+import koaRouter from 'koa-router';
+import { fileUpload, listPreviewSave, fileUploadTest } from '../controller/file';
+
+const router = koaRouter();
 
 // 设置url前缀
 router.prefix('/api/file');
 
-router.post('/upload', controller.fileUpload);
+router.post('/upload', fileUpload);
 
-router.post('/list_preview_save', controller.listPreviewSave);
+router.post('/list_preview_save', listPreviewSave);
 
+router.post('/test', fileUploadTest);
 
-module.exports = router;
+export default router;

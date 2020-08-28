@@ -1,10 +1,13 @@
-const router = require('koa-router')();
-const controller = require('../controller/proxy');
+import koaRouter from 'koa-router';
+import { getProxy, postProxy } from '../controller/proxy';
+
+const router = koaRouter();
+
 // 设置url前缀
 router.prefix('/api/');
 
-router.get('/proxy', controller.getProxy);
+router.get('/proxy', getProxy);
 
-router.post('/proxy', controller.postProxy);
+router.post('/proxy', postProxy);
 
-module.exports = router;
+export default router;

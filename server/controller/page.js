@@ -1,13 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-const utils = require('../utils/index');
-const PageModule = require('../module/page');
-const ListModule = require('../module/list');
-const process = require('child_process');
-const io = require('./io-handle');
-const axios = require('axios');
+import fs from 'fs';
+import path from 'path';
+import process from 'child_process';
+import compressing from 'compressing';
+import axios from 'axios';
+import utils from '../utils/index';
+import { PageModule, ListModule, ScriptModel } from '../model';
+import { writeHtml, writeCss, writeJs, mkdirImage } from './io-handle';
+import { domain } from '../config/domain.config';
+
+const name = (pid, direName) => direName ? direName : pid;
+
 // 页面信息获取
-exports.pageGet = async (ctx, next) => {
+export const pageGet = async (ctx, next) => {
     let { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid }, { _id: 0, __v: 0 });
     if (result) {
@@ -17,9 +21,10 @@ exports.pageGet = async (ctx, next) => {
         ctx.body = utils.res(200, 'ok', { pid });
     }
 };
+
 // 页面信息保存
-exports.pageSave = async (ctx, next) => {
-    let { pid, index, title, desc, htmlTree, preview } = ctx.request.body;
+export const pageSave = async (ctx, next) => {
+    let { pid, title, desc, htmlTree, preview } = ctx.request.body;
     const time = new Date().getTime();
     let pageResult = false;
     let listResult = false;
@@ -32,7 +37,6 @@ exports.pageSave = async (ctx, next) => {
                 { pid },
                 {
                     $set: {
-                        index,
                         title,
                         desc,
                         htmlTree,
@@ -58,7 +62,6 @@ exports.pageSave = async (ctx, next) => {
         console.error('无数据 新建');
         const _page = new PageModule({
             pid,
-            index,
             title,
             desc,
             htmlTree,
@@ -88,55 +91,72 @@ exports.pageSave = async (ctx, next) => {
         ctx.body = utils.res(500, msg, {});
     }
 };
+
 // 页面构建
-exports.pageBuild = async (ctx, next) => {
+export const pageBuild = async (ctx, next) => {
     const { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid });
     if (!result) {
         ctx.body = utils.res(3001, 'no data', {});
         return;
     }
-    const { htmlTree } = result;
-    const dirPath = `${path.resolve('./')}/public/html/${pid}`;
+    const { htmlTree, dirName } = result;
+    const dirPath = `${path.resolve('./')}/server/public/html/${name(pid, dirName)}`;
     // 判断目录存在
     const dirExists = fs.existsSync(dirPath);
     // 创建新目录
     if (!dirExists) fs.mkdirSync(dirPath);
-
-    io.writeHtml(dirPath, result);
-    io.writeCss(dirPath, htmlTree);
-    io.writeJs(dirPath, htmlTree);
-    io.mkdirImage(dirPath);
-    // 执行格式化命令
-    process.execFileSync(`${path.resolve('./')}/shell/format.sh`, [dirPath]);
+    const time1 = new Date().getTime();
+    writeHtml(dirPath, result);
+    const time2 = new Date().getTime();
+    console.log('html: ', time2 - time1);
+    writeCss(dirPath, htmlTree);
+    const time3 = new Date().getTime();
+    console.log('css: ', time3 - time2);
+    writeJs(dirPath, htmlTree);
+    const time4 = new Date().getTime();
+    console.log('js: ', time4 - time3);
+    mkdirImage(dirPath);
+    const time5 = new Date().getTime();
+    console.log('image: ', time5 - time4);
+    process.execSync(`gulp build -f ${path.resolve('./')}/server/shell/gulpfile.js --pid ${name(pid, dirName)}`);
+    const time6 = new Date().getTime();
+    console.log('gulp: ', time6 - time5);
 
     ctx.body = utils.res(200, 'ok', {
         result: true,
     });
 };
+
 // 打开构建好的页面
-exports.pageOpen = async (ctx, next) => {
+export const pageOpen = async (ctx, next) => {
     const { pid } = ctx.request.body;
     const result = await PageModule.findOne({ pid });
     if (result) {
+        const { dirName } = result;
         ctx.body = utils.res(200, 'ok', {
-            url: `http://localhost:3000/html/${pid}`, // ^^^^^^
+            url: `${domain}/html/${name(pid, dirName)}/index.html`,
         });
     } else {
         ctx.body = utils.res(500, '无此页面', {});
     }
 };
+
 // 页面删除
-exports.pageDelete = async (ctx, next) => {
+export const pageDelete = async (ctx, next) => {
     const { pid } = ctx.request.body;
+    const result = await PageModule.findOne({ pid });
+    const { dirName } = result;
     const resultPage = await PageModule.deleteOne({ pid });
     const resultList = await ListModule.deleteOne({ pid });
 
-    const dirPath = `${path.resolve('./')}/public/html/${pid}`;
+    const dirPath = `${path.resolve('./')}/server/public/html/${name(pid, dirName)}`;
     // 删除生成目录
     utils.delFile(dirPath);
     // 删除生成文件
-    fs.unlinkSync(`${path.resolve('./')}/public/preview/${pid}.jpg`);
+    try {
+        fs.unlinkSync(`${path.resolve('./')}/server/public/preview/${pid}.jpg`);
+    } catch (e) {}
 
     if (resultPage.ok === 1 && resultList.ok === 1) {
         ctx.body = utils.res(200, 'ok', { result: true });
@@ -144,21 +164,61 @@ exports.pageDelete = async (ctx, next) => {
         ctx.body = utils.res(500, '删除失败', { result: false });
     }
 };
+
 // 页面发布
-exports.pageRelease = async (ctx, next) => {
-    const { pid } = ctx.request.body;
-    const dirPath = `${path.resolve('./')}/public/html/${pid}`;
-    // 判断目录存在
-    const dirExists = fs.existsSync(dirPath);
-    if (dirExists) {
-        process.execFileSync(`${path.resolve('./')}/shell/release.sh`, [dirPath]);
+export const pageRelease = async (ctx, next) => {
+    const { pid, sid } = ctx.request.body;
+    const result = await PageModule.findOne({ pid });
+    const { dirName } = result;
+    const scriptResult = await ScriptModel.findOne({ sid }, { _id: 0, __v: 0 });
+    const { host, username, deployPath, modelType } = scriptResult;
+    if (modelType === 'script') {
+        process.execFileSync(`${path.resolve('./')}/server/shell/release/${sid}.sh`, [name(pid, dirName)]);
         ctx.body = utils.res(200, 'ok', { result: true });
     } else {
-        ctx.body = utils.res(500, '无此页面，请先生成后再发布', {});
+        const dirPath = `${path.resolve('./')}/server/public/html/${name(pid, dirName)}`;
+        const dirExists = fs.existsSync(dirPath);
+        if (dirExists) {
+            process.execFileSync(`${path.resolve('./')}/server/shell/rsync.sh`, [
+                dirPath,
+                username,
+                host,
+                `${deployPath}/html`,
+            ]);
+            ctx.body = utils.res(200, 'ok', { result: true });
+        } else {
+            ctx.body = utils.res(500, '无此页面，请先生成后再发布', {});
+        }
     }
 };
+
+// 页面下载
+export const pageDownload = async (ctx, next) => {
+    const { pid } = ctx.request.body;
+    const result = await PageModule.findOne({ pid });
+    const { dirName } = result;
+    const publicPath = `${path.resolve('./')}/server/public`;
+    const dirPath = `${publicPath}/html/${name(pid, dirName)}`;
+    const dirExists = fs.existsSync(dirPath);
+    if (dirExists) {
+        const zipPath = `${publicPath}/zip/${name(pid, dirName)}.zip`;
+        const publicZipPath = `${domain}/zip/${name(pid, dirName)}.zip`;
+        // 打包文件夹
+        await compressing.zip.compressDir(dirPath, zipPath)
+            .then(() => {
+                ctx.body = utils.res(200, 'ok', { url: publicZipPath });
+            })
+            .catch(err => {
+                console.error('打包失败：', err);
+                ctx.body = utils.res(500, '打包失败', {});
+            });
+    } else {
+        ctx.body = utils.res(500, '无此页面，请先生成后再下载', {});
+    }
+}
+
 // 处理iconfont
-exports.iconSave = async (ctx, next) => {
+export const iconSave = async (ctx, next) => {
     let { pid, iconfontUrl } = ctx.request.body;
     iconfontUrl = iconfontUrl.replace(/.*\/\//, 'https://');
     let iconList = [];
@@ -182,3 +242,28 @@ exports.iconSave = async (ctx, next) => {
             ctx.body = utils.res(500, 'fetch err', err);
         });
 };
+
+// 保存文件名
+export const dirNameSave = async (ctx, next) => {
+    let { pid, dirName } = ctx.request.body;
+    const result = await PageModule.findOne({ pid });
+    let oldDirName = name(pid, result.dirName);
+    const publicPath = `${path.resolve('./')}/server/public/html/`;
+    // 老路径是否存在
+    const dirExists = fs.existsSync(`${publicPath}${oldDirName}`);
+    // 数据库更新
+    const pageResult = await PageModule.updateOne({ pid }, { $set: { dirName } });
+    if (dirExists) {
+        // 重命名文件夹
+        const renameErr = await fs.renameSync(`${publicPath}${oldDirName}`, `${publicPath}${name(pid, dirName)}`);
+        if (renameErr) {
+            ctx.body = utils.res(500, 'rename err', {});
+        }
+    }
+
+    if (pageResult) {
+        ctx.body = utils.res(200, 'ok', { result: true });
+    } else {
+        ctx.body = utils.res(500, 'update err', {});
+    }
+}

@@ -3,4 +3,4 @@ const mongoConfig = {
     database: 'html_editor',
 };
 
-module.exports = mongoConfig;
+export default mongoConfig;

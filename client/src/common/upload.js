@@ -1,7 +1,9 @@
 import axios from 'axios';
+import CONFIG from '../config';
 
 const uploadFile = opts => {
-    const { url, formData } = opts;
+    let { url, formData } = opts;
+    url = CONFIG.restDomain + url;
     const config = {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -11,7 +13,7 @@ const uploadFile = opts => {
         axios
             .post(url, formData, config)
             .then(res => {
-                const { data } = res
+                const { data } = res;
                 if (data.code === 200) {
                     resolve(data);
                 } else {

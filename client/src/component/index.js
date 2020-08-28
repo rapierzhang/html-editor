@@ -1,3 +1,3 @@
-import { Select, Toast, Switch, Upload, Dialog } from './common';
+import { Search } from './search';
 
-export { Select, Toast, Switch, Upload, Dialog };
+export { Search };

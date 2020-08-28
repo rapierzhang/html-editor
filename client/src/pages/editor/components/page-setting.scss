@@ -1,0 +1,64 @@
+.page-setting {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.5);
+
+    .panel {
+        width: 40%;
+        height: 80%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        border-radius: 5px;
+        padding: 20px;
+    }
+
+    .setting-title {
+        height: 40px;
+        font-size: 22px;
+        color: #262626;
+    }
+
+    .setting-close {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        transition: all 0.5s;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+            color: #007aff;
+        }
+
+        svg {
+            font-size: 20px;
+        }
+    }
+
+    .row {
+        height: 40px;
+        margin-bottom: 10px;
+    }
+
+    .setting-text {
+        font-size: 18px;
+    }
+
+    .setting-button {
+        width: 100%;
+
+        span {
+            font-size: 16px;
+        }
+    }
+}

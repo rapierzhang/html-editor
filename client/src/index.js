@@ -6,6 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger  from 'redux-logger';
 import './style/common.scss';
+import 'antd/dist/antd.css'
 
 import RootRouter from './router/index';
 import reducers from './reducers/index';

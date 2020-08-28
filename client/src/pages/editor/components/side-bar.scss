@@ -1,263 +1,78 @@
 // 侧边栏
-.side-bar {
+.editor-side-bar {
     width: 450px;
     height: 100%;
     border-left: 1px solid #d8d8d8;
-    overflow-y: scroll;
-}
 
-.tree {
-    height: 100%;
-    padding: 10px;
+    .side-bar-box {
+        color: #262626;
+        position: relative;
 
-    .tree-item {
-        width: 100%;
-        cursor: pointer;
-        min-height: 30px;
-        line-height: 30px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-
-        .tree-row {
-            width: 100%;
+        .nav {
+            height: 50px;
+            font-size: 24px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #d9d9d9;
+            padding: 0 20px;
 
-            &.active {
-                color: #ea413c;
-                outline: 1px dashed #ea413c;
-            }
-
-            .text {
-                font-size: 20px;
-            }
-
-            .arrow {
-                color: #262626 !important;
-                font-size: 14px;
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                line-height: 20px;
-                text-align: center;
-                background: #d9d9d9;
-                border-radius: 10px;
-                cursor: pointer;
-                margin-right: 10px;
-
-                &:hover {
-                    background: #8c8c8c;
-                }
-            }
-
-        }
-    }
-}
-
-.attr-list {
-    color: #262626;
-    position: relative;
-
-    .nav {
-        height: 50px;
-        font-size: 24px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-
-        .nav-item {
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .actived {
-            color: red;
-        }
-
-        .save {
-            width: 100px;
-            height: 40px;
-            border-radius: 4px;
-            border: 0;
-            background: lightskyblue;
-            color: #fff;
-            font-size: 24px;
-        }
-
-        .close {
-            width: 30px;
-            height: 30px;
-            font-size: 20px;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            outline: none;
-        }
-    }
-
-    .attr-card {
-        padding: 20px;
-        border-top: 1px solid #d8d8d8;
-
-        .card-title {
-            font-size: 22px;
-        }
-
-        .card-content {
-            padding: 10px 0 0;
-
-            .row {
-                min-height: 30px;
-                margin-bottom: 20px;
+            .nav-item-box {
+                width: 419px;
+                height: 50px;
                 display: flex;
                 flex-direction: row;
                 justify-content: flex-start;
-                align-items: center;
-                font-size: 16px;
+                align-items: flex-end;
+            }
 
-                >span {
-                    display: inline-block;
-                    width: 100px;
-                }
+            .nav-item {
+                font-size: 24px;
+                padding: 10px 20px;
+                cursor: pointer;
+                border: 1px solid transparent;
+                line-height: 1;
 
-                input {
-                    padding-left: 10px;
-                    width: 198px;
-                    height: 30px;
-                    border: 1px solid #d9d9d9;
-                }
-
-                textarea {
-                    padding-left: 10px;
-                    width: 198px;
-                    height: 80px;
-                    border: 1px solid #d9d9d9;
-                    resize: none;
-                }
-
-                .size-text {
-                    width: 20px;
-                    margin-right: 10px;
-                }
-
-                .size-input {
-                    padding: 0;
-                    width: 40px;
-                    margin-right: 10px;
-                }
-
-                .pid {
-                    flex: 1;
-                    display: inline-block;
-                    height: 30px;
-                    line-height: 30px;
-                    cursor: pointer;
-                    font-size: 16px;
-                    padding-left: 10px;
-
-                    &:hover {
-                        color: #ea413c;
-                    }
+                &.actived {
+                    color: #ea413c;
+                    border-color: #d9d9d9 #d9d9d9 #fff #d9d9d9;
+                    border-style: solid;
+                    border-width: 1px;
+                    border-top-left-radius: 2px;
+                    border-top-right-radius: 2px;
                 }
             }
 
-            .column {
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: flex-start;
-
-                .title {
-                    margin-bottom: 10px;
-                }
-            }
-
-            .margin, .padding, .border {
-                input {
-                    width: 50px;
-                    margin: 0 10px;
-                }
-            }
-
-            .border-select {
+            .save {
                 width: 100px;
-            }
-
-            .extra {
-                width: 360px;
-                height: 200px;
-                resize: none;
-                border: 1px solid#d9d9d9;
-                padding: 10px;
-            }
-
-            .del-ele {
-                width: 80%;
                 height: 40px;
-                margin: 20px auto;
-                font-size: 16px;
+                border-radius: 4px;
+                border: 0;
+                background: lightskyblue;
+                color: #fff;
+                font-size: 24px;
             }
 
-            .icon-input {
-                width: 320px !important;
+            .close {
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+                outline: none;
+                cursor: pointer;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+
+                &:hover {
+                    color: #ea413c;
+                }
+
+                svg {
+                    font-size: 24px;
+                }
             }
-
-        }
-    }
-
-    .icon-box {
-        width: 400px;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: flex-start;
-        flex-wrap: wrap;
-
-        .icon-item {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid transparent;
-            border-radius: 2px;
-
-            &:hover {
-                top: -4px;
-                box-shadow: 0px 10px 14px 0 rgba(0,0,0,0.08);
-                border: 1px solid #d9d9d9;
-            }
-        }
-    }
-}
-
-.attr-menu {
-    width: 200px;
-    overflow: hidden;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 999;
-
-    .row {
-        height: 30px;
-        line-height: 30px;
-        padding: 0 10px;
-        cursor: pointer;
-
-        &:hover {
-            background: #f5f5f5;
         }
     }
 }

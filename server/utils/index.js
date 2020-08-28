@@ -71,14 +71,16 @@ const utils = {
     trim: str => str.replace(/  /g, ''),
     // css字符串转obj
     cssStrToObj(text = '') {
+        if (!text) return {};
+        text = text.replace(/  /g, '');
+        text = text.replace(/\n/g, '');
+        text = text.match(/\{(.*)\}/, '$1');
         let obj = {};
-        const arr = utils
-            .trim(text)
-            .replace('\n', '')
-            .split(';');
+        const arr = text[1].split(';');
         arr.forEach(item => {
             if (!item) return;
-            const [k, v] = item.split(':');
+            let [k, v] = item.split(':');
+            k = k.replace(/([^-])(?:-+([^-]))/g, ($0, $1, $2) => $1 + $2.toUpperCase());
             obj[k] = v;
         });
         return obj;
@@ -121,7 +123,8 @@ const utils = {
         recursion(obj, key);
         return target;
     },
-    lineToUnderLine: str => str.replace(/-/g, '_'),
+    lineToUnderLine: (str = '') => str.replace(/-/g, '_'),
+    has: (strOrObj, text) => strOrObj.indexOf(text) > -1,
 };
 
-module.exports = utils;
+module.exports = utils; // 不能改

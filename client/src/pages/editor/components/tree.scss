@@ -1,0 +1,102 @@
+.tree {
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+    padding: 10px;
+    position: relative;
+
+    #tree-root {
+        padding-bottom: 20px;
+    }
+
+    .tree-item {
+        width: 100%;
+        cursor: pointer;
+        min-height: 30px;
+        line-height: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .tree-row {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        &.active {
+            color: #ea413c;
+            outline: 1px dashed #ea413c;
+        }
+
+        .row-text {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            .ctrl-box {
+                margin-right: 5px;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                font-weight: 700;
+
+                svg {
+                    font-size: 16px;
+                }
+
+                &:hover {
+                    color: #ea413c;
+                }
+            }
+
+            .blank {
+                margin-right: 5px;
+                width: 20px;
+                height: 20px;
+            }
+
+            .text {
+                flex: 1;
+                font-size: 20px;
+
+                &:hover {
+                    color: #ea413c;
+                }
+            }
+        }
+
+        .component-name {
+            padding-right: 10px;
+        }
+    }
+
+    .tree-menu {
+        width: 200px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #d9d9d9;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 999;
+
+        .row {
+            height: 30px;
+            line-height: 30px;
+            padding: 0 10px;
+            cursor: pointer;
+
+            &:hover {
+                background: #f5f5f5;
+            }
+        }
+    }
+}

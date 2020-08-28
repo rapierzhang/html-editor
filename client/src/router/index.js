@@ -1,13 +1,15 @@
 import React from 'react';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
-import List from '../pages/list/';
-import Editor from '../pages/editor';
+import { Route, Switch, BrowserRouter, hashHistory } from 'react-router-dom';
+import { List, Editor, ComponentList, Backstage } from '../pages';
 
-const RootRouter = () => (
+const RootRouter = props => (
     <BrowserRouter>
         <Switch>
+            <Route exact path='/' component={List} />
             <Route path='/list' component={List} />
             <Route path='/editor' component={Editor} />
+            <Route path='/component-list' component={ComponentList} />
+            <Route path='/backstage' component={Backstage} />
         </Switch>
     </BrowserRouter>
 );

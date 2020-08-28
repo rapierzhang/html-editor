@@ -1,0 +1,159 @@
+.help {
+    position: relative;
+
+    .help-content {
+        position: absolute;
+        padding: 10px;
+        border-radius: 4px;
+        background: #fff;
+        min-width: 200px;
+        max-width: 300px;
+        border: 1px solid #007aff;
+
+        &.top {
+            bottom: 33px;
+        }
+
+        &.bottom {
+            top: 33px;
+        }
+
+        &.left {
+            left: -12px;
+        }
+
+        &.center {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        &.right {
+            right: -12px;
+        }
+
+        &.show {
+            animation: show 0.5s;
+        }
+
+        &.hide {
+            animation: hide 0.5s;
+        }
+
+        &.none {
+            display: none;
+        }
+
+        .help-text {
+            font-size: 14px;
+            color: #262626;
+        }
+
+        .arrow-bottom {
+            position: absolute;
+            bottom: -20px;
+            width: 0;
+            height: 0;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #007aff transparent transparent transparent;
+
+            .inner {
+                position: absolute;
+                bottom: -9px;
+                left: -10px;
+                z-index: 2;
+                width: 0;
+                height: 0;
+                border-width: 10px;
+                border-style: solid;
+                border-color: #fff transparent transparent transparent;
+            }
+
+            &.bottom {
+                display: none;
+            }
+
+            &.left {
+                left: 10px;
+            }
+
+            &.center {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            &.right {
+                right: 10px;
+            }
+        }
+
+        .arrow-top {
+            position: absolute;
+            top: -20px;
+            width: 0;
+            height: 0;
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent transparent #007aff transparent;
+
+            .inner {
+                position: absolute;
+                top: -9px;
+                left: -10px;
+                z-index: 2;
+                width: 0;
+                height: 0;
+                border-width: 10px;
+                border-style: solid;
+                border-color: transparent transparent #fff transparent;
+            }
+
+            &.top {
+                display: none;
+            }
+
+            &.left {
+                left: 10px;
+            }
+
+            &.center {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            &.right {
+                right: 10px;
+            }
+        }
+    }
+
+    .help-icon {
+        cursor: pointer;
+
+        svg {
+            font-size: 18px;
+            transition: color 0.3s;
+
+            &:hover {
+                color: #007aff;
+            }
+        }
+    }
+
+    @keyframes show {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    @keyframes hide {
+        0% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+}

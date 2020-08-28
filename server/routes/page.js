@@ -1,21 +1,38 @@
-const router = require('koa-router')();
-const controller = require('../controller/page');
+import koaRouter from 'koa-router';
+import {
+    pageGet,
+    pageSave,
+    pageBuild,
+    pageOpen,
+    pageDelete,
+    pageRelease,
+    pageDownload,
+    iconSave,
+    dirNameSave
+} from '../controller/page'
+
+const router = koaRouter();
+
 // 设置url前缀
 router.prefix('/api/page');
 
-router.post('/get', controller.pageGet);
+router.post('/get', pageGet);
 
-router.post('/save', controller.pageSave);
+router.post('/save', pageSave);
 
-router.post('/build', controller.pageBuild);
+router.post('/build', pageBuild);
 
-router.post('/open', controller.pageOpen);
+router.post('/open', pageOpen);
 
-router.post('/delete', controller.pageDelete);
+router.post('/delete', pageDelete);
 
-router.post('/release', controller.pageRelease);
+router.post('/release', pageRelease);
 
-router.post('/icon_save', controller.iconSave)
+router.post('/download', pageDownload);
+
+router.post('/icon_save', iconSave);
+
+router.post('/dirname_save', dirNameSave);
 
 const test = async (ctx, next) => {
     console.log('-------------');
@@ -55,4 +72,4 @@ const test = async (ctx, next) => {
 router.get('/test', test);
 router.post('/test', test);
 
-module.exports = router;
+export default router;

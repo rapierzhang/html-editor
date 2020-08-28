@@ -1,49 +1,86 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
-import { Dialog } from '../../component';
-import { Element, SideBar, ComponentList } from './components';
-import utils from '../../common/utils';
 import query from 'query-string';
 import html2canvas from 'html2canvas';
-import './editor.scss';
+import { Dialog } from '../../component/common';
+import utils from '../../common/utils';
+import { Element, SideBar, ComponentList, Setting } from './components';
+import {
+    SaveOutlined,
+    DeleteOutlined,
+    BuildOutlined,
+    EyeOutlined,
+    UploadOutlined,
+    DownloadOutlined,
+    SettingOutlined,
+} from '@ant-design/icons';
+import QRCode from 'qrcode.react';
+import { scriptListGet } from '../../actions';
 import {
     pageInit,
     pidSet,
     canvasPositionSet,
-    elementsUpdate,
+    htmlTreeUpdate,
     htmlSave,
     htmlBuild,
     htmlOpen,
     htmlRelease,
-    indexSet,
+    htmlDownload,
+    htmlDelete,
     titleSet,
     descSet,
+    dirNameSet,
     activeIdSet,
     isEditSet,
     listPreviewSave,
-    htmlDelete,
     iconListSet,
     attributeUpdate,
-    componentSelect, ctrlListen,
+    ctrlListen,
+    componentGet,
+    componentSave,
+    navHandle,
 } from './actions';
+import './editor.scss';
+
+const componentDetaultData = {
+    component: {
+        id: 'component-root',
+        element: 'ComponentRoot',
+        children: [],
+    },
+};
+
+const pageDefaultData = {
+    root: {
+        id: 'root',
+        element: 'Root',
+        children: [],
+    },
+};
 
 class Editor extends Component {
     constructor(props) {
         super(props);
         this.state = {
             pid: '',
+            model: '',
 
             deleteShow: false,
             deletePid: '',
 
-            ctrlPress: false,
+            previewUrl: '',
+
+            releaseListShow: false, // 脚本列表
+            settingShow: false, // 页面设置
+
+            scriptListData: utils.defaultData,
         };
     }
 
     componentDidMount() {
         setTimeout(() => this.ctxPosition(), 500);
         this.init();
+        this.scriptListGet();
 
         // 禁止右击菜单
         document.oncontextmenu = () => false;
@@ -51,29 +88,58 @@ class Editor extends Component {
         this.listenAlt();
     }
 
+    // 获取脚本列表
+    scriptListGet() {
+        utils.fetchLoading(this, 'scriptListData');
+        scriptListGet().then(scriptListData => {
+            utils.fetchSucc(this, 'scriptListData', scriptListData);
+        });
+    }
+
     // 初始化
     init() {
-        const { pid } = query.parse(this.props.location.search);
-        this.setState({ pid });
-        pageInit({ pid })
+        const { pid, model } = query.parse(this.props.location.search);
+        this.setState({ pid, model });
+        const init = model === 'component' ? componentGet : pageInit;
+        init({ pid })
             .then(res => {
-                const { pid, index, title, desc, htmlTree, iconfontUrl, iconList } = res;
+                const { pid, title, desc, htmlTree, iconfontUrl, iconList, dirName } = res;
                 this.props.dispatch(pidSet(pid));
-                index && this.props.dispatch(indexSet(index));
-                htmlTree && this.props.dispatch(elementsUpdate(htmlTree));
+                const tree = htmlTree ? htmlTree : model === 'component' ? componentDetaultData : pageDefaultData;
+                this.props.dispatch(htmlTreeUpdate(tree));
                 title && this.props.dispatch(titleSet(title));
                 desc && this.props.dispatch(descSet(desc));
+                dirName && this.props.dispatch(dirNameSet(dirName));
+                // 设置iconfont
                 if (iconfontUrl) {
                     this.props.dispatch(iconListSet(iconfontUrl, iconList));
                     const header = document.getElementById('iconfont');
                     header.setAttribute('href', iconfontUrl);
                 }
+                this.setGlobalStyle(htmlTree)
                 // 设置参数但不跳转
-                window.history.pushState(null, null, `${location.origin}/editor?pid=${pid}`);
+                window.history.pushState(
+                    null,
+                    null,
+                    `${location.origin}/editor?${model ? `model=${model}&` : ''}pid=${pid}`,
+                );
             })
             .catch(err => {
                 console.error(err);
             });
+    }
+
+    // 设置全局css
+    setGlobalStyle(htmlTree) {
+        let {
+            root: { others: { globalCss } = {} },
+        } = htmlTree;
+        if (!globalCss) return;
+        globalCss = globalCss.replace(/  /g, '');
+        const $globalStyle = document.getElementById('global-style');
+        let valueList = globalCss.split('\n');
+        valueList = valueList.map(val => (val.indexOf('{') > -1 ? `#context ${val}` : val));
+        $globalStyle.innerText = valueList.join('');
     }
 
     // 监听按住alt
@@ -81,6 +147,22 @@ class Editor extends Component {
         document.onkeydown = event => {
             const e = event || window.event;
             if (e.keyCode === 18) this.props.dispatch(ctrlListen(true));
+            const { altDown } = this.props.editorInfo;
+            if (altDown === true) {
+                switch (e.keyCode) {
+                    case 83:
+                        this.save();
+                        break;
+                    case 66:
+                        this.build();
+                        break;
+                    case 80:
+                        this.open();
+                        break;
+                    default:
+                        return;
+                }
+            }
         };
         document.onkeyup = event => {
             const e = event || window.event;
@@ -91,11 +173,12 @@ class Editor extends Component {
     // 控制标题
     async handleTitle(status) {
         const { title } = this.props.editorInfo;
+        const { model } = this.state;
         await this.setState({ titleEdit: status });
         if (status) {
-            if (title == '未命名页面') this.props.dispatch(titleSet(''));
+            if (utils.has(['未命名页面', '未命名模块'], title)) this.props.dispatch(titleSet(''));
         } else {
-            if (!title) this.props.dispatch(titleSet('未命名页面'));
+            if (!title) this.props.dispatch(titleSet(model === 'component' ? '未命名模块' : '未命名页面'));
         }
     }
 
@@ -130,27 +213,25 @@ class Editor extends Component {
         e.stopPropagation();
         this.props.dispatch(attributeUpdate({}));
         this.props.dispatch(isEditSet(false));
-        this.props.dispatch(componentSelect(''));
+        this.props.dispatch(navHandle(0));
         // 双击取消选择元素
         if (!this.props.editorInfo.isEdit) this.props.dispatch(activeIdSet(false));
     }
 
     // 渲染画布中元素
-    renderElements(elements) {
+    renderHtmlTree(htmlTree) {
         const { activeId } = this.props.editorInfo;
-        const list = Object.values(elements);
-        return list.map((item, idx) => {
-            return (
-                <Element key={`item-${idx}`} item={item} active={activeId == item.id}>
-                    {item.children && this.renderElements(item.children)}
-                </Element>
-            );
-        });
+        const list = Object.values(htmlTree);
+        return list.map((item, idx) => (
+            <Element key={`item-${idx}`} item={item} active={activeId == item.id}>
+                {item.children && this.renderHtmlTree(item.children)}
+            </Element>
+        ));
     }
 
     // 保存
     async save() {
-        const { elements, pid, index, title, desc } = this.props.editorInfo;
+        const { htmlTree, pid, title, desc } = this.props.editorInfo;
         let preview = '';
         // 生成截图
         await html2canvas(document.getElementById('root')).then(async canvas => {
@@ -162,12 +243,11 @@ class Editor extends Component {
             // 保存截图
             preview = await listPreviewSave(formData);
         });
-        htmlSave({
+        await htmlSave({
             pid,
-            index,
             title,
             desc,
-            htmlTree: elements,
+            htmlTree,
             preview,
         })
             .then(res => {
@@ -183,17 +263,24 @@ class Editor extends Component {
         const { pid } = this.props.editorInfo;
         htmlBuild({ pid })
             .then(res => {
-                console.error(111, res)
                 utils.toast(res.result ? '生成成功' : '生成失败');
             })
             .catch(err => {
-                console.error(err)
+                console.error(err);
                 if (err.code == 3001) {
                     utils.toast('请先保存数据');
                 } else {
                     utils.toast('生成失败');
                 }
             });
+    }
+
+    async saveBuild(e) {
+        const { button } = e;
+        if (button === 2) {
+            await this.save();
+            this.build();
+        }
     }
 
     // 打开
@@ -209,15 +296,42 @@ class Editor extends Component {
             });
     }
 
-    // 发布
-    release() {
+    // 移动端预览
+    preview() {
         const { pid } = this.props.editorInfo;
-        htmlRelease({ pid })
+        if (!this.state.previewUrl) {
+            htmlOpen({ pid })
+                .then(res => {
+                    this.setState({ previewUrl: res.url });
+                })
+                .catch(err => {
+                    utils.toast(err.msg);
+                    console.error(err);
+                });
+        }
+    }
+
+    // 发布
+    release(sid) {
+        const { pid } = this.props.editorInfo;
+        htmlRelease({ pid, sid })
             .then(res => {
                 utils.toast('发布成功');
             })
             .catch(err => {
                 utils.toast('发布失败');
+                console.error(err);
+            });
+    }
+
+    download() {
+        const { pid } = this.props.editorInfo;
+        htmlDownload({ pid })
+            .then(res => {
+                window.open(res.url);
+            })
+            .catch(err => {
+                utils.toast(err.msg);
                 console.error(err);
             });
     }
@@ -255,11 +369,50 @@ class Editor extends Component {
         utils.copy(pid);
     }
 
+    // 模板保存
+    componentSave() {
+        const { htmlTree, pid, title, desc } = this.props.editorInfo;
+        componentSave({
+            pid,
+            title,
+            desc,
+            htmlTree,
+        })
+            .then(res => {
+                utils.toast(res.result ? '保存成功' : '保存失败');
+            })
+            .catch(err => {
+                utils.toast(['保存失败', err.msg]);
+            });
+    }
+
+    componentDel() {}
+
+    // 发布列表控制
+    handleReleaseList(releaseListShow) {
+        this.setState({ releaseListShow });
+    }
+
+    stop(e) {
+        e.stopPropagation();
+    }
+
+    // ^^^^^^
+    pageChange(page) {}
+
+    // 页面设置
+    settingHandle(settingShow) {
+        this.setState({ settingShow });
+    }
+
     render() {
         const {
-            editorInfo: { pid, title, desc, elements, dialogMap },
+            editorInfo: { pid, title, desc, htmlTree, activeEle },
         } = this.props;
-        const { deleteShow, deletePid } = this.state;
+        const { deleteShow, deletePid, model, scriptListData, releaseListShow, settingShow, previewUrl } = this.state;
+        const {
+            data: { pageList: scriptList = [] },
+        } = scriptListData;
 
         return (
             <div className='editor'>
@@ -270,6 +423,7 @@ class Editor extends Component {
                             type='text'
                             className='title-input'
                             value={title}
+                            placeholder={model === 'component' ? '未命名模块' : '未命名页面'}
                             onChange={this.titleChange.bind(this)}
                             onFocus={this.handleTitle.bind(this, true)}
                             onBlur={this.handleTitle.bind(this, false)}
@@ -283,32 +437,101 @@ class Editor extends Component {
                         />
                     </div>
                     {/*------ 按钮组 ------*/}
-                    <div className='btn-box'>
-                        <div className='button primary' onClick={this.save.bind(this)}>
-                            保存
+                    {model === 'component' ? (
+                        <div className='btn-box'>
+                            <div className='button' onClick={this.componentSave.bind(this)}>
+                                <SaveOutlined />
+                                保存
+                            </div>
+                            <div className='button' onClick={this.componentDel.bind(this)}>
+                                <DeleteOutlined />
+                                删除模板
+                            </div>
                         </div>
-                        <div className='button warrning' onClick={this.build.bind(this)}>
-                            生成
+                    ) : (
+                        <div className='btn-box'>
+                            <div className='button' onClick={this.settingHandle.bind(this, true)}>
+                                <SettingOutlined />
+                                页面设置
+                            </div>
+                            <div
+                                className='button'
+                                onClick={this.save.bind(this)}
+                                onMouseDown={this.saveBuild.bind(this)}
+                            >
+                                <SaveOutlined />
+                                保存
+                            </div>
+                            <div className='button' onClick={this.build.bind(this)}>
+                                <BuildOutlined />
+                                生成
+                            </div>
+                            <div className='page-preview' onMouseEnter={this.preview.bind(this)}>
+                                <div className='button' onClick={this.open.bind(this)}>
+                                    <EyeOutlined />
+                                    预览
+                                </div>
+                                {previewUrl && (
+                                    <div className='qr-box'>
+                                        <QRCode value={previewUrl} size={120} fgColor='#000000' />
+                                        <div className='trangle-outer'>
+                                            <div className='trangle-inner' />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className='page-release'>
+                                <div className='button' onClick={this.handleReleaseList.bind(this, !releaseListShow)}>
+                                    <UploadOutlined />
+                                    发布
+                                </div>
+                                {releaseListShow && (
+                                    <div className='script-list'>
+                                        <div className='trangle-outer'>
+                                            <div className='trangle-inner'></div>
+                                        </div>
+                                        {scriptList.map((item, idx) => (
+                                            <div
+                                                key={`item-${idx}`}
+                                                className='script-item'
+                                                title={item.desc}
+                                                onClick={this.release.bind(this, item.sid)}
+                                            >
+                                                {item.title}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <div className='button' onClick={this.download.bind(this)}>
+                                <DownloadOutlined />
+                                下载
+                            </div>
+                            <div className='button' onClick={this.deleteDialogHandle.bind(this, true)}>
+                                <DeleteOutlined />
+                                删除页面
+                            </div>
                         </div>
-                        <div className='button success' onClick={this.open.bind(this)}>
-                            打开
-                        </div>
-                        <div className='button info' onClick={this.release.bind(this)}>
-                            发布
-                        </div>
-                        <div className='button danger' onClick={this.deleteDialogHandle.bind(this, true)}>
-                            删除
-                        </div>
-                    </div>
+                    )}
                 </div>
                 <div className='content'>
                     {/*------ 元素列表 ------*/}
                     <ComponentList />
                     {/*------ 画布 ------*/}
-                    <div id='table' className='table' onClick={this.unSelect.bind(this)}>
+                    <div id='table' className='table' onMouseDown={this.unSelect.bind(this)}>
                         <div id='context' className='context' ref='ctx'>
-                            {this.renderElements(elements)}
+                            {this.renderHtmlTree(htmlTree)}
                         </div>
+                        {/* ^^^^^^ TODO 是否可删除*/}
+                        {activeEle.element === 'FullPage' && (
+                            <div className='page-number' onClick={this.stop.bind(this)}>
+                                {Object.values(activeEle.children).map((item, idx) => (
+                                    <div key={`item-${idx}`} className='page-item' onClick={this.pageChange.bind(this)}>
+                                        {idx + 1}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     {/*------ 属性 ------*/}
                     <SideBar />
@@ -317,6 +540,7 @@ class Editor extends Component {
                 <Dialog
                     title='删除确认'
                     show={deleteShow}
+                    onClose={this.deleteDialogHandle.bind(this, false)}
                     renderFooter={
                         <div className='footer'>
                             <div className='button cancel' onClick={this.deleteDialogHandle.bind(this, false)}>
@@ -339,6 +563,8 @@ class Editor extends Component {
                         onChange={this.delInputChange.bind(this)}
                     />
                 </Dialog>
+                {/*------ 设置弹窗 ------*/}
+                {settingShow && <Setting onClose={this.settingHandle.bind(this)} />}
             </div>
         );
     }

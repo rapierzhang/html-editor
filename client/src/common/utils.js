@@ -1,4 +1,4 @@
-import { Toast } from '../component/';
+import { Toast } from '../component/common';
 import copy from 'copy-to-clipboard';
 
 const fetchStatus = {
@@ -191,24 +191,68 @@ const utils = {
         return target;
     },
     /*
-     * 深度优先对象扁平化
-     * @param    initObj object  需要遍历的树
-     * return            array   结构话后的数组
+     *  深度遍历
+     *  @param   obj     object  需要更改的树
+     *  @param   func    func    回调函数
+     */
+    deepForEach(obj, func) {
+        let target = {};
+        for (let key in obj) {
+            if (obj[key].children) {
+                target[key] = { ...func(obj[key]), children: utils.deepForEach(obj[key].children, func) };
+            } else {
+                target[key] = func(obj[key]);
+            }
+        }
+        return target;
+    },
+    deepIdChange(obj, func) {
+        let target = {};
+        for (let key in obj) {
+            const newId = func(key);
+            if (obj[key].children) {
+                target[newId] = { ...obj[key], id: newId, children: utils.deepIdChange(obj[key].children, func) };
+            } else {
+                target[newId] = { ...obj[key], id: newId };
+            }
+        }
+        return target;
+    },
+    /*
+     * 获取所有父节点
+     *   @param   obj           object  需要更改的树
+     *   @param   id            string  需要查询的id
+     *   @param   family        array   家族列表
+     *   @param   includeSelf   bool    包含自己
      * */
-    objDepthFirstTraversal(initObj) {
-        let list = [];
-        const render = obj => {
-            Object.values(obj).map((item, idx) => {
-                if (item.children) {
-                    list.push(item.id);
-                    render(item.children);
+    familyTree(obj, id, family = [], includeSelf = true) {
+        let f = [];
+        const getTree = (obj, id, family = []) => {
+            const arr = Object.values(obj);
+            arr.forEach(item => {
+                const newFamily = {
+                    id: item.id,
+                    element: item.element,
+                };
+                if (item.id == id) {
+                    f = [...family, ...includeSelf && { newFamily }];
+                } else if (item.children) {
+                    getTree(item.children, id, [...family, newFamily]);
                 } else {
-                    list.push(item.id);
+                    return;
                 }
             });
         };
-        render(initObj);
-        return list;
+        getTree(obj, id, family);
+        return f;
+    },
+    isInFamily(obj, id, familyKey, familyValue) {
+      const familyList = utils.familyTree(obj, id, [], false);
+      let result = false;
+      familyList.forEach(item => {
+          if(item[familyKey] === familyValue) result = true;
+      })
+        return result;
     },
     // 是否存在
     has: (strOrObj, text) => strOrObj.indexOf(text) > -1,
@@ -241,12 +285,13 @@ const utils = {
     toast: msg => ({ ...Toast(msg) }),
     trim: str => str.replace(/ /g, ''),
     toHump: str => str.replace(/\-(\w)/g, (all, letter) => letter.toUpperCase()),
-    cssTtrToObj(text = '') {
+    cssStrToObj(text = '') {
+        if (!text) return {};
+        text = text.replace(/\n/g, '');
+        text = text.replace(/([^-])(?:-+([^-]))/g, ($0, $1, $2) => $1 + $2.toUpperCase());
+        text = text.match(/\{(.*)\}/, '$1');
         let obj = {};
-        const arr = utils
-            .trim(text)
-            .replace('\n', '')
-            .split(';');
+        const arr = text[1].split(';');
         arr.forEach(item => {
             if (!item) return;
             const [k, v] = item.split(':');
@@ -258,7 +303,7 @@ const utils = {
     cssFilter(css = {}, out) {
         // css扩展
         const { extra = '' } = css;
-        const extraObj = utils.cssTtrToObj(utils.has(extra, '-') ? utils.toHump(extra) : extra);
+        const extraObj = utils.cssStrToObj(extra);
         css = { ...css, ...extraObj };
         delete css.extra;
         let obj = {};
@@ -329,6 +374,47 @@ const utils = {
     copy(text) {
         copy(text);
         utils.toast('复制成功！');
+    },
+    // 唯一id
+    uniqueKey() {
+        let num = new Date().getTime();
+        const str = utils.tenToLetter(num);
+        return utils.splitByLine(str, 3, '-');
+    },
+    // 按位分割
+    splitByLine(str, num, symbol = '') {
+        const strLen = str.length;
+        let newStr = '';
+        for (let i = 0; i < strLen; i++) {
+            if (i % num == 0 && parseInt(i / num) != 0) newStr += symbol;
+            newStr += str[i];
+        }
+        return newStr;
+    },
+    // 10进制转26进制
+    tenToLetter(num) {
+        let str = '';
+        while (num > 0) {
+            let m = num % 26;
+            if (m == 0) m = 26;
+            str = String.fromCharCode(m + 64) + str;
+            num = (num - m) / 26;
+        }
+        return str.toLocaleLowerCase();
+    },
+    letterToTen(str) {
+        let num = 0;
+        let s = str.match(/./g); //求出字符数组
+        for (let i = str.length - 1, j = 1; i >= 0; i--, j *= 26) {
+            let c = s[i].toUpperCase();
+            if (c < 'A' || c > 'Z') return 0;
+            num += (c.charCodeAt(0) - 64) * j;
+        }
+        return num;
+    },
+    trimNumber(str = '') {
+        if (typeof str !== 'string') return str;
+        return str.replace(/\d+/g, '').replace(/-/g, '');
     },
     ...fetchStatus,
 };

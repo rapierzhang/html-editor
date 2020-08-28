@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CloseOutlined } from '@ant-design/icons'
 import './dialog.scss';
 /*
 * @params   show            bool        展示
@@ -21,15 +22,15 @@ const Dialog = props =>{
     }
 
     return show ? (
-        <div className='dialog'>
+        <div className='html-dialog'>
             {title && (
                 <div className='title'>
                     {title}
                 </div>
             )}
             {hasClose && (
-                <i className='icon close' onClick={close}>
-                    x
+                <i className='close' onClick={close}>
+                    <CloseOutlined />
                 </i>
             )}
             <div className='ctx'>{props.children}</div>

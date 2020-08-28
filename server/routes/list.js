@@ -1,8 +1,11 @@
-const router = require('koa-router')();
-const controller = require('../controller/list');
+import koaRouter from 'koa-router';
+import { listGet } from '../controller/list'
+
+const router = koaRouter();
+
 // 设置url前缀
 router.prefix('/api/list');
 
-router.post('/get', controller.listGet);
+router.post('/get', listGet);
 
-module.exports = router;
+export default router;
